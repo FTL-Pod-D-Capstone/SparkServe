@@ -1,6 +1,6 @@
 # Project Plan
 
-Pod Members: **Add Pod Members Names**
+Pod Members: **Ahmed Hamouda, Larnelle Ankunda, Morgan Villanueva**
 
 ## Problem Statement and Description
 
