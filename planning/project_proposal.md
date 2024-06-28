@@ -10,20 +10,27 @@ Pod Members: **Ahmed Hamouda, Larnelle Ankunda, Morgan Villanueva**
 
 Our web application idea, born from our experiences as visitors and interns in San Francisco, aims to facilitate community impact by bridging the gap between volunteers and opportunities. Inspired by pressing social issues, we empower individuals to make a positive impact and foster a more engaged, compassionate community.
 The application simplifies finding and engaging with volunteer opportunities through a location-based search, ensuring convenience. Integrated SMS and email notifications keep users informed about upcoming opportunities. It also tracks users' volunteering history and commitments, aiding organization and effectiveness. Our design focuses on making volunteering easy and impactful, connecting individuals with the places and causes that need them most.
+
 ## Features List
-Location-Based Volunteering:
+-Location-Based Volunteering:
 Use Google Maps API for interactive maps to display nearby opportunities and store and query volunteer opportunities based on geographical data.
-Selection of Volunteering Opportunities:
+
+-Selection of Volunteering Opportunities:
 Provide a user-friendly interface for browsing and selecting opportunities while using a relational database to manage them for quick and accurate retrieval.
-Variety of Social Causes:
+
+-Variety of Social Causes:
 Implement filters and categories for users to select their areas of interest, categorizing and tagging opportunities for easy filtering.
-Filter by Location:
+
+-Filter by Location:
 Create filter options within the search interface and implement query parameters to filter results based on location data.
-SMS and Email Notifications:
+
+-SMS and Email Notifications:
 Enable users to opt-in for notifications, integrating with Twilio API for SMS and SendGrid API for email notifications to manage communications.
-Prior and Signed-Up Volunteering Organizations:
+
+-Prior and Signed-Up Volunteering Organizations:
 Develop a user dashboard to track volunteer history and upcoming events, storing user interactions and volunteering history in a database for easy access.
-Chatbot:
+
+-Chatbot:
 Integrate a chatbot interface for user interactions, using OpenAI’s API to manage the chatbot's responses and interactions.
 
 ## Related Work
