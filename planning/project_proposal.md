@@ -1,6 +1,6 @@
 # Project Proposal
 
-Pod Members: ** Ahmed Hamouda, Larnelle Ankunda, Morgan Villanueva**
+Pod Members: **Ahmed Hamouda, Larnelle Ankunda, Morgan Villanueva**
 
 ## Problem Statement
 
