@@ -27,6 +27,12 @@ Add a list of your groups's brainstormed features list
 
 What similar apps and websites? How will your project stand out from these other websites?
 
+Similar apps and websites include VolunteerMatch, Idealist, and All for Good. Our project will stand out by offering a more personalized and user-friendly experience, with advanced filtering options and an intuitive interface that caters specifically to the individual’s skills and interests.
+
+
+
 ## Open Questions
 
 What questions do you still have? What topics do you need to research more for your project?
+
+(Survey Implementation)  What do people value most when looking to volunteer online? How can we design the user experience to be as efficient and satisfying as possible?
