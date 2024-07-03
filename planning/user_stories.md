@@ -41,6 +41,11 @@ Include at least 10 user stories.
 2. As an employee, I want to locate personalized volunteering opportunites, so I can use my VTO time more often.
 3. As a student, I want to participate at a nearby volunteer event, so I can create better collaborative relationships.
 4. As an employee, I want to locate specific volunteer opportunities so I can improve certain leadership skills.
+5. As an organization, I want to post an existing event on the platform, so I can get more volunteers to help.
+6. As a student, I want to receive notifications for volunteering opportunites that I prefer, so I can join events easily.
+7. As an employee, I want to receive notifications about new volunteer opportunities, so that I can stay informed and participate in relevant events.
+8. As a student, I want to be able to receive an email about my preferred NGO, so I can be updated on the latest opportunites.
+
  
 
 ## Wireframe (Bonus)
