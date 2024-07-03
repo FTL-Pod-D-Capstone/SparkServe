@@ -37,7 +37,11 @@ Include at least 2 personas per User Role
 Include at least 10 user stories.
 
  **As a [user role], I want to [what], so that [why]**
-1. 
+1. 1. As a student, I want to find age appropriate volunteering events, so I can improve my college applications. 
+2. As an employee, I want to locate personalized volunteering opportunites, so I can use my VTO time more often.
+3. As a student, I want to participate at a nearby volunteer event, so I can create better collaborative relationships.
+4. As an employee, I want to locate specific volunteer opportunities so I can improve certain leadership skills.
+ 
 
 ## Wireframe (Bonus)
 
