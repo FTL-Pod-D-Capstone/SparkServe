@@ -45,6 +45,9 @@ Include at least 10 user stories.
 6. As a student, I want to receive notifications for volunteering opportunites that I prefer, so I can join events easily.
 7. As an employee, I want to receive notifications about new volunteer opportunities, so that I can stay informed and participate in relevant events.
 8. As a student, I want to be able to receive an email about my preferred NGO, so I can be updated on the latest opportunites.
+9. As the administrator of MealsInSF, I want to create and upload volunteering opportunities on the platform, so that I can attract volunteers to help with meal preparation and distribution for our upcoming events.
+10. As a volunteer coordinator at CommunityCleanUp, I want to post details about our next clean-up event, so that I can recruit volunteers who are passionate about improving our neighborhoods.
+
 
  
 
