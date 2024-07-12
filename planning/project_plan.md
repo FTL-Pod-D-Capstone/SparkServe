@@ -12,8 +12,14 @@ Did you know that 72% of volunteers work with only one organization?
 ## User Roles and Personas
 Include the most up-to-date user roles and personas.
 
-  -User(Student/Employees)
-  -Organizations
+-USERS:
+  Student {
+  Sarah is a rising highschool senior from Detroit, Michigan. She enjoys spending time with her family and friends. She wants to improve her applications submit it to various colleges. Sarah has trouble finding volunteering opportunites that truly interest her; but realizes the potential of volunteer work as it gives her opporunties to learn more, improve her time mangement skills, and work experience.
+  JaSON is a university junior in Manhattan, New York. Aside from academics, he is the president of a conservational student org at his uni. Members of the club would like to host a meet-up at conservational volunteer effort, reflectig their club values. The city of manhattan isn't known for its greenry, so finding the right opportunity to have this event is challenging. }
+  Employee { 3) Leroy is a SWE at a tech startup in Las Vegas, Nevada; he's aspiring to be a team lead. He has never done any volunteer work but wants to look into it, to hone his collaborative and leadership skills. Being new to volunteering, he doesn't know where to begin; but he's determined to find the efforts that have the best opportunites to improve these skills. 4) Michelle is a civil engineer at a firm. She has an allocated amount of VTO, but doesn't really use them as often as she likes. While her company offers the VTO, they don't have a wide selection of volunteering opportunities. She has certain interests towards humaitarian efforts but is looking to apply her logistic skills as well. }
+  
+-Organizations:
+  Organizations { 5) MealsInSF is a non-profit organization that provides meals for the homeless and underserved communities in San Francisco. They are currently in need of volunteers to help with meal preparation, distribution, and other support activities. 6) CommunityCleanUp, a non-profit organization focused on organizing neighborhood clean-up events in various cities. They started the organization 3 years ago after witnessing the impact of pollution in his hometown. }
 
 ## User Stories
 List the current user stories you will implement.
