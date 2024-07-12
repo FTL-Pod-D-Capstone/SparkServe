@@ -33,11 +33,8 @@ Include at least 2 personas per User Role
 
 ## User Stories
 
-Include at least 10 user stories.
- **As a [user role], I want to [what], so that [why]**
- 
-                                      -Filtering/Selection of Vol.
-1. As an employee, I want to have categories of different volunteering opportunites, so I can pick and search through them at my convience.
+                                     
+1. As an employee, I want to have categories of different volunteering opportunites, so I can pick and search through them at my convience. -Filtering/Selection of Vol.
 2. As an student, I want to have a large selection of volunteer work to chose from, so I can use my VTO time more often.
 3. As an employee, I want to locate a specific type of volunteer activites, so I can improve certain skills.
 4. As a student, I want to view detailed descriptions of volunteer opportunities, so that I can understand what each opportunity involves.
