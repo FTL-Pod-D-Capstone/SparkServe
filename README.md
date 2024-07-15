@@ -9,7 +9,7 @@ Team Member Names:**Ahmed Hamouda, Larnelle Ankuda, Morgan Villanueva**
 
 Pod Instructor Name: Devarsh Thaker 
 
-Mentors Names: **Doug McCulloch, Huasheng Su, Gauri Mawalanker **
+Mentors Names: **Doug McCulloch, Huasheng Su, Gauri Mawalanker**
 
 Project Code Repository Links
 
