@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId          Int       @id @default(autoincrement())
+  userName        String
+  firstName       String
+  lastName        String
+  email           String    @unique
+  password        String
+  phoneNumber     String
+  profilePicture  String
+  bio             String
+  address         String
+  createdAt       DateTime  @default(now())
+  feedbacks       Feedback[]                              // One-to-many relation with Feedback
+  chatBotInteractions ChatBotInteraction[]               // One-to-many relation with ChatBotInteraction
+  notifications   Notification[]                          // One-to-many relation with Notification
+  registrations   Registration[]                          // One-to-many relation with Registration
+}
+
+model Organization {
+  organizationId  Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  password        String
+  description     String
+  address         String
+  website         String
+  contactEmail    String
+  logo            String
+  createdAt       DateTime  @default(now())
+  opportunities   Opportunity[]                           // One-to-many relation with Opportunity
+}
+
+model Opportunity {
+  opportunityId   Int       @id @default(autoincrement())
+  title           String
+  description     String
+  organizationId  Int
+  address         String
+  date            DateTime
+  time            DateTime
+  skillsRequired  String
+  spotsAvailable  Int
+  createdAt       DateTime  @default(now())
+  organization    Organization @relation(fields: [organizationId], references: [organizationId]) // Relation to Organization
+  feedbacks       Feedback[]                              // One-to-many relation with Feedback
+  registrations   Registration[]                          // One-to-many relation with Registration
+}
+
+model ChatBotInteraction {
+  interactionId   Int       @id @default(autoincrement())
+  userId          Int
+  message         String
+  response        String
+  timestamp       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [userId])
+}
+
+model Feedback {
+  feedbackId      Int       @id @default(autoincrement())
+  userId          Int
+  opportunityId   Int
+  rating          Int
+  comments        String
+  timestamp       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [userId]) // Relation to User
+  opportunity     Opportunity @relation(fields: [opportunityId], references: [opportunityId]) // Relation to Opportunity
+}
+
+model Notification {
+  notificationId  Int       @id @default(autoincrement())
+  userId          Int
+  message         String
+  type            String
+  readStatus      Boolean   @default(false)
+  timestamp       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [userId]) // Relation to User
+  }
+
+model Registration {
+  registrationId  Int       @id @default(autoincrement())
+  userId          Int
+  opportunityId   Int
+  registrationTime DateTime @default(now())
+  status          String
+  user            User      @relation(fields: [userId], references: [userId]) // Relation to User
+  opportunity     Opportunity @relation(fields: [opportunityId], references: [opportunityId]) // Relation to Opportunity
+}
