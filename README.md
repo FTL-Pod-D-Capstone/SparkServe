@@ -13,8 +13,8 @@ Mentors Names: **Doug McCulloch, Huasheng Su, Gauri Mawalanker **
 
 Project Code Repository Links
 
-* [Frontend Repo Link]()
-* [Backend Repo Link](https://github.com/FTL-Pod-D-Capstone/Project/tree/main/SparkServe/sparkServe-api)
+* [Frontend File Link](https://github.com/FTL-Pod-D-Capstone/Project/tree/main/SparkServe/sparkServe-ui)
+* [Backend File Link](https://github.com/FTL-Pod-D-Capstone/Project/tree/main/SparkServe/sparkServe-api)
 
 ## Project Overview
 
