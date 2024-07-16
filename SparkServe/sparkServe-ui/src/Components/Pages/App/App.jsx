@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import './App.css'
-import WelcomePage from "../WelcomePage/WelcomePage"
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import './App.css';
+import PageRoutes from '../../../Router/PageRoutes';
 
 function App() {
-
   return (
-    <>
-      <WelcomePage/>
-    </>
-  )
+    <Router>
+      <PageRoutes />
+    </Router>
+  );
 }
 
-export default App
+export default App;
