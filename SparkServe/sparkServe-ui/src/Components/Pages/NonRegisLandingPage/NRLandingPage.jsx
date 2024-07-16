@@ -3,7 +3,7 @@ import Navbar from '../../Navbar/Navbar'
 import { Container, Grid } from '@mui/material'
 import Footer from '../../Footer/Footer'
 import Cards from '../../Cards/Cards'
-import DummyData from '../../DumyData/DummyData'
+import {posts} from '../../DumyData/DummyData'
 
 const NRLandingPage = () => {
     return (
@@ -20,10 +20,10 @@ const NRLandingPage = () => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    Many cards
                     {posts.map((post) => (
                         <Grid item xs={12} sm={6} md={4} key={post.id}>
                             <Cards 
+                                className="Cards"
                                 title={post.title}
                                 cover={post.cover}
                                 author={post.author}
