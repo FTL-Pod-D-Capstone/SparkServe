@@ -7,7 +7,7 @@ const PageRoutes = () => {
     return (
     <Routes>
         <Route path="/" element={<WelcomePage />} />
-        <Route path="/NRLanding" element={<NRLandingPage />} />
+        <Route path="/NRLandingPage" element={<NRLandingPage/>} />
     </Routes>
     );
 };
