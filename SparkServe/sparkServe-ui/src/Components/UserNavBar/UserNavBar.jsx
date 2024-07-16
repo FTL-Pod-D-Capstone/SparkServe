@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
-import logo from '../../assets/logo.png';
+import logo2 from '../../assets/logo2.png';
 import "./UserNavBar.css";
 
 const logoStyle = {
@@ -64,7 +64,7 @@ function UserNavBar() {
               }}
             >
               <img
-                src={logo}
+                src={logo2}
                 style={logoStyle}
                 alt="Logo"
               />
