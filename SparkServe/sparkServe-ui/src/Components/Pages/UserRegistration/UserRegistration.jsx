@@ -1,8 +1,16 @@
 import React from 'react'
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 const UserRegistration = () => {
   return (
-    <div>UserRegistration</div>
+    <header>
+    <SignedOut>
+      <SignInButton />
+    </SignedOut>
+    <SignedIn>
+      <UserButton />
+    </SignedIn>
+  </header>
   )
 }
 
