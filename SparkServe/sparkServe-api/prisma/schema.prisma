@@ -56,7 +56,7 @@ model opportunity {
   spotsAvailable  Int
   ageRange        String
   createdAt       DateTime  @default(now())
-  organization    organization @relation(fields: [organizationId], references: [organizationId]) // Relation to Organization
+  organization    organization @relation(fields: [organizationId], references: [organizationId],onDelete: Cascade) // Relation to Organization
   feedbacks       feedback[]                              // One-to-many relation with Feedback
   registrations   registration[]                          // One-to-many relation with Registration
 }
@@ -67,7 +67,7 @@ model chatBotInteraction {
   message         String
   response        String
   timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId])
+  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade)
 }
 //restructure feedback feature
 model feedback {
@@ -77,8 +77,8 @@ model feedback {
   rating          Int
   comments        String
   timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId]) // Relation to User
-  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId]) // Relation to Opportunity
+  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade) // Relation to User
+  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId],onDelete: Cascade) // Relation to Opportunity
 }
 
 model notification {
@@ -88,7 +88,7 @@ model notification {
   type            String
   readStatus      Boolean   @default(false)
   timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId]) // Relation to User
+  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade) // Relation to User
   }
 
 model registration {
@@ -97,6 +97,6 @@ model registration {
   opportunityId   Int
   registrationTime DateTime @default(now())
   status          String
-  user            user      @relation(fields: [userId], references: [userId]) // Relation to User
-  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId]) // Relation to Opportunity
+  user            user      @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
+  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId],onDelete: Cascade) // Relation to Opportunity
 }

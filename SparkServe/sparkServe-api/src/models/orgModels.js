@@ -8,7 +8,6 @@ const getAllOrganizations = async (orderBy = {}) => {
     include: {
       opportunities: true 
     }
-
   });
 };
 
