@@ -11,11 +11,13 @@ const ThreeDB = () => {
 
     const init = () => {
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, 1, 0.1, 10000);
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
       camera.position.z = 2;
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setClearColor(0x4685f6, 1); // Set the background color
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
@@ -97,36 +99,32 @@ const ThreeDB = () => {
 
       scene.add(ribbon);
 
-      resize();
+      const resize = () => {
+        const { innerWidth, innerHeight } = window;
+        renderer.setSize(innerWidth, innerHeight);
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+        ribbon.scale.set(camera.aspect * 1.55, 0.75, 1);
+      };
+
       window.addEventListener('resize', resize);
-    };
+      resize();
 
-    const resize = () => {
-      const { offsetWidth, offsetHeight } = container;
+      const animate = () => {
+        ribbon.material.uniforms.time.value += 0.01;
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
 
-      renderer.setSize(offsetWidth, offsetHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
-
-      camera.aspect = offsetWidth / offsetHeight;
-      camera.updateProjectionMatrix();
-
-      ribbon.scale.set(camera.aspect * 1.55, 0.75, 1);
-    };
-
-    const animate = () => {
-      ribbon.material.uniforms.time.value += 0.01;
-
-      renderer.render(scene, camera);
-      requestAnimationFrame(() => animate());
+      animate();
     };
 
     init();
-    animate();
 
-    return () => {
-      window.removeEventListener('resize', resize);
-      container.removeChild(renderer.domElement);
-    };
+    // return () => {
+    //   window.removeEventListener('resize', resize);
+    //   container.removeChild(renderer.domElement);
+    // };
   }, []);
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
@@ -134,11 +132,12 @@ const ThreeDB = () => {
 
 const containerStyle = {
   position: 'absolute',
-  width: '100vw', 
+  width: '100%',
   height: '100vh',
   left: '0',
   top: '0',
   background: 'linear-gradient(to bottom, #4685f6, #31524F, #FFFFFF)', 
+  zIndex: -1,
 };
 
 export default ThreeDB;
