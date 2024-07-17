@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../Navbar/Navbar'
+import UserNavBar from '../../UserNavBar/UserNavBar'
 import { Container, Grid } from '@mui/material'
 import Footer from '../../Footer/Footer'
 

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import logo from '../../assets/logo.png'; 
+import logo2 from '../../assets/logo2.png'; 
 
 const logoStyle = {
   width: '140px',
@@ -47,7 +47,7 @@ function WelcomeCard() {
     >
       <Card sx={{ maxHeight: 1000, maxWidth: 700, height: '100%', width: '100%', bgcolor: 'white', boxShadow: 3, zIndex: 99 }}>
         <CardContent sx={cardStyle}>
-          <img src={logo} style={logoStyle} alt="Logo" />
+          <img src={logo2} style={logoStyle} alt="Logo" />
           <Typography variant="h5" component="div" gutterBottom>
             Welcome to Our Platform
           </Typography>

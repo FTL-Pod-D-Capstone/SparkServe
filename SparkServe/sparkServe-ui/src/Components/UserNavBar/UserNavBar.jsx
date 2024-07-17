@@ -9,7 +9,6 @@ import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import logo2 from '../../assets/logo2.png';
-import "./UserNavBar.css";
 
 const logoStyle = {
   width: '140px',
