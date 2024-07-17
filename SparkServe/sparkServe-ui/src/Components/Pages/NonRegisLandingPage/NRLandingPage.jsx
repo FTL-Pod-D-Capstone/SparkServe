@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../Navbar/Navbar'
+import UserNavBar from '../../UserNavBar/UserNavBar'
 import { Container, Grid } from '@mui/material'
 import Footer from '../../Footer/Footer'
 
@@ -7,7 +7,7 @@ import Footer from '../../Footer/Footer'
 const NRLandingPage = () => {
     return (
         <>
-            <Navbar/>
+            <UserNavBar/>
             <Container>
                 <div style={{ padding: '20px', background: 'lightblue' }}>
                     <p>Hello World</p>
