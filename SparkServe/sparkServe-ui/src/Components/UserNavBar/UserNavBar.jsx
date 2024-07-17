@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 
 import logo2 from '../../assets/logo2.png';
 
-import "./UserNavBar.css";
+// import "./UserNavBar.css";
 
 const logoStyle = {
   width: '140px',
