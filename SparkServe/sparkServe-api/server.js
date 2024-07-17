@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-// const Routes = require("");
+const userRoutes = require("./src/routes/userRoutes");
+const orgRoutes = require("./src/routes/orgRoutes");
+const oppRoutes = require("./src/routes/oppRoutes");
+
 const app = express();
 const port = 3000;
 
@@ -21,8 +24,20 @@ app.get("/", (req, res) => {
   res.send("Hello from the backend -- You are currently at the / route");
 });
 
-//  routes
-// app.use("/", Routes);
+// Users routes
+app.use("/users", userRoutes);
+
+// // Orgs routes
+ app.use("/orgs", orgRoutes);
+
+ //Oppurtinties routes
+ app.use("/opps", oppRoutes);
+
+// Registration routes
+// app.use("/registration", registrationRoutes);
+
+
+
 
 // Start the server
 app.listen(port, () => {
