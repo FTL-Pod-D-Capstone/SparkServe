@@ -5,6 +5,10 @@ const prisma = new PrismaClient();
 const getAllOrganizations = async (orderBy = {}) => {
   return prisma.organization.findMany({
     orderBy: orderBy,
+    include: {
+      opportunities: true 
+    }
+
   });
 };
 
@@ -12,6 +16,9 @@ const getAllOrganizations = async (orderBy = {}) => {
 const getOrganizationById = async (id) => {
   return prisma.organization.findUnique({
     where: { organizationId: parseInt(id) },
+    include: {
+      opportunities: true 
+    }
   });
 };
 
@@ -37,6 +44,18 @@ const deleteOrganization = async (id) => {
   });
 };
 
+// Function to get all opportunities by organization ID
+const getOppsByOrgId = async (organizationId) => {
+  return prisma.opportunity.findMany({
+    where: { organizationId: parseInt(organizationId) },
+    include: {
+      feedbacks: true,
+      registrations: true,
+    },
+  });
+};
+
+
 // Export the functions
 module.exports = {
   getAllOrganizations,
@@ -44,4 +63,5 @@ module.exports = {
   createOrganization,
   updateOrganization,
   deleteOrganization,
+  getOppsByOrgId
 };

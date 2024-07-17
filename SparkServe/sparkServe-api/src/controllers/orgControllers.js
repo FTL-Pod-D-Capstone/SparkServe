@@ -2,12 +2,12 @@ const organizationModel = require("../models/orgModels");
 
 // Function to get all organizations 
 const getAllOrganizations = async (req, res) => {
-    const { sort } = req.query;
+    const { name } = req.query;
     //sorting by name asc/desc
     let orderBy = {};
   
-    if (sort) {
-      orderBy.name = sort === "asc" ? "asc" : "desc";
+    if (name) {
+      orderBy.name = name === "asc" ? "asc" : "desc";
     }
   
     try {
@@ -17,6 +17,7 @@ const getAllOrganizations = async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   };
+
 // Function to get organization by ID
 const getOrganizationById = async (req, res) => {
   try {
@@ -68,6 +69,22 @@ const deleteOrganization = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+// Function to get all opportunities by organization ID
+const getOppsByOrgId = async (req, res) => {
+  const { id: organizationId } = req.params;
+
+  try {
+    const opportunities = await organizationModel.getOppsByOrgId(organizationId);
+    if (opportunities.length > 0) {
+      res.status(200).json(opportunities);
+    } else {
+      res.status(404).json({ error: "No opportunities found for this organization" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // Export the functions
 module.exports = {
@@ -76,4 +93,5 @@ module.exports = {
   createOrganization,
   updateOrganization,
   deleteOrganization,
+  getOppsByOrgId
 };

@@ -7,7 +7,6 @@ const getAllOpportunities = async (filter = {}, orderBy = {}) => {
     where: filter,
     orderBy: orderBy,
     include: {
-      organization: true,
       feedbacks: true,
       registrations: true
     },
@@ -19,7 +18,6 @@ const getOpportunityById = async (id) => {
   return prisma.opportunity.findUnique({
     where: { opportunityId: parseInt(id) },
     include: {
-      organization: true,
       feedbacks: true,
       registrations: true
     },
@@ -40,7 +38,6 @@ const createOpportunity = async (opportunityData) => {
       ageRange: opportunityData.ageRange,
     },
     include: {
-      organization: true,
       feedbacks: true,
       registrations: true
     },
@@ -53,7 +50,6 @@ const updateOpportunity = async (id, opportunityData) => {
     where: { opportunityId: parseInt(id) },
     data: opportunityData,
     include: {
-      organization: true,
       feedbacks: true,
       registrations: true
     },

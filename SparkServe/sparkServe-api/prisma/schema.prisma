@@ -69,7 +69,7 @@ model chatBotInteraction {
   timestamp       DateTime  @default(now())
   user            user      @relation(fields: [userId], references: [userId])
 }
-
+//restructure feedback feature
 model feedback {
   feedbackId      Int       @id @default(autoincrement())
   userId          Int

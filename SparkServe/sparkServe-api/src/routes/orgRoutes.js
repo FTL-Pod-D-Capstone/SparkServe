@@ -12,5 +12,7 @@ router.post("/", organizationController.createOrganization);
 router.put("/:id", organizationController.updateOrganization);
 // delete an organization
 router.delete("/:id", organizationController.deleteOrganization);
+// Get all opportunities by organization ID
+router.get('/:id/opps', organizationController.getOppsByOrgId);
 
 module.exports = router;
