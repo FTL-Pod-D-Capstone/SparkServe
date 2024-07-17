@@ -7,7 +7,7 @@ import Footer from '../../Footer/Footer'
 const NRLandingPage = () => {
     return (
         <>
-            <Navbar/>
+            <UserNavBar/>
             <Container>
                 <div style={{ padding: '20px', background: 'lightblue' }}>
                     <p>Hello World</p>
