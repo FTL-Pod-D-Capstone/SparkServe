@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const userRoutes = require("./src/routes/userRoutes");
 const orgRoutes = require("./src/routes/orgRoutes");
 const oppRoutes = require("./src/routes/oppRoutes");
+const registrationRoutes = require("./src/routes/registrationRoutes");
 
 const app = express();
 const port = 3000;
@@ -30,11 +31,11 @@ app.use("/users", userRoutes);
 // // Orgs routes
  app.use("/orgs", orgRoutes);
 
- //Oppurtinties routes
+ //Opportunity routes
  app.use("/opps", oppRoutes);
 
-// Registration routes
-// app.use("/registration", registrationRoutes);
+//Registration routes
+app.use("/registration", registrationRoutes);
 
 
 

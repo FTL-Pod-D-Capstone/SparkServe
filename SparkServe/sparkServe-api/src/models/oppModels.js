@@ -1,15 +1,14 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // Function to get all opportunities with filters
-const getAllOpportunities = async (filters = {}, orderBy = {}) => {
+const getAllOpportunities = async (filter = {}, orderBy = {}) => {
   return prisma.opportunity.findMany({
-    where: filters,
+    where: filter,
     orderBy: orderBy,
     include: {
-      organization: true,
       feedbacks: true,
-      registrations: true,
+      registrations: true
     },
   });
 };
@@ -19,9 +18,8 @@ const getOpportunityById = async (id) => {
   return prisma.opportunity.findUnique({
     where: { opportunityId: parseInt(id) },
     include: {
-      organization: true,
       feedbacks: true,
-      registrations: true,
+      registrations: true
     },
   });
 };
@@ -29,38 +27,46 @@ const getOpportunityById = async (id) => {
 // Function to create a new opportunity
 const createOpportunity = async (opportunityData) => {
   return prisma.opportunity.create({
-    data: opportunityData,
+    data: {
+      title: opportunityData.title,
+      description: opportunityData.description,
+      organizationId: opportunityData.organizationId,
+      address: opportunityData.address,
+      dateTime: new Date(opportunityData.dateTime),
+      skillsRequired: opportunityData.skillsRequired,
+      spotsAvailable: opportunityData.spotsAvailable,
+      ageRange: opportunityData.ageRange,
+    },
     include: {
-      organization: true,
       feedbacks: true,
-      registrations: true,
+      registrations: true
     },
   });
 };
 
-// Function to update opportunity
+// Function to update an opportunity
 const updateOpportunity = async (id, opportunityData) => {
   return prisma.opportunity.update({
     where: { opportunityId: parseInt(id) },
     data: opportunityData,
     include: {
-      organization: true,
       feedbacks: true,
-      registrations: true,
+      registrations: true
     },
   });
 };
 
-// Function to delete opportunity
+// Function to delete an opportunity
 const deleteOpportunity = async (id) => {
-  return prisma.opportunity.delete({ where: { opportunityId: parseInt(id) } });
+  return prisma.opportunity.delete({
+    where: { opportunityId: parseInt(id) },
+  });
 };
 
-// Export the functions
 module.exports = {
   getAllOpportunities,
   getOpportunityById,
   createOpportunity,
   updateOpportunity,
-  deleteOpportunity,
+  deleteOpportunity
 };
