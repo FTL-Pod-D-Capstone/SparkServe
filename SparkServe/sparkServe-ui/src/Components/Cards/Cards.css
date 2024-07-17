@@ -1,0 +1,14 @@
+.Cards {
+    margin: 0px;
+    font-weight: 600;
+    line-height: 1.57143;
+    font-size: 0.875rem;
+    font-family: "Public Sans", sans-serif;
+    text-decoration: none;
+    color: inherit;
+    height: 44px;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
