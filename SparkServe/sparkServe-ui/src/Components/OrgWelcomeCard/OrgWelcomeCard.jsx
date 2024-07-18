@@ -28,10 +28,11 @@ const buttonStyle = {
   margin: '10px',
 };
 
-function WelcomeCard() {
+function OrgWelcomeCard() {
+    console.log("orgwelcome card")
   const navigate = useNavigate();
 
-  const handleExploreClick = () => {
+  const handleCalendarClick = () => {
     navigate('/Calendar');
   };
 
@@ -55,7 +56,7 @@ function WelcomeCard() {
             Connecting your passion to purpose.
           </Typography>
           <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleExploreClick}>
+          <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleCalendarClick}>
               Calendar
             </Button>
           </Box>
@@ -65,4 +66,4 @@ function WelcomeCard() {
   );
 }
 
-export default WelcomeCard;
+export default OrgWelcomeCard;

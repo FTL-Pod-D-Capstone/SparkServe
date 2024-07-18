@@ -1,16 +1,19 @@
 import React from 'react';
-import OrgThreeDB from '../../OrgThreeDB/OrgThreeDB';
+import OrgThreeDB from '../OrgWelcomePage/OrgWelcomePage';
+import ThreeDB from '../../ThreeDB/ThreeDB';
 import OrgNavBar from '../../OrgNavBar/OrgNavBar'; 
 import OrgWelcomeCard from '../../OrgWelcomeCard/OrgWelcomeCard';
 
-const WelcomePage = () => {
+const OrgWelcomePage = () => {
+    console.log('org welcome page')
   return (
     <div>
-    <OrgThreeDB />
       <OrgNavBar />
+      {/* <OrgThreeDB currentPage={'orgWelcomePage'}/> */}
+      <ThreeDB />
       <OrgWelcomeCard />
     </div>
   );
 }
 
-export default WelcomePage;
+export default OrgWelcomePage;

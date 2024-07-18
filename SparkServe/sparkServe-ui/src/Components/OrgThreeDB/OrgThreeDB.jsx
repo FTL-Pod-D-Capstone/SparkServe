@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-const OrgThreeDB = () => {
+const backgroundColor = { 
+  'welcomePageColor': 0x4685f6,
+  'orgWelcomePage': 0xff66c4 }
+const OrgThreeDB = ({currentPage}) => {
+
   const containerRef = useRef();
+  console.log("OrgThreeDB", currentPage, backgroundColor[currentPage])
 
   useEffect(() => {
     let scene, camera, renderer, ribbon;
@@ -15,7 +20,7 @@ const OrgThreeDB = () => {
       camera.position.z = 2;
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setClearColor(0xff66c4, 1); // Set the background color
+      renderer.setClearColor(backgroundColor[currentPage], 1); // Set the background color
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       container.appendChild(renderer.domElement);
@@ -125,7 +130,7 @@ const OrgThreeDB = () => {
     //   window.removeEventListener('resize', resize);
     //   container.removeChild(renderer.domElement);
     // };
-  }, []);
+  }, [currentPage]);
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
 };

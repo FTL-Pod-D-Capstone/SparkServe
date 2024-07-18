@@ -35,7 +35,8 @@ function WelcomeCard() {
     navigate('/NRLandingPage');
   };
 
-  const handleCreateClick = () => {
+  const handleCreateOwnClick = () => {
+    console.log('clicked')
     navigate('/OrgWelcomePage');
   };
 
@@ -45,8 +46,8 @@ function WelcomeCard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 'calc(100vh - 400px)', 
-        paddingTop: '10px', 
+        minHeight: 'calc(100vh - 400px)',
+        paddingTop: '10px',
       }}
     >
       <Card sx={{ maxHeight: 1000, maxWidth: 700, height: '100%', width: '700px', bgcolor: 'white', boxShadow: 3, zIndex: 99 }}>
@@ -62,7 +63,7 @@ function WelcomeCard() {
             <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleExploreClick}>
               Explore Opportunities
             </Button>
-            <Button variant="outlined" color="primary" sx={buttonStyle} onClick={handleCreateClick}>
+            <Button variant="outlined" color="primary" sx={buttonStyle} onClick={handleCreateOwnClick}>
               Create Your Own
             </Button>
           </Box>
@@ -73,3 +74,5 @@ function WelcomeCard() {
 }
 
 export default WelcomeCard;
+
+
