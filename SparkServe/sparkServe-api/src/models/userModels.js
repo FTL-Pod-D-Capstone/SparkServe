@@ -28,12 +28,18 @@ const getUsersById = async (id) => {
 
 // Function to create a new user
 const createUsers = async (id, first_name, last_name, username) => {
-  return prisma.user.create({
+  return prisma.user.created({
     data: {
       clerkUserId: id,
       firstName: first_name,
       lastName: last_name,
       userName: username,
+    },
+    include: {
+      feedbacks: true,
+      chatBotInteractions: true,
+      notifications: true,
+      registrations: true,
     },
   });
 };
