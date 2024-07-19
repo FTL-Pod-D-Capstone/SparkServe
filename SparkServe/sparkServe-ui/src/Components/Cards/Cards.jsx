@@ -1,7 +1,15 @@
 import React from 'react'
 import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Cards = ({ title, cover, author, view, comment }) => {
+
+
+const Cards = ({ id, title, cover, author, view, comment }) => {
+
+    const navigate = useNavigate();
+
+
+
     return (
         <Card sx={{ maxWidth: 345, m: 2 }}>
             <CardMedia
@@ -22,7 +30,7 @@ const Cards = ({ title, cover, author, view, comment }) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small" component={Link} to={`/post/${id}`}>Learn More</Button>
             </CardActions>
         </Card>
     );
