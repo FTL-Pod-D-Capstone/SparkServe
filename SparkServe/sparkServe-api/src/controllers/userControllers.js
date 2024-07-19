@@ -26,64 +26,152 @@ const getUsersById = async (req, res) => {
 };
 
 // Function to create a new user
+// const createUsers = async (req, res) => {
+//   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+//     if (!WEBHOOK_SECRET) {
+//       throw new Error("You need a WEBHOOK_SECRET in your .env");
+//     }
+
+//     // Get the headers and body
+//     const headers = req.headers;
+//     const payload = JSON.stringify(req.body);
+
+//     // Get the Svix headers for verification
+//     const svix_id = headers["svix-id"];
+//     const svix_timestamp = headers["svix-timestamp"];
+//     const svix_signature = headers["svix-signature"];
+
+//     // If there are no Svix headers, error out
+//     if (!svix_id || !svix_timestamp || !svix_signature) {
+//       return new Response("Error occured -- no svix headers", {
+//         status: 400,
+//       });
+//     }
+
+//     // Create a new Svix instance with your secret.
+//     const wh = new Webhook(WEBHOOK_SECRET);
+
+//     let evt;
+
+//     // Attempt to verify the incoming webhook
+//     // If successful, the payload will be available from 'evt'
+//     // If the verification fails, error out and  return error code
+//     try {
+//       evt = wh.verify(payload, {
+//         "svix-id": svix_id,
+//         "svix-timestamp": svix_timestamp,
+//         "svix-signature": svix_signature,
+//       });
+//     } catch (err) {
+//       console.log("Error verifying webhook:", err.message);
+//       return res.status(400).json({
+//         success: false,
+//         message: err.message,
+//       });
+//     }
+
+//     // Do something with the payload
+//     // For this guide, you simply log the payload to the console
+//     const { id,first_name,last_name,username  } = evt.data;
+//     const eventType = evt.type;
+//     console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
+//     console.log("Webhook body:", evt.data);
+
+//     const user = await userModel.createUsers(id,first_name,last_name,username ) 
+//     return res.status(200).json({
+//       success: true,
+//       message: "Webhook received",
+//       user: user
+//     });
+//   }
+
+const base64 = require('@stablelib/base64'); // Ensure you have the stablelib base64 package
+
 const createUsers = async (req, res) => {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-    if (!WEBHOOK_SECRET) {
-      throw new Error("You need a WEBHOOK_SECRET in your .env");
-    }
+  if (!WEBHOOK_SECRET) {
+    throw new Error("You need a WEBHOOK_SECRET in your .env");
+  }
 
-    // Get the headers and body
-    const headers = req.headers;
-    const payload = JSON.stringify(req.body);
+  // Get the headers and body
+  const headers = req.headers;
+  const payload = JSON.stringify(req.body);
 
-    // Get the Svix headers for verification
-    const svix_id = headers["svix-id"];
-    const svix_timestamp = headers["svix-timestamp"];
-    const svix_signature = headers["svix-signature"];
+  // Get the Svix headers for verification
+  const svix_id = headers["svix-id"];
+  const svix_timestamp = headers["svix-timestamp"];
+  const svix_signature = headers["svix-signature"];
 
-    // If there are no Svix headers, error out
-    if (!svix_id || !svix_timestamp || !svix_signature) {
-      return new Response("Error occured -- no svix headers", {
-        status: 400,
-      });
-    }
+  // Log the headers for debugging
+  console.log("Headers:", {
+    svix_id,
+    svix_timestamp,
+    svix_signature
+  });
 
-    // Create a new Svix instance with your secret.
-    const wh = new Webhook(WEBHOOK_SECRET);
+  // If there are no Svix headers, error out
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    return res.status(400).json({
+      success: false,
+      message: "Error occurred -- no svix headers",
+    });
+  }
 
-    let evt;
+  // Check for Base64 validity
+  try {
+    base64.decode(svix_signature);
+  } catch (err) {
+    console.error("Invalid Base64 encoding:", err.message);
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Base64 encoding in svix-signature",
+    });
+  }
 
-    // Attempt to verify the incoming webhook
-    // If successful, the payload will be available from 'evt'
-    // If the verification fails, error out and  return error code
-    try {
-      evt = wh.verify(payload, {
-        "svix-id": svix_id,
-        "svix-timestamp": svix_timestamp,
-        "svix-signature": svix_signature,
-      });
-    } catch (err) {
-      console.log("Error verifying webhook:", err.message);
-      return res.status(400).json({
-        success: false,
-        message: err.message,
-      });
-    }
+  // Create a new Svix instance with your secret.
+  const wh = new Webhook(WEBHOOK_SECRET);
 
-    // Do something with the payload
-    // For this guide, you simply log the payload to the console
-    const { id,first_name,last_name,username  } = evt.data;
-    const eventType = evt.type;
-    console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
-    console.log("Webhook body:", evt.data);
+  let evt;
 
-    const user = await userModel.createUsers(id,first_name,last_name,username ) 
+  // Attempt to verify the incoming webhook
+  // If successful, the payload will be available from 'evt'
+  // If the verification fails, error out and return error code
+  try {
+    evt = wh.verify(payload, {
+      "svix-id": svix_id,
+      "svix-timestamp": svix_timestamp,
+      "svix-signature": svix_signature,
+    });
+  } catch (err) {
+    console.error("Error verifying webhook:", err.message);
+    return res.status(400).json({
+      success: false,
+      message: `Verification failed: ${err.message}`,
+    });
+  }
+
+  // Do something with the payload
+  const { id, first_name, last_name, username } = evt.data;
+  const eventType = evt.type;
+  console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
+  console.log("Webhook body:", evt.data);
+
+  try {
+    const user = await userModel.createUsers(id, first_name, last_name, username);
     return res.status(200).json({
       success: true,
       message: "Webhook received",
       user: user
     });
+  } catch (err) {
+    console.error("Error creating user:", err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
+};
+
 
 // Function to update user
 const updateUser = async (req, res) => {
