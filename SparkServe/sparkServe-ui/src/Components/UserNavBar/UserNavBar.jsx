@@ -29,7 +29,7 @@ function UserNavBar() {
         boxShadow: 0,
         bgcolor: 'white',
         backgroundImage: 'none',
-        zIndex: 1100, // Ensure navbar is on top
+        zIndex: 1100, 
       }}
     >
       <Container>

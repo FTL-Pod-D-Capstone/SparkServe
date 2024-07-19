@@ -1,6 +1,6 @@
 
 
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     background-color: white;
-  }
+  } */
   
   .calendar-app {
     width: 100%;
@@ -76,7 +76,7 @@
     color: #bbb;
   }
   
-  button {
+  /* button {
     background-color: #ff66c4;
     border: none;
     border-radius: 50%;
@@ -88,7 +88,7 @@
     align-items: center;
     cursor: pointer;
     font-size: 2rem;
-  }
+  } */
   
   .weekdays {
     width: 100%;
