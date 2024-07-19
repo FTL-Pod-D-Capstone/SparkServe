@@ -1,9 +1,9 @@
 import React from 'react';
-import UserNavBarNR from '../../Components/UserNavBarNR/UserNavBarNR';
-import Footer from '../../Components/Footer/Footer';
+import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
+import Footer from '../../Footer/Footer';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, CardMedia, Button } from '@mui/material';
-import { posts } from '../../Components/DumyData/DummyData';
+import { posts } from '../../DumyData/DummyData';
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 

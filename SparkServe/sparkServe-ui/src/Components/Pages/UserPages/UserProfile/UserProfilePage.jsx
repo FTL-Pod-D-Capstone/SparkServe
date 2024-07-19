@@ -1,6 +1,6 @@
 import React from 'react'
-import Footer from '../../../Components/Footer/Footer'
-import UserNavBarREG from '../../../Components/UserNavBarREG/UserNavBarREG'
+import Footer from '../../../Footer/Footer'
+import UserNavBarREG from '../../../../Components/UserNavBarREG/UserNavBarREG'
 import { Typography } from '@mui/material'
 import '../UserLanding/UserLandingPage.css'
 import { IconButton } from '@mui/material';

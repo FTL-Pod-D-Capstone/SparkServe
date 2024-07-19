@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserNavBar from '../../UserNavBar/UserNavBar';
+import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
 import ReactGoogleMapComponent from '../../Map/Map';
 import Footer from '../../Footer/Footer';
 import { Box, IconButton } from '@mui/material';
@@ -22,10 +22,11 @@ const MapPage = () => {
         flexDirection: 'column',
       }}
     >
-      <UserNavBar />
+      <UserNavBarNR />
       <Box
         id="map-container"
         sx={{
+          mt:'60px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

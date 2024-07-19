@@ -1,7 +1,7 @@
 import React from 'react'
-import UserNavBarREG from '../../../Components/UserNavBarREG/UserNavBarREG'
-import Footer from '../../../Components/Footer/Footer'
-import VolOppContainer from '../../../Components/VolCardContainer/VolOppContainer'
+import UserNavBarREG from '../../../UserNavBarREG/UserNavBarREG'
+import Footer from '../../../Footer/Footer'
+import VolOppContainer from '../../../VolCardContainer/VolOppContainer'
 import { Typography } from '@mui/material'
 
 
