@@ -2,7 +2,6 @@
   "name": "sparkserve-api",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
@@ -14,7 +13,8 @@
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "svix": "^1.25.0"
   },
   "author": "",
   "license": "ISC",
