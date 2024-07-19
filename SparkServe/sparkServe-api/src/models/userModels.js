@@ -27,13 +27,15 @@ const getUsersById = async (id) => {
 };
 
 // Function to create a new user
-const createUsers = async (id, first_name, last_name, username) => {
+const createUsers = async (id, first_name, last_name, username, email_address, phone_number) => {
   return prisma.user.create({
     data: {
       clerkUserId: id,
       firstName: first_name,
       lastName: last_name,
       userName: username,
+      email: email_address,
+      phoneNumber: phone_number,
     },
     include: {
       feedbacks: true,
@@ -61,7 +63,7 @@ const updateUser = async (id, userData) => {
 
 // Function to delete user
 const deleteUsers = async (id) => {
-  return prisma.user.delete({ where: { userId: parseInt(id) } });
+  return prisma.user.delete({ where: { clerkUserId: parseInt(id),  } });
 };
 
 // Export the functions
