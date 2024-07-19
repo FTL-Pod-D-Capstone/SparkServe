@@ -35,12 +35,6 @@ const createUsers = async (id, first_name, last_name, username) => {
       lastName: last_name,
       userName: username,
     },
-    include: {
-      feedbacks: true,
-      chatBotInteractions: true,
-      notifications: true,
-      registrations: true,
-    },
   });
 };
 
