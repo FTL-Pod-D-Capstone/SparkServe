@@ -3,7 +3,7 @@ import OrgThreeDB from '../../OrgThreeDB/OrgThreeDB';
 import OrgNavBar from '../../OrgNavBar/OrgNavBar'; 
 import OrgWelcomeCard from '../../OrgWelcomeCard/OrgWelcomeCard';
 
-const WelcomePage = () => {
+const OrgWelcomePage = () => {
   return (
     <div>
     <OrgThreeDB />
@@ -13,4 +13,4 @@ const WelcomePage = () => {
   );
 }
 
-export default WelcomePage;
+export default OrgWelcomePage;
