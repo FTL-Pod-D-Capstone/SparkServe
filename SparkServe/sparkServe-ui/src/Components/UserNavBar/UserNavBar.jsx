@@ -9,13 +9,12 @@ import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import logo2 from '../../assets/logo2.png';
 import UserRegistration from "../Pages/UserRegistration/UserRegistration";
- 
+
 const logoStyle = {
   width: '140px',
   height: 'auto',
   cursor: 'pointer',
 };
-
 function UserNavBar() {
   const [open, setOpen] = React.useState(false);
 
@@ -54,9 +53,7 @@ function UserNavBar() {
             </Button>
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ width: 250, p: 2 }}>
-                <MenuItem>
-                  <UserRegistration />
-                </MenuItem>
+                <UserRegistration />
               </Box>
             </Drawer>
           </Box>
