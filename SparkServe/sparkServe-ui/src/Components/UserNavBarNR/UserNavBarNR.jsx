@@ -15,7 +15,7 @@ const logoStyle = {
   cursor: 'pointer',
 };
 
-function UserNavBar() {
+function UserNavBarNR() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -45,7 +45,7 @@ function UserNavBar() {
             <img src={logo2} style={logoStyle} alt="Logo" />
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
-            <Button color="primary" variant="text" size="small" href="/signin">
+            <Button color="primary" variant="text" size="small" href="/UserLanding">
               Sign in
             </Button>
             <Button color="primary" variant="contained" size="small" href="/signup">
@@ -64,7 +64,7 @@ function UserNavBar() {
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="outlined" href="/signin" sx={{ width: '100%' }}>
+                  <Button color="primary" variant="outlined" href="/UserLanding" sx={{ width: '100%' }}>
                     Sign in
                   </Button>
                 </MenuItem>
@@ -77,4 +77,4 @@ function UserNavBar() {
   );
 }
 
-export default UserNavBar;
+export default UserNavBarNR;
