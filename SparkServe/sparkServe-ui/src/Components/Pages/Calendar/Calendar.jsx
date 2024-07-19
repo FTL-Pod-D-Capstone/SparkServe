@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import './Calendar.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-// import "../Calendar/Calendar.css"
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import IconButton from '@mui/material/IconButton';
 
 const CalendarApp = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -22,6 +25,8 @@ const CalendarApp = () => {
   const [eventName, setEventName] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [editingEvent, setEditingEvent] = useState(null);
+
+  const navigate = useNavigate(); // Initialize navigate
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -115,9 +120,16 @@ const CalendarApp = () => {
     setEventTime((prevTime) => ({ ...prevTime, [name]: value.padStart(2, '0') }));
   };
 
+  const handleBackClick = () => {
+    navigate('/OrgWelcomePage'); // Navigate to OrgWelcomePage
+  };
+
   return (
     <div className="calendar-app">
       <div className="header">
+        <IconButton color="primary" onClick={handleBackClick}>
+          <ArrowBackIosIcon />
+        </IconButton>
         <h1 className="heading">
           Calendar
           <lord-icon
@@ -242,7 +254,8 @@ const CalendarApp = () => {
   );
 };
 
-
 export default CalendarApp;
+
+
 
 

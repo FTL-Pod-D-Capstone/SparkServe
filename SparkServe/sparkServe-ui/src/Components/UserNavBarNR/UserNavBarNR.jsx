@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import logo2 from '../../assets/logo2.png';
+import UserRegistration from "../Pages/UserRegistration/UserRegistration";
 
 const logoStyle = {
   width: '140px',
@@ -29,7 +30,7 @@ function UserNavBarNR() {
         boxShadow: 0,
         bgcolor: 'white',
         backgroundImage: 'none',
-        zIndex: 1100, // Ensure navbar is on top
+        zIndex: 1100, 
       }}
     >
       <Container>
@@ -45,12 +46,7 @@ function UserNavBarNR() {
             <img src={logo2} style={logoStyle} alt="Logo" />
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
-            <Button color="primary" variant="text" size="small" href="/UserLanding">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small" href="/signup">
-              Sign up
-            </Button>
+            <UserRegistration />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <Button variant="text" color="primary" onClick={toggleDrawer(true)}>
@@ -58,16 +54,7 @@ function UserNavBarNR() {
             </Button>
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ width: 250, p: 2 }}>
-                <MenuItem>
-                  <Button color="primary" variant="contained" href="/signup" sx={{ width: '100%' }}>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" href="/UserLanding" sx={{ width: '100%' }}>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                <UserRegistration />
               </Box>
             </Drawer>
           </Box>
