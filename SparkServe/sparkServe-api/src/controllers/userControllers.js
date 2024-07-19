@@ -77,8 +77,7 @@ const createUsers = async (req, res) => {
     console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
     console.log("Webhook body:", evt.data);
 
-    const user = await userModel.createUsers(id,first_name,last_name,username ) //andi cooked-- Pass the extracted data to the model function
-
+    const user = await userModel.createUsers(id,first_name,last_name,username ) 
     return res.status(200).json({
       success: true,
       message: "Webhook received",
