@@ -30,7 +30,7 @@ const getUsersById = async (id) => {
 const createUsers = async (id, first_name, last_name, username) => {
   return prisma.user.create({
     data: {
-      userId: id,
+      clerkUserId: id,
       firstName: first_name,
       lastName: last_name,
       userName: username,
