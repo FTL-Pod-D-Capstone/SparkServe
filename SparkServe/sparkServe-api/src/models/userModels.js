@@ -27,14 +27,15 @@ const getUsersById = async (id) => {
 };
 
 // Function to create a new user
-const createUsers = async (id,first_name,last_name,username) => {
+const createUsers = async (id, first_name, last_name, username) => {
   return prisma.user.create({
     data: {
       userId: id,
       firstName: first_name,
       lastName: last_name,
       userName: username,
-    },    include: {
+    },
+    include: {
       feedbacks: true,
       chatBotInteractions: true,
       notifications: true,
@@ -42,6 +43,7 @@ const createUsers = async (id,first_name,last_name,username) => {
     },
   });
 };
+
 
 // Function to update user
 const updateUser = async (id, userData) => {
