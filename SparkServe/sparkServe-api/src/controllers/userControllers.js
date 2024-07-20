@@ -72,16 +72,16 @@ const createUsers = async (req, res) => {
   }
 
   // Extract user data from the payload
-  const { id, first_name, last_name, username, email_addresses } = evt.data; 
+  const { id, first_name, last_name, username, email_addresses, phone_numbers } = evt.data; 
   const email_address = email_addresses[0].email_address;
-  const phone_numbers = phone_numbers[5].phone_number;
+  const phone_number = phone_numbers[4].phone_number;
   const eventType = evt.type;
   console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
   console.log("Webhook body:", evt.data);
 
   // Create a new user
   try {
-    const user = await userModel.createUsers(id, first_name, last_name, username,email_address);
+    const user = await userModel.createUsers(id, first_name, last_name, username,email_address,phone_number);
     return res.status(200).json({
       success: true,
       message: "User created successfully",
