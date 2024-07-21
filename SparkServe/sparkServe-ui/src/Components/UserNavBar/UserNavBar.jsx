@@ -10,12 +10,14 @@ import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import logo2 from '../../assets/logo2.png';
+import AccountPopover from '../AccountPopover/AccountPopover'; 
 
 const logoStyle = {
   width: '140px',
   height: 'auto',
   cursor: 'pointer',
 };
+
 function UserNavBar() {
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
@@ -63,12 +65,12 @@ function UserNavBar() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <img src={logo2} style={logoStyle} alt="Logo" />
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
-            <Button color="primary" variant="text" size="small" href="/signin">
-              Sign in
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
+            <Button color="primary" variant="text" size="small" href="/">
+              Home
             </Button>
-            <Button color="primary" variant="contained" size="small" href="/signup">
-              Sign up
+            <Button color="primary" variant="text" size="small" href="/NRLandingPage">
+              Opportunities
             </Button>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
@@ -80,16 +82,34 @@ function UserNavBar() {
             </IconButton>
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ width: 250, p: 2 }}>
-                <MenuItem>
-                  <Button color="primary" variant="contained" href="/signup" sx={{ width: '100%' }}>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" href="/signin" sx={{ width: '100%' }}>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                {location.pathname === '/' || location.pathname === '/signup' ? (
+                  <>
+                    <MenuItem>
+                      <Button color="primary" variant="contained" href="/signup" sx={{ width: '100%' }}>
+                        Sign up
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button color="primary" variant="outlined" href="/signin" sx={{ width: '100%' }}>
+                        Sign in
+                      </Button>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Button color="primary" variant="text" size="small" href="/" sx={{ width: '100%' }}>
+                        Home
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button color="primary" variant="text" size="small" href="/NRLandingPage" sx={{ width: '100%' }}>
+                        Opportunities
+                      </Button>
+                    </MenuItem>
+                    <AccountPopover />
+                  </>
+                )}
               </Box>
             </Drawer>
           </Box>
@@ -100,6 +120,8 @@ function UserNavBar() {
 }
 
 export default UserNavBar;
+
+
 
 
 
