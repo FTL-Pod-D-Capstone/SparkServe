@@ -5,7 +5,7 @@ const OrgThreeDB = () => {
   const containerRef = useRef();
 
   useEffect(() => {
-    let scene, camera, renderer, ribbon;
+    let scene, camera, renderer, ribbon, animationFrameId;
 
     const container = containerRef.current;
 
@@ -17,11 +17,11 @@ const OrgThreeDB = () => {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setClearColor(0xff66c4, 1); // Set the background color
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for better performance
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1, 128, 128),
+        new THREE.PlaneGeometry(1, 1, 32, 32), // Reduced segments for better performance
         new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 1.0 },
@@ -87,9 +87,6 @@ const OrgThreeDB = () => {
           `,
           extensions: {
             derivatives: true,
-            fragDepth: false,
-            drawBuffers: false,
-            shaderTextureLOD: false,
           },
           side: THREE.DoubleSide,
           transparent: true,
@@ -113,18 +110,22 @@ const OrgThreeDB = () => {
       const animate = () => {
         ribbon.material.uniforms.time.value += 0.01;
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       };
 
       animate();
+
+      return () => {
+        window.removeEventListener('resize', resize);
+        cancelAnimationFrame(animationFrameId);
+        container.removeChild(renderer.domElement);
+        renderer.dispose();
+        ribbon.geometry.dispose();
+        ribbon.material.dispose();
+      };
     };
 
     init();
-
-    // return () => {
-    //   window.removeEventListener('resize', resize);
-    //   container.removeChild(renderer.domElement);
-    // };
   }, []);
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
@@ -136,8 +137,9 @@ const containerStyle = {
   height: '100vh',
   left: '0',
   top: '0',
-  background: 'linear-gradient(to bottom, #4685f6, #31524F, #FFFFFF)', 
+  background: 'linear-gradient(to bottom, #ff66c4, #FFFFFF)',
   zIndex: -1,
 };
 
 export default OrgThreeDB;
+

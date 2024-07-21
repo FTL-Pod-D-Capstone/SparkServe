@@ -6,7 +6,7 @@ import OrgWelcomeCard from '../../OrgWelcomeCard/OrgWelcomeCard';
 const OrgWelcomePage = () => {
   return (
     <div>
-    <OrgThreeDB />
+    {/* <OrgThreeDB /> */}
       <OrgNavBar />
       <OrgWelcomeCard />
     </div>

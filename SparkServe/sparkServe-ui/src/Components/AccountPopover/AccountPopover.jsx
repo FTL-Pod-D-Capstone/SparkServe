@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -14,19 +15,10 @@ const account = {
   photoURL: 'https://via.placeholder.com/150',
 };
 
-const MENU_OPTIONS = [
-  {
-    label: 'Organization Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Notifications',
-    icon: 'eva:home-fill',
-  },
-];
-
 export default function AccountPopover() {
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = React.useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -34,6 +26,30 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    handleClose();
+  };
+
+  const renderMenuOptions = () => {
+    if (location.pathname === '/OrgWelcomePage' || location.pathname === '/Calendar') {
+      return (
+        <>
+          <MenuItem onClick={() => handleNavigation('/organization-profile')}>Organization Profile</MenuItem>
+          <MenuItem onClick={() => handleNavigation('/notifications')}>Notifications</MenuItem>
+        </>
+      );
+    } else if (location.pathname === '/NRLandingPage') {
+      return (
+        <>
+          <MenuItem onClick={() => handleNavigation('/signin')}>Sign in</MenuItem>
+          <MenuItem onClick={() => handleNavigation('/signup')}>Sign up</MenuItem>
+        </>
+      );
+    }
+    return null;
   };
 
   return (
@@ -89,25 +105,23 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
-            {option.label}
-          </MenuItem>
-        ))}
+        {renderMenuOptions()}
 
         <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
 
-        <MenuItem
-          disableRipple
-          disableTouchRipple
-          onClick={handleClose}
-          sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
-        >
-          Logout
-        </MenuItem>
+        {location.pathname !== '/NRLandingPage' && (
+          <MenuItem
+            disableRipple
+            disableTouchRipple
+            onClick={handleClose}
+            sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+          >
+            Logout
+          </MenuItem>
+        )}
       </Popover>
     </>
   );
-
 }
+
 
