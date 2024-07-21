@@ -1,5 +1,5 @@
 import React from 'react';
-import UserNavBar from '../../UserNavBar/UserNavBar'; 
+import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR'; 
 import ThreeDB from '../../ThreeDB/ThreeDB';
 import WelcomeCard from '../../WelcomeCard/WelcomeCard';
 import AppFeatures from '../../AppFeatures/AppFeatures';
@@ -9,7 +9,7 @@ import ProfileCards from '../../ProfileCards/ProfileCards';
 const WelcomePage = () => {
   return (
     <div>
-      <UserNavBar />
+      <UserNavBarNR />
       <ThreeDB />
       <WelcomeCard />
       <AppFeatures />

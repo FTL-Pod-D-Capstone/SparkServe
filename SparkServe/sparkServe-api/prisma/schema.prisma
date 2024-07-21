@@ -13,91 +13,91 @@ datasource db {
   url      = env("DEPLOYED_DATABASE_URL")
 }
 
-model user {
-  userId          Int       @id @default(autoincrement())
-  clerkUserId     String @unique
-  userName        String @unique
-  firstName       String
-  lastName        String
-  email           String?    @unique
-  password        String?
-  phoneNumber     String?
-  profilePicture  String?
-  bio             String?
-  address         String?
-  createdAt       DateTime  @default(now())
-  feedbacks       feedback[]                              // One-to-many relation with Feedback
-  chatBotInteractions chatBotInteraction[]               // One-to-many relation with ChatBotInteraction
-  notifications   notification[]                          // One-to-many relation with Notification
-  registrations   registration[]                          // One-to-many relation with Registration
+model User {
+  userId              Int                  @id @default(autoincrement())
+  username            String               @unique
+  firstName           String?
+  lastName            String?
+  email               String?              @unique
+  password            String
+  phoneNumber         String?              @unique
+  profilePicture      String?
+  bio                 String?
+  address             String?
+  createdAt           DateTime             @default(now())
+  feedbacks           Feedback[] // One-to-many relation with Feedback
+  chatBotInteractions ChatBotInteraction[] // One-to-many relation with ChatBotInteraction
+  notifications       Notification[] // One-to-many relation with Notification
+  registrations       Registration[] // One-to-many relation with Registration
 }
 
-model organization {
-  organizationId  Int       @id @default(autoincrement())
-  name            String
-  email           String    @unique
-  password        String
-  description     String
-  address         String
-  website         String
-  contactEmail    String
-  logo            String
-  createdAt       DateTime  @default(now())
-  opportunities   opportunity[]                           // One-to-many relation with Opportunity
+model Organization {
+  organizationId Int           @id @default(autoincrement())
+  name           String
+  email          String        @unique
+  password       String
+  phoneNumber    String        @unique
+  description    String
+  address        String
+  website        String
+  contactEmail   String
+  logo           String
+  createdAt      DateTime      @default(now())
+  opportunities  Opportunity[] // One-to-many relation with Opportunity
 }
 
-model opportunity {
-  opportunityId   Int       @id @default(autoincrement())
-  title           String
-  description     String
-  organizationId  Int
-  address         String
-  dateTime        DateTime
-  skillsRequired  String
-  spotsAvailable  Int
-  ageRange        String
-  createdAt       DateTime  @default(now())
-  organization    organization @relation(fields: [organizationId], references: [organizationId],onDelete: Cascade) // Relation to Organization
-  feedbacks       feedback[]                              // One-to-many relation with Feedback
-  registrations   registration[]                          // One-to-many relation with Registration
+model Opportunity {
+  opportunityId  Int            @id @default(autoincrement())
+  title          String
+  description    String
+  organizationId Int
+  address        String
+  dateTime       DateTime
+  skillsRequired String
+  spotsAvailable Int
+  ageRange       String
+  createdAt      DateTime       @default(now())
+  organization   Organization   @relation(fields: [organizationId], references: [organizationId], onDelete: Cascade) // Relation to Organization
+  feedbacks      Feedback[] // One-to-many relation with Feedback
+  registrations  Registration[] // One-to-many relation with Registration
 }
 
-model chatBotInteraction {
-  interactionId   Int       @id @default(autoincrement())
-  userId          Int
-  message         String
-  response        String
-  timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade)
-}
-//restructure feedback feature
-model feedback {
-  feedbackId      Int       @id @default(autoincrement())
-  userId          Int
-  opportunityId   Int
-  rating          Int
-  comments        String
-  timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade) // Relation to User
-  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId],onDelete: Cascade) // Relation to Opportunity
+model ChatBotInteraction {
+  interactionId Int      @id @default(autoincrement())
+  userId        Int
+  message       String
+  response      String
+  timestamp     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
-model notification {
-  notificationId  Int       @id @default(autoincrement())
-  userId          Int
-  message         String
-  type            String
-  readStatus      Boolean   @default(false)
-  timestamp       DateTime  @default(now())
-  user            user      @relation(fields: [userId], references: [userId],onDelete: Cascade) // Relation to User
-  }
+model Feedback {
+  feedbackId    Int         @id @default(autoincrement())
+  userId        Int
+  opportunityId Int
+  rating        Int
+  comments      String
+  timestamp     DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [opportunityId], onDelete: Cascade) // Relation to Opportunity
+}
 
-model registration {
-  registrationId  Int       @id @default(autoincrement())
-  userId          Int
-  opportunityId   Int
-  registrationTime DateTime @default(now())
-  status          String
-  user            user      @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
-  opportunity     opportunity @relation(fields: [opportunityId], references: [opportunityId],onDelete: Cascade) // Relation to Opportunity
+model Notification {
+  notificationId Int      @id @default(autoincrement())
+  userId         Int
+  message        String
+  type           String
+  readStatus     Boolean  @default(false)
+  timestamp      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
+}
+
+model Registration {
+  registrationId   Int         @id @default(autoincrement())
+  userId           Int
+  opportunityId    Int
+  registrationTime DateTime    @default(now())
+  status           String
+  user             User        @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
+  opportunity      Opportunity @relation(fields: [opportunityId], references: [opportunityId], onDelete: Cascade) // Relation to Opportunity
 }

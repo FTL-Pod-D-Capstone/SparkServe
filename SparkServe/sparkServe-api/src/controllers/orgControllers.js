@@ -1,4 +1,57 @@
 const organizationModel = require("../models/orgModels");
+const jwt = require("jsonwebtoken");
+
+// Function to register a new organization
+const registerOrganization = async (req, res) => {
+  try {
+    const { name, email, password, phoneNumber, description, address, website, contactEmail, logo } = req.body;
+
+    // Check if an organization with the same email or phone number already exists
+    const existingOrganizationByEmail = await organizationModel.findOrganizationByEmail(email);
+    if (existingOrganizationByEmail) {
+      return res.status(400).json({ error: "Email is already in use" });
+    }
+
+    const existingOrganizationByPhoneNumber = await organizationModel.findOrganizationByPhoneNumber(phoneNumber);
+    if (existingOrganizationByPhoneNumber) {
+      return res.status(400).json({ error: "Phone number is already in use" });
+    }
+
+    const newOrganization = await organizationModel.createOrganization({
+      name,
+      email,
+      password,
+      phoneNumber,
+      description,
+      address,
+      website,
+      contactEmail,
+      logo,
+    });
+    res.status(201).json(newOrganization);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Function to log in an organization
+const loginOrganization = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const organization = await organizationModel.validateOrganizationCredentials(email, password);
+    if (!organization) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ id: organization.organizationId, email: organization.email }, 'your_jwt_secret', { expiresIn: '1h' });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // Function to get all organizations 
 const getAllOrganizations = async (req, res) => {
@@ -93,5 +146,7 @@ module.exports = {
   createOrganization,
   updateOrganization,
   deleteOrganization,
-  getOppsByOrgId
+  getOppsByOrgId,
+  registerOrganization,
+  loginOrganization,
 };

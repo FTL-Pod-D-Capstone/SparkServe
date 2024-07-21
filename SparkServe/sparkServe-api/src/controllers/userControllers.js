@@ -1,5 +1,6 @@
 const userModel = require("../models/userModels");
-const { Webhook } = require("svix");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // Function to get all users
 const getAllUsers = async (req, res) => {
@@ -12,9 +13,9 @@ const getAllUsers = async (req, res) => {
 };
 
 // Function to get user by ID
-const getUsersById = async (req, res) => {
+const findUserById = async (req, res) => {
   try {
-    const user = await userModel.getUsersById(req.params.id);
+    const user = await userModel.findUserById(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -25,66 +26,64 @@ const getUsersById = async (req, res) => {
   }
 };
 
-// Function to create a new user
-const createUsers = async (req, res) => {
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-    if (!WEBHOOK_SECRET) {
-      throw new Error("You need a WEBHOOK_SECRET in your .env");
+// Register User
+const register = async (req, res) => {
+  const { username, email, phoneNumber, password } = req.body;
+  try {
+    // Check if user already exists by username, email, or phone number
+    const existingUser =
+      (await userModel.findUserByUsername(username)) ||
+      (await userModel.findUserByEmail(email)) ||
+      (await userModel.findUserByPhoneNumber(phoneNumber));
+
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: "Username, email, or phone number already exists" });
     }
 
-    // Get the headers and body
-    const headers = req.headers;
-    const payload = JSON.stringify(req.body);
+    // Hash the password using bcrypt and salt factor 10
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Get the Svix headers for verification
-    const svix_id = headers["svix-id"];
-    const svix_timestamp = headers["svix-timestamp"];
-    const svix_signature = headers["svix-signature"];
-
-    // If there are no Svix headers, error out
-    if (!svix_id || !svix_timestamp || !svix_signature) {
-      return new Response("Error occured -- no svix headers", {
-        status: 400,
-      });
-    }
-
-    // Create a new Svix instance with your secret.
-    const wh = new Webhook(WEBHOOK_SECRET);
-
-    let evt;
-
-    // Attempt to verify the incoming webhook
-    // If successful, the payload will be available from 'evt'
-    // If the verification fails, error out and  return error code
-    try {
-      evt = wh.verify(payload, {
-        "svix-id": svix_id,
-        "svix-timestamp": svix_timestamp,
-        "svix-signature": svix_signature,
-      });
-    } catch (err) {
-      console.log("Error verifying webhook:", err.message);
-      return res.status(400).json({
-        success: false,
-        message: err.message,
-      });
-    }
-
-    // Do something with the payload
-    // For this guide, you simply log the payload to the console
-    const { id,first_name,last_name,username  } = evt.data;
-    const eventType = evt.type;
-    console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
-    console.log("Webhook body:", evt.data);
-
-    const user = await userModel.createUsers(id,first_name,last_name,username ) //andi cooked-- Pass the extracted data to the model function
-
-    return res.status(200).json({
-      success: true,
-      message: "Webhook received",
-      user: user
+    // Create the user with the hashed password
+    const user = await userModel.createUser({
+      username,
+      email,
+      phoneNumber,
+      password: hashedPassword,
     });
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Register Error: ", error); // Log the detailed error for debugging
+    res.status(400).json({ error: error.message || "User register error" });
   }
+};
+
+// Function to login user
+const login = async (req, res) => {
+  const { username, email, phoneNumber, password } = req.body;
+  let user;
+
+  if (username) {
+    user = await userModel.findUserByUsername(username);
+  } else if (email) {
+    user = await userModel.findUserByEmail(email);
+  } else if (phoneNumber) {
+    user = await userModel.findUserByPhoneNumber(phoneNumber);
+  }
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    // create a json web token
+    const token = jwt.sign(
+      { userId: user.userId, username: user.username }, //as a token encode info and respond to the client
+      process.env.JWT_SECRET_KEY //setup env variable for secret key
+    );
+    res.status(200).json({ token });
+  } else {
+    res.status(401).json({ error: "Invalid Credentials" });
+  }
+};
 
 // Function to update user
 const updateUser = async (req, res) => {
@@ -105,7 +104,11 @@ const deleteUsers = async (req, res) => {
   try {
     const deletedUser = await userModel.deleteUsers(req.params.id);
     if (deletedUser) {
-      res.status(200).json(deletedUser);
+      res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+        user: deletedUser,
+      });
     } else {
       res.status(404).json({ error: "User not found" });
     }
@@ -117,8 +120,9 @@ const deleteUsers = async (req, res) => {
 // Export the functions
 module.exports = {
   getAllUsers,
-  getUsersById,
-  createUsers,
+  findUserById,
+  register,
   updateUser,
   deleteUsers,
+  login,
 };

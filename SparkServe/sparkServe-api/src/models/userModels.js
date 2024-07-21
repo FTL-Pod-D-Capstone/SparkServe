@@ -13,29 +13,43 @@ const getAllUsers = async () => {
   });
 };
 
-// Function to get user by ID
-const getUsersById = async (id) => {
-  return prisma.user.findUnique({
-    where: { userId: parseInt(id) },
-    include: {
-      feedbacks: true,
-      chatBotInteractions: true,
-      notifications: true,
-      registrations: true,
-    },
+// Function to create a new user
+const createUser = async (data) => {
+  try {
+    return await prisma.user.create({
+      data,
+    });
+  } catch (error) {
+    console.error("Create User Error: ", error);
+    throw new Error("Failed to create user");
+  }
+};
+
+// Function to find user by username
+const findUserByUsername = async (username) => {
+  return await prisma.user.findUnique({
+    where: { username },
   });
 };
 
-// Function to create a new user
-const createUsers = async (userData) => {
-  return prisma.user.create({
-    data: userData,
-    include: {
-      feedbacks: true,
-      chatBotInteractions: true,
-      notifications: true,
-      registrations: true,
-    },
+// Function to find user by email
+const findUserByEmail = async (email) => {
+  return await prisma.user.findUnique({
+    where: { email },
+  });
+};
+
+// Function to find user by phone number
+const findUserByPhoneNumber = async (phoneNumber) => {
+  return await prisma.user.findUnique({
+    where: { phoneNumber },
+  });
+};
+
+// Function to get user by ID
+const findUserById = async (userId) => {
+  return await prisma.user.findUnique({
+    where: { userId: parseInt(userId) },
   });
 };
 
@@ -61,8 +75,11 @@ const deleteUsers = async (id) => {
 // Export the functions
 module.exports = {
   getAllUsers,
-  getUsersById,
-  createUsers,
+  findUserById,
+  findUserByUsername,
+  findUserByEmail,
+  findUserByPhoneNumber,
+  createUser,
   updateUser,
   deleteUsers,
 };

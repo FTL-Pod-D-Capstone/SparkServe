@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserNavBar from '../../UserNavBar/UserNavBar';
+import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
 import { Container, Grid, Button, Box, IconButton } from '@mui/material';
 import Footer from '../../Footer/Footer';
 import Cards from '../../Cards/Cards';
 import { posts } from '../../DumyData/DummyData';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import VolOppContainer from '../../VolCardContainer/VolOppContainer'
+
 
 const NRLandingPage = () => {
     const navigate = useNavigate();
@@ -20,7 +22,7 @@ const NRLandingPage = () => {
 
     return (
         <>
-            <UserNavBar />
+            <UserNavBarNR />
             <Box
                 sx={{
                     background: 'linear-gradient(to bottom, #4685f6, white)',
@@ -30,27 +32,7 @@ const NRLandingPage = () => {
                 }}
             >
                 <Container>
-                    <Grid
-                        container
-                        rowSpacing={4}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        {posts.map((post) => (
-                            <Grid item xs={12} sm={6} md={4} key={post.id}>
-                                <Cards
-                                    className="Cards"
-                                    title={post.title}
-                                    cover={post.cover}
-                                    author={post.author}
-                                    view={post.view}
-                                    comment={post.comment}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <VolOppContainer/>
                     <Box
                         sx={{
                             display: 'flex',
