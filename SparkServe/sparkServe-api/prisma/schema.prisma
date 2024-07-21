@@ -15,15 +15,16 @@ datasource db {
 
 model user {
   userId          Int       @id @default(autoincrement())
-  userName        String
+  clerkUserId     String @unique
+  userName        String @unique
   firstName       String
   lastName        String
-  email           String    @unique
-  password        String
-  phoneNumber     String
-  profilePicture  String
-  bio             String
-  address         String
+  email           String?    @unique
+  password        String?
+  phoneNumber     String?
+  profilePicture  String?
+  bio             String?
+  address         String?
   createdAt       DateTime  @default(now())
   feedbacks       feedback[]                              // One-to-many relation with Feedback
   chatBotInteractions chatBotInteraction[]               // One-to-many relation with ChatBotInteraction
