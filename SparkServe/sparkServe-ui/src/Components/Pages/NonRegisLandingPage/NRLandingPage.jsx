@@ -32,17 +32,16 @@ const NRLandingPage = () => {
                 }}
             >
                 <Container>
-                    <VolOppContainer/>
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'flex-end',
-                            marginTop: 2,
+                            marginTop: 10,
                             marginBottom: 2,
                         }}
                     >
                         <IconButton
-                            color="primary"
+                            color="white"
                             onClick={handleBackClick}
                         >
                             <ArrowBackIosIcon />
@@ -56,6 +55,7 @@ const NRLandingPage = () => {
                     >
                         Search by Map
                     </Button>
+                    <VolOppContainer/>
                 </Container>
             </Box>
             <Footer />
