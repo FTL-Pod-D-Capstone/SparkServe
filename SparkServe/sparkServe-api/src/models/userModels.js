@@ -13,39 +13,45 @@ const getAllUsers = async () => {
   });
 };
 
-// Function to get user by ID
-const getUsersById = async (id) => {
-  return prisma.user.findUnique({
-    where: { userId: parseInt(id) },
-    include: {
-      feedbacks: true,
-      chatBotInteractions: true,
-      notifications: true,
-      registrations: true,
-    },
-  });
-};
-
 // Function to create a new user
-const createUsers = async (id, first_name, last_name, username, email_address, phone_number) => {
-  return prisma.user.create({
-    data: {
-      clerkUserId: id,
-      firstName: first_name,
-      lastName: last_name,
-      userName: username,
-      email: email_address,
-      phoneNumber: phone_number,
-    },
-    include: {
-      feedbacks: true,
-      chatBotInteractions: true,
-      notifications: true,
-      registrations: true,
-    },
+const createUser = async (data) => {
+  try {
+    return await prisma.user.create({
+      data,
+    });
+  } catch (error) {
+    console.error("Create User Error: ", error);
+    throw new Error("Failed to create user");
+  }
+};
+
+// Function to find user by username
+const findUserByUsername = async (username) => {
+  return await prisma.user.findUnique({
+    where: { username },
   });
 };
 
+// Function to find user by email
+const findUserByEmail = async (email) => {
+  return await prisma.user.findUnique({
+    where: { email },
+  });
+};
+
+// Function to find user by phone number
+const findUserByPhoneNumber = async (phoneNumber) => {
+  return await prisma.user.findUnique({
+    where: { phoneNumber },
+  });
+};
+
+// Function to get user by ID
+const findUserById = async (userId) => {
+  return await prisma.user.findUnique({
+    where: { userId: parseInt(userId) },
+  });
+};
 
 // Function to update user
 const updateUser = async (id, userData) => {
@@ -63,14 +69,17 @@ const updateUser = async (id, userData) => {
 
 // Function to delete user
 const deleteUsers = async (id) => {
-  return prisma.user.delete({ where: { clerkUserId: parseInt(id),  } });
+  return prisma.user.delete({ where: { userId: parseInt(id) } });
 };
 
 // Export the functions
 module.exports = {
   getAllUsers,
-  getUsersById,
-  createUsers,
+  findUserById,
+  findUserByUsername,
+  findUserByEmail,
+  findUserByPhoneNumber,
+  createUser,
   updateUser,
   deleteUsers,
 };
