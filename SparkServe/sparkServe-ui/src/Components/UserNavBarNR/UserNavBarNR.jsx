@@ -15,8 +15,7 @@ const logoStyle = {
   height: 'auto',
   cursor: 'pointer',
 };
-
-function UserNavBarNR() {
+function UserNavBar() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -64,4 +63,4 @@ function UserNavBarNR() {
   );
 }
 
-export default UserNavBarNR;
+export default UserNavBar;

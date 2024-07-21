@@ -8,21 +8,16 @@ import UserLandingPage from '../Components/Pages/UserPages/UserLanding/UserLandi
 import UserProfilePage from '../Components/Pages/UserPages/UserProfile/UserProfilePage';
 import MapPage from '../Components/Pages/MapPage/MapPage'
 import OrgWelcomePage from '../Components/Pages/OrgWelcomePage/OrgWelcomePage'
+import OrgLandingPage from '../Components/Pages/OrgLandingpage/OrgLandingPage';
 
 const PageRoutes = () => {
     return (
     <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/NRLandingPage" element={<NRLandingPage/>} />
-        <Route path="/UserLanding" element={<UserLandingPage/>} />
-        <Route path="/Calander" element={<Calendar/>} />
-        <Route path="/ProfilePage" element={<UserProfilePage/>} />
-        <Route path="/Map" element={<MapPage/>} />
-        <Route path="/OrgWelcomePage" element={<OrgWelcomePage/>} />
-        <Route path="/Calendar" element={<Calendar/>} />
-
-        <Route path="/post/:id" element={<VolunOppPage/>} />
-
+        <Route path= "OrgWelcomePage" element={<OrgWelcomePage/>} />
+        <Route path="Calendar" element={<Calendar/>} />
+        <Route path="Map" element={<MapPage />} /> 
     </Routes>
     );
 };
