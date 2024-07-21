@@ -36,6 +36,7 @@ model Organization {
   name           String
   email          String        @unique
   password       String
+  phoneNumber    String        @unique
   description    String
   address        String
   website        String
