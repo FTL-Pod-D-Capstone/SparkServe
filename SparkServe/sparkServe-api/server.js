@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const userRoutes = require("./src/routes/userRoutes");
-const orgRoutes = require("./src/routes/organizationRoutes");
-const oppRoutes = require("./src/routes/opportunityRoutes");
+const organizationRoutes = require("./src/routes/organizationRoutes");
+const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
 
 const app = express();
@@ -29,10 +29,10 @@ app.get("/", (req, res) => {
 app.use("/users", userRoutes);
 
 // // Orgs routes
- app.use("/orgs", orgRoutes);
+ app.use("/orgs", organizationRoutes);
 
  //Opportunity routes
- app.use("/opps", oppRoutes);
+ app.use("/opps", opportunityRoutes);
 
 //Registration routes
 app.use("/registration", registrationRoutes);
