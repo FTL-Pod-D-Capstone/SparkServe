@@ -6,8 +6,8 @@ import Calendar from '../Components/Pages/Calendar/Calendar';
 import MapPage from '../Components/Pages/MapPage/MapPage';
 import OrgWelcomePage from '../Components/Pages/OrgWelcomePage/OrgWelcomePage';
 import OrgLandingPage from '../Components/Pages/OrgLandingpage/OrgLandingPage';
-import LogInPage from '../Components/Pages/LogInPage/LogInPage';
-import SignUpPage from '../Components/Pages/SignUpPage/SignUpPage'; // Import the SignUpPage component
+import UserLogInPage from '../Components/Pages/UserLogInPage/UserLogInPage';
+import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage'; 
 
 const PageRoutes = () => {
   return (
@@ -16,8 +16,8 @@ const PageRoutes = () => {
       <Route path="/UserLandingPage" element={<UserLandingPage />} />
       <Route path="/OrgWelcomePage" element={<OrgWelcomePage />} />
       <Route path="/OrgLandingPage" element={<OrgLandingPage />} />
-      <Route path="/LogInPage" element={<LogInPage />} /> 
-      <Route path="/SignUpPage" element={<SignUpPage />} /> {/* Ensure the path and component are correctly linked */}
+      <Route path="/UserLogInPage" element={<UserLogInPage />} /> 
+      <Route path="/UserSignUpPage" element={<UserSignUpPage />} /> 
       <Route path="/Calendar" element={<Calendar />} />
       <Route path="/Map" element={<MapPage />} />
     </Routes>

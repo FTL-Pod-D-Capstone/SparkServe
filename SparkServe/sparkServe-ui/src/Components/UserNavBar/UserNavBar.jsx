@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import logo2 from '../../assets/logo2.png';
 import AccountPopover from '../AccountPopover/AccountPopover';
-import SignIn from '../SignIn/SignIn'; 
+import UserSignIn from '../UserSignIn/UserSignIn'; 
 
 
 const logoStyle = {
@@ -44,7 +44,7 @@ function UserNavBar() {
           <Button color="primary" variant="text" size="small" onClick={handleSignInClick}>
             Sign in
           </Button>
-          <Button color="primary" variant="contained" size="small" href="/SignUpPage">
+          <Button color="primary" variant="contained" size="small" href="/UserSignUpPage">
             Sign up
           </Button>
         </>
@@ -97,7 +97,7 @@ function UserNavBar() {
                   {location.pathname === '/' || location.pathname === '/signup' ? (
                     <>
                       <MenuItem>
-                        <Button color="primary" variant="contained" href="/SignUpPage" sx={{ width: '100%' }}>
+                        <Button color="primary" variant="contained" href="/UserSignUpPage" sx={{ width: '100%' }}>
                           Sign up
                         </Button>
                       </MenuItem>
@@ -128,7 +128,7 @@ function UserNavBar() {
           </Toolbar>
         </Container>
       </AppBar>
-      <SignIn open={signInModalOpen} handleClose={handleSignInClose} />
+      <UserSignIn open={signInModalOpen} handleClose={handleSignInClose} />
     </>
   );
 }
