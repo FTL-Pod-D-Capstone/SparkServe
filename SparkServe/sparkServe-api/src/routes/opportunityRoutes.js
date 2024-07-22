@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const opportunityController = require("../controllers/oppControllers");
+const opportunityController = require("../controllers/opportunityControllers");
 
 // get all opportunities with filters
 router.get("/", opportunityController.getAllOpportunities);

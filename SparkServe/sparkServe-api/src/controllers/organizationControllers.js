@@ -1,4 +1,4 @@
-const organizationModel = require("../models/orgModels");
+const organizationModel = require("../models/organizationModels");
 const jwt = require("jsonwebtoken");
 
 // Function to register a new organization

@@ -1,4 +1,4 @@
-const opportunityModel = require("../models/oppModels");
+const opportunityModel = require("../models/opportunityModels");
 
 // Function to get all opportunities with filters
 const getAllOpportunities = async (req, res) => {
