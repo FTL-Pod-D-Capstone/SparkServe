@@ -33,7 +33,7 @@ function WelcomeCard() {
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
-    navigate('/NRLandingPage');
+    navigate('/UserLandingPage');
   };
 
   const handleCreateClick = () => {

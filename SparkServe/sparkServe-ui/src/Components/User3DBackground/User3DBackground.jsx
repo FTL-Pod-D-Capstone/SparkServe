@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
 
-const ThreeDB = () => {
+const User3DBackground = () => {
   const containerRef = useRef();
   const location = useLocation();
 
@@ -23,7 +23,7 @@ const ThreeDB = () => {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setClearColor(0x4685f6, 1); // Set the background color
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for better performance
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); // Limit pixel ratio for better performance
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
@@ -154,6 +154,6 @@ const containerStyle = {
   zIndex: -1,
 };
 
-export default ThreeDB;
+export default User3DBackground;
 
 

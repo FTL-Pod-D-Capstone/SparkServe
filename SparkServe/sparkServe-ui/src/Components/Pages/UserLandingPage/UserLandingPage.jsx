@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
+import UserNavBar from '../../UserNavBar/UserNavBar';
 import { Container, Grid, Button, Box, IconButton } from '@mui/material';
 import Footer from '../../Footer/Footer';
 import Cards from '../../Cards/Cards';
@@ -9,7 +9,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import VolOppContainer from '../../VolCardContainer/VolOppContainer'
 
 
-const NRLandingPage = () => {
+const UserLandingPage = () => {
     const navigate = useNavigate();
 
     const handleMapClick = () => {
@@ -22,7 +22,7 @@ const NRLandingPage = () => {
 
     return (
         <>
-            <UserNavBarNR />
+            <UserNavBar />
             <Box
                 sx={{
                     background: 'linear-gradient(to bottom, #4685f6, white)',
@@ -63,6 +63,6 @@ const NRLandingPage = () => {
     );
 };
 
-export default NRLandingPage;
+export default UserLandingPage;
 
 

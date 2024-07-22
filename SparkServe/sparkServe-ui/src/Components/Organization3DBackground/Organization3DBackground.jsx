@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
 
-const OrgThreeDB = () => {
+const Organization3DBackground = () => {
   const containerRef = useRef();
   const location = useLocation();
 
@@ -154,5 +154,5 @@ const containerStyle = {
   zIndex: -1,
 };
 
-export default OrgThreeDB;
+export default Organization3DBackground;
 

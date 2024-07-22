@@ -1,8 +1,8 @@
 import React from 'react'
 import Footer from '../../../Footer/Footer'
-import UserNavBarREG from '../../../../Components/UserNavBarREG/UserNavBarREG'
+import UserNavBar from '../../../../Components/UserNavBar/UserNavBar'
 import { Typography } from '@mui/material'
-import '../UserLanding/UserLandingPage.css'
+// import '../UserLanding/UserLandingPage.css'
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ const UserProfilePage = () => {
 
     return (
         <>
-            <UserNavBarREG/>
+            <UserNavBar/>
             <Typography>
             <div className='TopBlock'>
             <IconButton onClick={handleGoBack} aria-label="go back">
