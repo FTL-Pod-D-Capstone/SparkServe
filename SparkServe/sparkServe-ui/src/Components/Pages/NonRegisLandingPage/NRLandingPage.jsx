@@ -8,7 +8,6 @@ import { posts } from '../../DumyData/DummyData';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import VolOppContainer from '../../VolCardContainer/VolOppContainer'
 
-
 const NRLandingPage = () => {
     const navigate = useNavigate();
 
@@ -19,6 +18,9 @@ const NRLandingPage = () => {
     const handleBackClick = () => {
         navigate('/');
     };
+
+    
+
 
     return (
         <>
