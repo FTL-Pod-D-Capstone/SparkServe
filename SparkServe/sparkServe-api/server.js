@@ -5,6 +5,9 @@ const userRoutes = require("./src/routes/userRoutes");
 const organizationRoutes = require("./src/routes/organizationRoutes");
 const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
+require("dotenv").config();
+const { rateLimiter } = require("../sparkServe-api/utils/security");
+const chatbotRoutes = require("./routes/chatbotRoutes");
 
 const app = express();
 const port = 3000;
@@ -37,7 +40,10 @@ app.use("/users", userRoutes);
 //Registration routes
 app.use("/registration", registrationRoutes);
 
+//use rate limiter for OpenAPI
+app.use(rateLimiter);
 
+app.use("/api/chat", chatbotRoutes);
 
 
 // Start the server
