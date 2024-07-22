@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useLocation } from 'react-router-dom';
 
-const ThreeDB = () => {
+const User3DBackground = () => {
   const containerRef = useRef();
+  const location = useLocation();
 
   useEffect(() => {
-    let scene, camera, renderer, ribbon, animationFrameId;
+    if (location.pathname !== '/' && location.pathname !== '/org') {
+      return;
+    }
 
+    let scene, camera, renderer, ribbon, animationFrameId;
     const container = containerRef.current;
+    let frame = 0;
 
     const init = () => {
       scene = new THREE.Scene();
@@ -17,11 +23,11 @@ const ThreeDB = () => {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setClearColor(0x4685f6, 1); // Set the background color
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); // Limit pixel ratio for better performance
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1, 32, 32), // Reduced segments for better performance
+        new THREE.PlaneGeometry(1, 1, 16, 16), // Reduced segments for better performance
         new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 1.0 },
@@ -108,8 +114,11 @@ const ThreeDB = () => {
       resize();
 
       const animate = () => {
-        ribbon.material.uniforms.time.value += 0.01;
-        renderer.render(scene, camera);
+        if (frame % 2 === 0) { // Render every 2nd frame for better performance
+          ribbon.material.uniforms.time.value += 0.01;
+          renderer.render(scene, camera);
+        }
+        frame++;
         animationFrameId = requestAnimationFrame(animate);
       };
 
@@ -126,7 +135,11 @@ const ThreeDB = () => {
     };
 
     init();
-  }, []);
+  }, [location.pathname]);
+
+  if (location.pathname !== '/' && location.pathname !== '/org') {
+    return null;
+  }
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
 };
@@ -141,6 +154,6 @@ const containerStyle = {
   zIndex: -1,
 };
 
-export default ThreeDB;
+export default User3DBackground;
 
 

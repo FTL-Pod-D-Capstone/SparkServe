@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
+import UserNavBar from '../../UserNavBar/UserNavBar';
 import ReactGoogleMapComponent from '../../Map/Map';
 import Footer from '../../Footer/Footer';
 import { Box, IconButton } from '@mui/material';
@@ -10,7 +10,7 @@ const MapPage = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate('/NRLandingPage');
+    navigate('/UserLandingPage');
   };
 
   return (
@@ -22,7 +22,7 @@ const MapPage = () => {
         flexDirection: 'column',
       }}
     >
-      <UserNavBarNR />
+      <UserNavBar />
       <Box
         id="map-container"
         sx={{

@@ -41,6 +41,7 @@ model Organization {
   address        String
   website        String
   contactEmail   String
+  primaryCause   String?
   logo           String
   createdAt      DateTime      @default(now())
   opportunities  Opportunity[] // One-to-many relation with Opportunity
@@ -53,6 +54,7 @@ model Opportunity {
   organizationId Int
   address        String
   dateTime       DateTime
+  relatedCause   String?
   skillsRequired String
   spotsAvailable Int
   ageRange       String

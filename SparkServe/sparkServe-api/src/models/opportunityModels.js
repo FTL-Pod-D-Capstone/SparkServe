@@ -33,6 +33,7 @@ const createOpportunity = async (opportunityData) => {
       organizationId: opportunityData.organizationId,
       address: opportunityData.address,
       dateTime: new Date(opportunityData.dateTime),
+      relatedCause: opportunityData.relatedCause,
       skillsRequired: opportunityData.skillsRequired,
       spotsAvailable: opportunityData.spotsAvailable,
       ageRange: opportunityData.ageRange,

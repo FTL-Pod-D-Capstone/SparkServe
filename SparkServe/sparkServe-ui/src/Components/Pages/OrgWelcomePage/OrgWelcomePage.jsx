@@ -1,12 +1,20 @@
 import React from 'react';
-import OrgThreeDB from '../../OrgThreeDB/OrgThreeDB';
-import OrgNavBar from '../../OrgNavBar/OrgNavBar'; 
+import OrgNavBar from '../../OrgNavBar/OrgNavBar';
 import OrgWelcomeCard from '../../OrgWelcomeCard/OrgWelcomeCard';
+import backgroundImage from '../../../assets/SparkServe-Organization-Background.jpg'; 
 
 const OrgWelcomePage = () => {
+  const backgroundStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    width: '100%',
+    height: '100vh', 
+    position: 'relative',
+  };
+
   return (
-    <div>
-    {/* <OrgThreeDB /> */}
+    <div style={backgroundStyle}>
       <OrgNavBar />
       <OrgWelcomeCard />
     </div>
