@@ -5,7 +5,7 @@ const ThreeDB = () => {
   const containerRef = useRef();
 
   useEffect(() => {
-    let scene, camera, renderer, ribbon;
+    let scene, camera, renderer, ribbon, animationFrameId;
 
     const container = containerRef.current;
 
@@ -21,7 +21,7 @@ const ThreeDB = () => {
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1, 128, 128),
+        new THREE.PlaneGeometry(1, 1, 32, 32), // Reduced segments for better performance
         new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 1.0 },
@@ -87,9 +87,6 @@ const ThreeDB = () => {
           `,
           extensions: {
             derivatives: true,
-            fragDepth: false,
-            drawBuffers: false,
-            shaderTextureLOD: false,
           },
           side: THREE.DoubleSide,
           transparent: true,
@@ -113,18 +110,22 @@ const ThreeDB = () => {
       const animate = () => {
         ribbon.material.uniforms.time.value += 0.01;
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       };
 
       animate();
+
+      return () => {
+        window.removeEventListener('resize', resize);
+        cancelAnimationFrame(animationFrameId);
+        container.removeChild(renderer.domElement);
+        renderer.dispose();
+        ribbon.geometry.dispose();
+        ribbon.material.dispose();
+      };
     };
 
     init();
-
-    // return () => {
-    //   window.removeEventListener('resize', resize);
-    //   container.removeChild(renderer.domElement);
-    // };
   }, []);
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
@@ -136,8 +137,10 @@ const containerStyle = {
   height: '100vh',
   left: '0',
   top: '0',
-  background: 'linear-gradient(to bottom, #4685f6, #31524F, #FFFFFF)', 
+  background: 'linear-gradient(to bottom, #4685f6, #31524F, #FFFFFF)',
   zIndex: -1,
 };
 
 export default ThreeDB;
+
+

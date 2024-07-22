@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import logo2 from '../../assets/logo2.png';
+import { alpha } from '@mui/material';
 
 const logoStyle = {
   width: '140px',
@@ -45,24 +46,57 @@ function WelcomeCard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 'calc(100vh - 400px)', 
-        paddingTop: '10px', 
+        minHeight: 'calc(100vh - 400px)',
+        paddingTop: '10px',
       }}
     >
-      <Card sx={{ maxHeight: 1000, maxWidth: 700, height: '100%', width: '700px', bgcolor: 'white', boxShadow: 3, zIndex: 99 }}>
+      <Card
+        sx={{
+          maxHeight: 1000,
+          maxWidth: 700,
+          height: '100%',
+          width: '700px',
+          bgcolor: 'white',
+          boxShadow: 3,
+          zIndex: 99,
+        }}
+      >
         <CardContent sx={cardStyle}>
           <img src={logo2} style={logoStyle} alt="Logo" />
-          <Typography variant="h5" component="div" gutterBottom>
+          <Typography
+            variant="h5"
+            component="div"
+            gutterBottom
+            sx={{
+              color: (theme) => theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+            }}
+          >
             Welcome to Our Platform
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{
+              color: (theme) => theme.palette.mode === 'light' ? 'text.secondary' : 'text.primary',
+            }}
+          >
             Connecting your passion to purpose.
           </Typography>
           <Box sx={{ mt: 3 }}>
-            <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleExploreClick}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={buttonStyle}
+              onClick={handleExploreClick}
+            >
               Explore Opportunities
             </Button>
-            <Button variant="outlined" color="primary" sx={buttonStyle} onClick={handleCreateClick}>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={buttonStyle}
+              onClick={handleCreateClick}
+            >
               Create Your Own
             </Button>
           </Box>
@@ -73,3 +107,4 @@ function WelcomeCard() {
 }
 
 export default WelcomeCard;
+

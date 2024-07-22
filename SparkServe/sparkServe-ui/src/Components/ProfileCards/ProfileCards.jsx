@@ -1,9 +1,8 @@
 import React from 'react';
-import { Container, Box, IconButton } from '@mui/material';
+import { Container, Box, IconButton, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -36,50 +35,83 @@ const profileData = [
 ];
 
 const ProfileCards = () => {
-  console.log('Rendering ProfileCards');
   return (
-    <Container sx={{ mt: 1 }}> 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-        {profileData.map((profile, index) => (
-          <Card sx={{ maxWidth: 400, margin: 1, zIndex: 99 }} key={index}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="200"
-                image={profile.image}
-                alt={profile.name}
-              />
-              <CardContent sx={{ paddingTop: '2px' }}></CardContent>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {profile.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {profile.description}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-                  <IconButton
-                    color="primary"
-                    href={profile.linkedin}
-                    aria-label="LinkedIn"
-                    sx={{ alignSelf: 'center' }}
-                  >
-                    <LinkedInIcon />
-                  </IconButton>
-                  <IconButton
-                    color="inherit"
-                    href={profile.github}
-                    aria-label="GitHub"
-                    sx={{ alignSelf: 'center', color: 'black' }}
-                  >
-                    <GitHubIcon />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
-      </Box>
+    <Container sx={{ mt: 4 }}>
+      <Card
+        sx={{
+          p: 4,
+          backgroundColor: 'white',
+          borderRadius: 2,
+          boxShadow: 3,
+          mt: 4, // Lower the card a bit
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
+          <Typography
+            component="h2"
+            variant="h4"
+            color="text.primary"
+            sx={{ textAlign: 'center', mr: 2 }}
+          >
+            Meet the&nbsp;
+            <Typography
+              component="span"
+              variant="h4"
+              sx={{ color: 'primary.main' }}
+            >
+              creators
+            </Typography>
+          </Typography>
+          <lord-icon
+            src="https://cdn.lordicon.com/mebvgwrs.json"
+            trigger="hover"
+            stroke="light"
+            colors="primary:#121331,secondary:#f9c9c0,tertiary:#4bb3fd,quaternary:#c67d53,quinary:#ebe6ef"
+            style={{ width: '50px', height: '50px' }}
+          ></lord-icon>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          {profileData.map((profile, index) => (
+            <Card sx={{ maxWidth: 400, margin: 2, zIndex: 99 }} key={index}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={profile.image}
+                  alt={profile.name}
+                />
+                <CardContent sx={{ paddingTop: '2px' }}></CardContent>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {profile.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {profile.description}
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+                    <IconButton
+                      color="primary"
+                      href={profile.linkedin}
+                      aria-label="LinkedIn"
+                      sx={{ alignSelf: 'center' }}
+                    >
+                      <LinkedInIcon />
+                    </IconButton>
+                    <IconButton
+                      color="inherit"
+                      href={profile.github}
+                      aria-label="GitHub"
+                      sx={{ alignSelf: 'center', color: 'black' }}
+                    >
+                      <GitHubIcon />
+                    </IconButton>
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))}
+        </Box>
+      </Card>
     </Container>
   );
 };
