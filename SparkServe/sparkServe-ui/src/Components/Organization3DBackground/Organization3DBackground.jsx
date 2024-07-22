@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useLocation } from 'react-router-dom';
 
-const OrgThreeDB = () => {
+const Organization3DBackground = () => {
   const containerRef = useRef();
+  const location = useLocation();
 
   useEffect(() => {
-    let scene, camera, renderer, ribbon, animationFrameId;
+    if (location.pathname !== '/org') {
+      return;
+    }
 
+    let scene, camera, renderer, ribbon, animationFrameId;
     const container = containerRef.current;
+    let frame = 0;
 
     const init = () => {
       scene = new THREE.Scene();
@@ -21,7 +27,7 @@ const OrgThreeDB = () => {
       container.appendChild(renderer.domElement);
 
       ribbon = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1, 32, 32), // Reduced segments for better performance
+        new THREE.PlaneGeometry(1, 1, 16, 16), // Reduced segments for better performance
         new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 1.0 },
@@ -108,8 +114,11 @@ const OrgThreeDB = () => {
       resize();
 
       const animate = () => {
-        ribbon.material.uniforms.time.value += 0.01;
-        renderer.render(scene, camera);
+        if (frame % 2 === 0) { // Render every 2nd frame for better performance
+          ribbon.material.uniforms.time.value += 0.01;
+          renderer.render(scene, camera);
+        }
+        frame++;
         animationFrameId = requestAnimationFrame(animate);
       };
 
@@ -126,7 +135,11 @@ const OrgThreeDB = () => {
     };
 
     init();
-  }, []);
+  }, [location.pathname]);
+
+  if (location.pathname !== '/org') {
+    return null;
+  }
 
   return <div id="container" ref={containerRef} style={containerStyle} />;
 };
@@ -141,5 +154,5 @@ const containerStyle = {
   zIndex: -1,
 };
 
-export default OrgThreeDB;
+export default Organization3DBackground;
 

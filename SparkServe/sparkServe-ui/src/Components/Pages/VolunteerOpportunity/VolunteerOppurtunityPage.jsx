@@ -1,5 +1,5 @@
 import React from 'react';
-import UserNavBarNR from '../../UserNavBarNR/UserNavBarNR';
+import UserNavBar from '../../UserNavBar/UserNavBar';
 import Footer from '../../Footer/Footer';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, CardMedia, Button } from '@mui/material';
@@ -21,7 +21,7 @@ const VolunOppPage = () => {
         return <Typography>
                 Post Not Found :( 
                 <Link to="/" style={{ color: 'black', textDecoration: 'none' }}>
-                    <Button variant="contained" color="primary" component={Link} to={`/NRLandingPage`}>
+                    <Button variant="contained" color="primary" component={Link} to={`/UserLandingPage`}>
                         Back to Opportunites!
                     </Button>
                 </Link>
@@ -30,7 +30,7 @@ const VolunOppPage = () => {
 
     return (
         <div>
-            <UserNavBarNR/>
+            <UserNavBar/>
             <Typography variant="h3">Secret Bug!</Typography>
             <IconButton onClick={handleGoBack} aria-label="go back">
                 <ArrowBack />

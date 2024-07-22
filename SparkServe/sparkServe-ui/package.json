@@ -16,13 +16,12 @@
     "@faker-js/faker": "^8.4.1",
     "@material/top-app-bar": "^14.0.0",
     "@mui/icons-material": "^5.16.1",
-
     "@mui/material": "^5.16.4",
     "@react-google-maps/api": "^2.19.3",
-
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "faker": "^6.6.6",
     "install": "^0.13.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
