@@ -10,6 +10,7 @@ import UserLogInPage from '../Components/Pages/UserLogInPage/UserLogInPage';
 import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage';
 import OrganizationSignInPage from '../Components/Pages/OrganizationSignInPage/OrganizationSignInPage'; 
 import OrganizationSignUpPage from '../Components/Pages/OrganizationSignUpPage/OrganizationSignUpPage';
+import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 
 
 const PageRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const PageRoutes = () => {
       <Route path="OrganizationSignInPage" element={<OrganizationSignInPage/>} />
       <Route path="/Calendar" element={<Calendar />} />
       <Route path="/Map" element={<MapPage />} />
+      <Route path="/opportunity/:opportunityId" element={<VolunOppPage />} />
     </Routes>
   );
 };
