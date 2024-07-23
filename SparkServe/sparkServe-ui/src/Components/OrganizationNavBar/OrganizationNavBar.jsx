@@ -14,7 +14,7 @@ const logoStyle = {
   cursor: 'pointer',
 };
 
-function OrgNavBar() {
+function OrganizationNavBar() {
   const navigate = useNavigate();
 
   return (
@@ -40,8 +40,8 @@ function OrgNavBar() {
             <img src={logo} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
-            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrgWelcomePage')}>Home</Button>
-            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrgLandingPage')}>Schedule</Button>
+            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
+            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
             <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -53,6 +53,6 @@ function OrgNavBar() {
   );
 }
 
-export default OrgNavBar;
+export default OrganizationNavBar;
 
 

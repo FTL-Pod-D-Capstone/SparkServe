@@ -1,9 +1,9 @@
 import React from 'react';
-import OrgNavBar from '../../OrgNavBar/OrgNavBar';
-import OrgWelcomeCard from '../../OrgWelcomeCard/OrgWelcomeCard';
+import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
+import OrganizationWelcomeCard from '../../OrganizationWelcomeCard/OrganizationWelcomeCard';
 import backgroundImage from '../../../assets/SparkServe-Organization-Background.jpg'; 
 
-const OrgWelcomePage = () => {
+const OrganizationWelcomePage = () => {
   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
@@ -15,10 +15,10 @@ const OrgWelcomePage = () => {
 
   return (
     <div style={backgroundStyle}>
-      <OrgNavBar />
-      <OrgWelcomeCard />
+      <OrganizationNavBar />
+      <OrganizationWelcomeCard />
     </div>
   );
 }
 
-export default OrgWelcomePage;
+export default OrganizationWelcomePage;
