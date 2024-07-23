@@ -6,7 +6,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import IconButton from '@mui/material/IconButton';
-import OrgNavBar from '../../OrgNavBar/OrgNavBar';
+import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import Footer from '../../Footer/Footer';
 
 const CalendarApp = () => {
@@ -142,12 +142,12 @@ const CalendarApp = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/OrgWelcomePage');
+    navigate('/OrganizationWelcomePage');
   };
 
   return (
     <>
-      <OrgNavBar />
+      <OrganizationNavBar />
       <div className="calendar-app">
         <div className="header">
           <IconButton color="primary" onClick={handleBackClick}>

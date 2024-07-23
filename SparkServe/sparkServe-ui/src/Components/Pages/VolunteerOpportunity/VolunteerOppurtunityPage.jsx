@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import Footer from '../../Footer/Footer';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, CardMedia, Button } from '@mui/material';
-import { posts } from '../../DumyData/DummyData';
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
+import axios from 'axios'
 
 const VolunOppPage = () => {
-    const {id} = useParams();
-    const post = posts.find(p => p.id === id);
+    const {opportunityId} = useParams();
+    const [opportunity, setOpportunity] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate(); 
 
@@ -17,7 +19,29 @@ const VolunOppPage = () => {
         navigate(-1);
     };
 
-    if(!post) {
+    useEffect(() => {
+        const getOpportunity = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`https://project-1-uljs.onrender.com/opps/${opportunityId}`);
+                setOpportunity(response.data);
+                setIsLoading(false);
+            } catch (err) {
+                console.error('Error fetching specified opportunity:', err);
+                setError('Failed to load the opportunity details.');
+                setIsLoading(false);
+            }
+        };
+        if (opportunityId) {
+            getOpportunity();
+        }
+        getOpportunity();
+    }, [opportunityId]);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
+    if(!opportunity) {
         return <Typography>
                 Post Not Found :( 
                 <Link to="/" style={{ color: 'black', textDecoration: 'none' }}>
@@ -40,22 +64,21 @@ const VolunOppPage = () => {
             }}>
                 <Box sx={{ my: 4,
                 }}>
-                    <Typography variant="h4" gutterBottom>{post.title}</Typography>
+                    <Typography variant="h4" gutterBottom>{opportunity.title}</Typography>
                     <CardMedia
                         component="img"
                         height="300"
-                        image={post.cover}
-                        alt={post.title}
+                        image={opportunity.cover || 'default-image-url'}
+                        alt={opportunity.title}
                         sx={{ mb: 2 }}
                     />
-                    <Typography variant="subtitle1">By {post.author.name}</Typography>
+                    <Typography variant="subtitle1">By {opportunity.organizationId}</Typography>
                     <Typography variant="body1" sx={{ mt: 2 }}>
-                        Views: {post.view} | Comments: {post.comment} | Shares: {post.share}
+                    Spots Available: {opportunity.spotsAvailable} | Related Cause: {opportunity.relatedCause}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 2 }}>
                         {/* You might want to add a 'content' field to your dummy data for this */}
-                        This is where you'd put the full content of the post. For now, it's just dummy text.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        About: {opportunity.description}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 2 }}>
                         <Button variant="contained" color="primary" href='Uhoh' >

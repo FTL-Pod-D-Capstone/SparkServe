@@ -37,6 +37,8 @@ const createOpportunity = async (opportunityData) => {
       skillsRequired: opportunityData.skillsRequired,
       spotsAvailable: opportunityData.spotsAvailable,
       ageRange: opportunityData.ageRange,
+      pictureUrl: opportunityData.pictureUrl,
+      opportunityUrl: opportunityData.opportunityUrl,
     },
     include: {
       feedbacks: true,

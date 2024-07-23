@@ -37,12 +37,13 @@ model Organization {
   email          String        @unique
   password       String
   phoneNumber    String        @unique
-  description    String
-  address        String
-  website        String
-  contactEmail   String
+  description    String?
+  address        String?
+  website        String?
+  contactEmail   String?
   primaryCause   String?
-  logo           String
+  pictureUrl     String?
+  orgUrl         String?
   createdAt      DateTime      @default(now())
   opportunities  Opportunity[] // One-to-many relation with Opportunity
 }
@@ -52,12 +53,14 @@ model Opportunity {
   title          String
   description    String
   organizationId Int
-  address        String
-  dateTime       DateTime
+  address        String?
+  dateTime       DateTime?
   relatedCause   String?
-  skillsRequired String
-  spotsAvailable Int
-  ageRange       String
+  skillsRequired String?
+  spotsAvailable Int?
+  pictureUrl     String?
+  opportunityUrl String?
+  ageRange       String?
   createdAt      DateTime       @default(now())
   organization   Organization   @relation(fields: [organizationId], references: [organizationId], onDelete: Cascade) // Relation to Organization
   feedbacks      Feedback[] // One-to-many relation with Feedback

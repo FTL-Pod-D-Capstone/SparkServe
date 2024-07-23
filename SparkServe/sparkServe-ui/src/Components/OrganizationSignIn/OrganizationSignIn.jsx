@@ -1,4 +1,3 @@
-// UserSignIn.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -29,7 +28,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-const UserSignIn = ({ open, handleClose }) => {
+const OrganizationSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -43,7 +42,7 @@ const UserSignIn = ({ open, handleClose }) => {
 
   const handleSignUpRedirect = () => {
     handleClose();
-    navigate('/UserSignUpPage');
+    navigate('/OrganizationSignUpPage');
   };
 
   return (
@@ -54,7 +53,7 @@ const UserSignIn = ({ open, handleClose }) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 500, // Adjusted width for wider modal
+          width: 500,
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,
@@ -72,11 +71,11 @@ const UserSignIn = ({ open, handleClose }) => {
                 alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: '#4856f6' }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Log In
+                Organization Log in
               </Typography>
               <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -84,7 +83,7 @@ const UserSignIn = ({ open, handleClose }) => {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address/Phone Number"
+                  label="Organization Email Address"
                   name="email"
                   autoComplete="email"
                   autoFocus
@@ -94,7 +93,7 @@ const UserSignIn = ({ open, handleClose }) => {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Organization Password"
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -110,7 +109,7 @@ const UserSignIn = ({ open, handleClose }) => {
                 <Grid container>
                   <Grid item>
                     <Link onClick={handleSignUpRedirect} variant="body2" style={{ cursor: 'pointer' }}>
-                      {"Don't have an account? Sign Up"}
+                      {"Don't have an Organization account? Sign Up"}
                     </Link>
                   </Grid>
                 </Grid>
@@ -124,6 +123,4 @@ const UserSignIn = ({ open, handleClose }) => {
   );
 };
 
-export default UserSignIn;
-
-
+export default OrganizationSignIn;

@@ -4,8 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 
 
 
-const Cards = ({ id, title, cover, author, view, comment }) => {
+const Cards = ({ id, title, cover, organizationId, spots, cause }) => {
 
+    console.log('Opportunity ID:', id);//debug
     const navigate = useNavigate();
 
 
@@ -23,14 +24,14 @@ const Cards = ({ id, title, cover, author, view, comment }) => {
                     {title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    By {author.name}
+                    By {organizationId}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    Views: {view} | Comments: {comment}
+                    Related Cause: {cause}
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" component={Link} to={`/post/${id}`}>Learn More</Button>
+                <Button size="small" component={Link} to={`/opportunity/${id}`}>Learn More</Button>
             </CardActions>
         </Card>
     );
