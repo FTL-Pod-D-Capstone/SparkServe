@@ -7,7 +7,7 @@ const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
 require("dotenv").config();
 const { rateLimiter } = require("../sparkServe-api/utils/security");
-const chatbotRoutes = require("./routes/chatbotRoutes");
+const chatbotRoutes = require("../sparkServe-api/src/routes/chatbotRoutes");
 
 const app = express();
 const port = 3000;

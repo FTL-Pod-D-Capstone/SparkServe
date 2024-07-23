@@ -1,23 +1,27 @@
-//import model
 const { getChatHistory, saveChatMessage } = require("../models/chatbotModels");
 
 const OpenAI = require("openai");
 
-// get the OpenAI api key from env file
+// Get the OpenAI api key from env file
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// chat handler function to handle chat prompts and response
+// Chat handler function to handle chat prompts and response
 const chatHandler = async (req, res) => {
-  const { prompt, conversationId } = req.body;
+  const { userId, prompt, conversationId } = req.body;
 
-  //check if prompt is  empty?
+  // Check if prompt is empty
   if (!prompt) {
     return res.status(400).send("Prompt is empty - it is required");
   }
 
-  // try to connect to openAI API
+  // Check if userId is empty
+  if (!userId) {
+    return res.status(400).send("User ID is required");
+  }
+
+  // Try to connect to OpenAI API
   try {
     let messages = [
       { role: "system", content: "You are a helpful assistant." },
@@ -33,18 +37,18 @@ const chatHandler = async (req, res) => {
 
     messages.push({ role: "user", content: prompt });
 
-    // interact with OpenAI API
+    // Interact with OpenAI API
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: messages,
     });
 
-    // process the response - specific to OpenAI Api resoponse
+    // Process the response - specific to OpenAI API response
     const chatResponse = completion.choices[0].message.content.trim();
 
-    //new conversation id and saave the chat message to DB
+    // New conversation id and save the chat message to DB
     const newConversationId = conversationId || Date.now().toString();
-    await saveChatMessage(newConversationId, prompt, chatResponse);
+    await saveChatMessage(userId, newConversationId, prompt, chatResponse);
 
     res.json({
       prompt: prompt,
