@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import OrgNavBar from '../../OrgNavBar/OrgNavBar';
+import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import UpcomingEvents from '../../UpcomingEvents/UpcomingEvents';
 import Footer from '../../Footer/Footer';
 import { Box, Container } from '@mui/material';
@@ -16,7 +16,7 @@ const OrgLandingPage = () => {
 
   return (
     <>
-      <OrgNavBar />
+      <OrganizationNavBar />
       <Box
         sx={{
           background: 'linear-gradient(to bottom, #ff66c4, white)',
