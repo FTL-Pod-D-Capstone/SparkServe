@@ -37,7 +37,7 @@ function WelcomeCard() {
   };
 
   const handleCreateClick = () => {
-    navigate('/OrgWelcomePage');
+    navigate('/OrganizationWelcomePage');
   };
 
   return (

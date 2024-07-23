@@ -1,4 +1,3 @@
-// UserSignUp.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,8 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import UserSignIn from '../../Components/UserSignIn/UserSignIn'; 
+import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn'; // Adjust the import path accordingly
 
 function Copyright(props) {
   return (
@@ -29,8 +27,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function UserSignUp() {
-  const navigate = useNavigate();
+export default function OrganizationSignUp() {
   const [openSignIn, setOpenSignIn] = React.useState(false);
 
   const handleOpenSignIn = () => {
@@ -47,7 +44,6 @@ export default function UserSignUp() {
     console.log({
       email: data.get('email'),
       password: data.get('password'),
-      phone: data.get('phone'),
     });
   };
 
@@ -63,41 +59,30 @@ export default function UserSignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: '#4856f6' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Organization Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="Organization Name"
+                  label="Organization Name"
+                  name="Name"
+                  autoComplete="Name"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
+                  id="Organization email"
+                  label="Organization Email Address"
                   name="email"
                   autoComplete="email"
                 />
@@ -116,8 +101,8 @@ export default function UserSignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
+                  name="Organization password"
+                  label="Organization Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -130,12 +115,12 @@ export default function UserSignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Organization Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link onClick={handleOpenSignIn} variant="body2" style={{ cursor: 'pointer' }}>
-                  Already have an account? Sign in
+                  Already have an Organization account? Sign in
                 </Link>
               </Grid>
             </Grid>
@@ -143,8 +128,7 @@ export default function UserSignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-      <UserSignIn open={openSignIn} handleClose={handleCloseSignIn} />
+      <OrganizationSignIn open={openSignIn} handleClose={handleCloseSignIn} />
     </ThemeProvider>
   );
 }
-

@@ -6,7 +6,7 @@ import Footer from '../../Footer/Footer';
 import Cards from '../../Cards/Cards';
 import { posts } from '../../DumyData/DummyData';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import VolOppContainer from '../../VolCardContainer/VolOppContainer'
+import VolunteerCardContainer from '../../VolunteerCardContainer/VolunteerCardContainer'
 
 
 const UserLandingPage = () => {
@@ -55,7 +55,7 @@ const UserLandingPage = () => {
                     >
                         Search by Map
                     </Button>
-                    <VolOppContainer/>
+                    <VolunteerCardContainer/>
                 </Container>
             </Box>
             <Footer />
