@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react'
 // import {posts} from '../DumyData/DummyData'
-import { Container, Grid } from '@mui/material'
+import { Container, Grid, CardActions, Button } from '@mui/material'
 import Cards from '../../Components/Cards/Cards'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
+
 
 const VolOppContainer = ({bgColor}) => {
     const [opportunities, setOpportunities] = useState([]);
@@ -14,7 +17,7 @@ const VolOppContainer = ({bgColor}) => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(`http://localhost:3000/opps`);
+                const response = await axios.get(`https://project-1-uljs.onrender.com/opps`);
                 setOpportunities(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -46,16 +49,20 @@ const VolOppContainer = ({bgColor}) => {
             alignItems="center"
         >
             {opportunities.map((opportunity) => (
-                <Grid item xs={12} sm={6} md={4} key={opportunity.id}>
+                <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
                     <Cards 
                         className="Cards"
-                        id={opportunity.id}
+                        id={opportunity.opportunityId}
                         title={opportunity.title}
                         cover={opportunity.cover || "default image"}
                         organizationId={opportunity.organizationId}
                         spots={opportunity.spotsAvailable}
                         cause={opportunity.relatedCause}
-                    />
+                    >
+                        <CardActions>
+                            <Button size="small" component={Link} to={`http://localhost:5173/opportunity/${opportunity.opportunityId}`}>Learn More</Button>
+                        </CardActions> 
+                    </Cards> 
                 </Grid>
             ))}
         </Grid>

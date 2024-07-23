@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const Cards = ({ id, title, cover, organizationId, spots, cause }) => {
 
+    console.log('Opportunity ID:', id);//debug
     const navigate = useNavigate();
 
 
@@ -30,7 +31,7 @@ const Cards = ({ id, title, cover, organizationId, spots, cause }) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" component={Link} to={`/post/${id}`}>Learn More</Button>
+                <Button size="small" component={Link} to={`/opportunity/${id}`}>Learn More</Button>
             </CardActions>
         </Card>
     );

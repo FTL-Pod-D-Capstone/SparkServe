@@ -7,7 +7,8 @@ import MapPage from '../Components/Pages/MapPage/MapPage';
 import OrgWelcomePage from '../Components/Pages/OrgWelcomePage/OrgWelcomePage';
 import OrgLandingPage from '../Components/Pages/OrgLandingpage/OrgLandingPage';
 import UserLogInPage from '../Components/Pages/UserLogInPage/UserLogInPage';
-import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage'; 
+import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage';
+import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 
 
 const PageRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const PageRoutes = () => {
       <Route path="/UserSignUpPage" element={<UserSignUpPage />} /> 
       <Route path="/Calendar" element={<Calendar />} />
       <Route path="/Map" element={<MapPage />} />
+      <Route path="/opportunity/:opportunityId" element={<VolunOppPage />} />
     </Routes>
   );
 };

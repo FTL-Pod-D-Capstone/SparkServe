@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 // Function to register a new organization
 const registerOrganization = async (req, res) => {
   try {
-    const { name, email, password, phoneNumber, description, address, website, contactEmail, logo } = req.body;
+    const { name, email, password, phoneNumber, description, address, website, contactEmail, orgUrl,pictureUrl } = req.body;
 
     // Check if an organization with the same email or phone number already exists
     const existingOrganizationByEmail = await organizationModel.findOrganizationByEmail(email);
@@ -26,7 +26,8 @@ const registerOrganization = async (req, res) => {
       address,
       website,
       contactEmail,
-      logo,
+      pictureUrl,
+      orgUrl,
     });
     res.status(201).json(newOrganization);
   } catch (error) {
@@ -43,9 +44,7 @@ const loginOrganization = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign({ id: organization.organizationId, email: organization.email }, 'your_jwt_secret', { expiresIn: '1h' });
-
+    const token = jwt.sign({ id: organization.organizationId, email: organization.email }, process.env.JWT_SECRET_KEY , { expiresIn: '1h' });
     res.status(200).json({ token });
   } catch (error) {
     res.status(400).json({ error: error.message });
