@@ -8,8 +8,8 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn'; 
-import OrganizationSignUp from '../../Components/OrganizationSignUp/OrganizationSignUp'; // Import OrganizationSignUp
+import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn';
+import OrganizationSignUp from '../../Components/OrganizationSignUp/OrganizationSignUp'; 
 import logo from '../../assets/logo.png';
 
 const logoStyle = {
@@ -28,8 +28,20 @@ const cardStyle = {
   textAlign: 'center',
 };
 
-const buttonStyle = {
+const introduceButtonStyle = {
   margin: '10px',
+  backgroundColor: '#8c52ff', // Set button color to #8c52ff
+  '&:hover': {
+    backgroundColor: '#7a46e0', // Set hover color to a slightly darker shade
+  },
+};
+
+const welcomeButtonStyle = {
+  margin: '10px',
+  backgroundColor: '#ff66c4', // Set button color to #ff66c4
+  '&:hover': {
+    backgroundColor: '#e05ab0', // Set hover color to a slightly darker shade
+  },
 };
 
 function OrganizationWelcomeCard() {
@@ -85,10 +97,10 @@ function OrganizationWelcomeCard() {
             </Typography>.
           </Typography>
           <Box sx={{ mt: 3 }}>
-            <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleExploreClick}>
+            <Button variant="contained" sx={introduceButtonStyle} onClick={handleExploreClick}>
               Introduce me
             </Button>
-            <Button variant="contained" color="primary" sx={buttonStyle} onClick={handleWelcomeClick}>
+            <Button variant="contained" sx={welcomeButtonStyle} onClick={handleWelcomeClick}>
               Welcome Back
             </Button>
           </Box>
