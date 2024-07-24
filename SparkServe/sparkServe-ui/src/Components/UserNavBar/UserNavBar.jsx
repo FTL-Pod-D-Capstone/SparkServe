@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -10,9 +10,8 @@ import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import logo2 from '../../assets/logo2.png';
-import AccountPopover from '../AccountPopover/AccountPopover';
-import UserSignIn from '../UserSignIn/UserSignIn'; 
-
+import UserAccountPopover from '../UserAccountPopover/UserAccountPopover';
+import UserSignIn from '../UserSignIn/UserSignIn';
 
 const logoStyle = {
   width: '140px',
@@ -23,7 +22,14 @@ const logoStyle = {
 function UserNavBar() {
   const [open, setOpen] = useState(false);
   const [signInModalOpen, setSignInModalOpen] = useState(false);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isUserAuthenticated');
+    setIsUserAuthenticated(authStatus === 'true');
+  }, []);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -38,7 +44,7 @@ function UserNavBar() {
   };
 
   const renderButtons = () => {
-    if (location.pathname === '/' || location.pathname === '/signup') {
+    if (!isUserAuthenticated) {
       return (
         <>
           <Button color="primary" variant="text" size="small" onClick={handleSignInClick}>
@@ -50,7 +56,7 @@ function UserNavBar() {
         </>
       );
     } else {
-      return <AccountPopover />;
+      return <UserAccountPopover profileType="User Profile" />;
     }
   };
 
@@ -75,7 +81,7 @@ function UserNavBar() {
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <img src={logo2} style={logoStyle} alt="Logo" />
+              <img src={logo2} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
               <Button color="primary" variant="text" size="small" href="/">
@@ -84,6 +90,11 @@ function UserNavBar() {
               <Button color="primary" variant="text" size="small" href="/UserLandingPage">
                 Opportunities
               </Button>
+              {isUserAuthenticated && (
+                <Button color="primary" variant="text" size="small" href="/Map">
+                  Map
+                </Button>
+              )}
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
               {renderButtons()}
@@ -119,13 +130,24 @@ function UserNavBar() {
                           Opportunities
                         </Button>
                       </MenuItem>
-                      <AccountPopover />
+                      {isUserAuthenticated && (
+                        <MenuItem>
+                          <Button color="primary" variant="text" size="small" href="/Map" sx={{ width: '100%' }}>
+                            Map
+                          </Button>
+                        </MenuItem>
+                      )}
+                      {isUserAuthenticated && (
+                        <MenuItem>
+                          <UserAccountPopover profileType="User Profile" />
+                        </MenuItem>
+                      )}
                     </>
                   )}
                 </Box>
               </Drawer>
             </Box>
-          </Toolbar>
+            </Toolbar>
         </Container>
       </AppBar>
       <UserSignIn open={signInModalOpen} handleClose={handleSignInClose} />

@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import logo from '../../assets/logo.png';
-import AccountPopover from '../AccountPopover/AccountPopover';
+import OrganizationAccountPopover from '../OrganizationAccountPopover/OrganizationAccountPopover'; // Update the import
 import { useNavigate } from 'react-router-dom';
 
 const logoStyle = {
@@ -16,6 +16,12 @@ const logoStyle = {
 
 function OrganizationNavBar() {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  React.useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated');
+    setIsAuthenticated(authStatus === 'true');
+  }, []);
 
   return (
     <AppBar
@@ -41,11 +47,15 @@ function OrganizationNavBar() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
             <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
-            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
-            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
+            {isAuthenticated && (
+              <>
+                <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
+                <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
+              </>
+            )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <AccountPopover />
+            {isAuthenticated && <OrganizationAccountPopover profileType="Organization Profile" />} {/* Conditionally render the popover */}
           </Box>
         </Toolbar>
       </Container>

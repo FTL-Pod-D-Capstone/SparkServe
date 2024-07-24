@@ -4,7 +4,7 @@ import './Calendar.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import IconButton from '@mui/material/IconButton';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import Footer from '../../Footer/Footer';
@@ -141,18 +141,18 @@ const CalendarApp = () => {
     setEventTime((prevTime) => ({ ...prevTime, [name]: value.padStart(2, '0') }));
   };
 
-  const handleBackClick = () => {
-    navigate('/OrganizationWelcomePage');
-  };
+  // const handleBackClick = () => {
+  //   navigate('/OrganizationWelcomePage');
+  // };
 
   return (
     <>
       <OrganizationNavBar />
       <div className="calendar-app">
         <div className="header">
-          <IconButton color="primary" onClick={handleBackClick}>
+          {/* <IconButton color="primary" onClick={handleBackClick}>
             <ArrowBackIosIcon />
-          </IconButton>
+          </IconButton> */}
           <h1 className="heading">
             Calendar
             <lord-icon
