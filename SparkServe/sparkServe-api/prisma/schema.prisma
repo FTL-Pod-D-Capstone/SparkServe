@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DEPLOYED_DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -70,7 +70,8 @@ model Opportunity {
 model ChatBotInteraction {
   interactionId Int      @id @default(autoincrement())
   userId        Int
-  message       String
+  conversationId String
+  prompt       String
   response      String
   timestamp     DateTime @default(now())
   user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)

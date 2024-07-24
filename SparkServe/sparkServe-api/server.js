@@ -6,6 +6,8 @@ const userRoutes = require("./src/routes/userRoutes");
 const organizationRoutes = require("./src/routes/organizationRoutes");
 const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
+const { rateLimiter } = require("../sparkServe-api/utils/security");
+const chatbotRoutes = require("../sparkServe-api/src/routes/chatbotRoutes");
 
 const app = express();
 const port = 3000;
@@ -38,10 +40,17 @@ app.use("/users", userRoutes);
 //Registration routes
 app.use("/registration", registrationRoutes);
 
+//use rate limiter for OpenAPI
+app.use(rateLimiter);
 
+app.use("/api/chat", chatbotRoutes);
 
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+app.use("/api/chat", (req, res, next) => {
+  console.log("Chat route hit");
+  next();
+}, chatbotRoutes);

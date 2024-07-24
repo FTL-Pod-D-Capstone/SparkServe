@@ -7,14 +7,17 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.8.2",
     "@prisma/client": "^5.17.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
+    "openai": "^4.53.0",
     "pg": "^8.12.0",
     "prisma": "^5.17.0",
     "svix": "^1.25.0"

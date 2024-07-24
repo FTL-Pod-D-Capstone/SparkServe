@@ -7,7 +7,8 @@ import MapPage from '../Components/Pages/MapPage/MapPage';
 import OrganizationWelcomePage from '../Components/Pages/OrganizationWelcomePage/OrganizationWelcomePage';
 import OrganizationLandingPage from '../Components/Pages/OrganizationLandingpage/OrganizationLandingPage';
 import UserLogInPage from '../Components/Pages/UserLogInPage/UserLogInPage';
-import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage';
+import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage'; 
+import Chatbot from '../Components/Chatbot/Chatbot';
 import OrganizationSignInPage from '../Components/Pages/OrganizationSignInPage/OrganizationSignInPage'; 
 import OrganizationSignUpPage from '../Components/Pages/OrganizationSignUpPage/OrganizationSignUpPage';
 import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 
@@ -25,6 +26,8 @@ const PageRoutes = () => {
       <Route path="OrganizationSignInPage" element={<OrganizationSignInPage/>} />
       <Route path="/Calendar" element={<Calendar />} />
       <Route path="/Map" element={<MapPage />} />
+      <Route path="/ChatBot" element={<Chatbot />} /> {/* Add this line for ChatBot route */}
+
       <Route path="/opportunity/:opportunityId" element={<VolunOppPage />} />
     </Routes>
   );
