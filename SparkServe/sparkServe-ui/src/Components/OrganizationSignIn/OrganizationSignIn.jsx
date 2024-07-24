@@ -44,7 +44,9 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       const response = await axios.post('https://project-1-uljs.onrender.com/orgs/login', credentials);
       console.log(response.data);
       if (response.status === 200) {
-        navigate('/OrganizationLandingPage'); 
+        localStorage.setItem('isAuthenticated', 'true');
+        navigate('/OrganizationLandingPage');
+        window.location.reload(); // Force a reload to update the nav bar
       }
     } catch (error) {
       console.error('Error logging in:', error.response?.data || error.message);
@@ -135,3 +137,5 @@ const OrganizationSignIn = ({ open, handleClose }) => {
 };
 
 export default OrganizationSignIn;
+
+
