@@ -4,7 +4,7 @@ import UserNavBar from '../../UserNavBar/UserNavBar';
 import ReactGoogleMapComponent from '../../Map/Map';
 import Footer from '../../Footer/Footer';
 import { Box, IconButton } from '@mui/material';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const MapPage = () => {
   const navigate = useNavigate();
@@ -45,12 +45,12 @@ const MapPage = () => {
           marginBottom: 2,
         }}
       >
-        <IconButton
+        {/* <IconButton
           color="primary"
           onClick={handleBackClick}
         >
           <ArrowBackIosIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
       <Footer />
     </Box>

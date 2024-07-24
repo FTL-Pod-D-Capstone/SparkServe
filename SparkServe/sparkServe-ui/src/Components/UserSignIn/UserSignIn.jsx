@@ -43,13 +43,11 @@ const UserSignIn = ({ open, handleClose }) => {
     try {
       const response = await axios.post('http://localhost:3000/users/login', credentials);
       console.log(response.data);
-      // Handle successful login, e.g., store token, navigate to another page
-      if (response.status === 200) {
-        navigate('/UserLandingPage'); // Redirect to UserLandingPage on successful login
-      }
+      localStorage.setItem('isUserAuthenticated', 'true');
+      navigate('/UserLandingPage');
+      window.location.reload(); // Force a reload to update the nav bar
     } catch (error) {
       console.error('Error logging in:', error);
-      // Handle error (e.g., show error message)
     }
   };
 
@@ -137,4 +135,6 @@ const UserSignIn = ({ open, handleClose }) => {
 };
 
 export default UserSignIn;
+
+
 
