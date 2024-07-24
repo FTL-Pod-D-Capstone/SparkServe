@@ -8,18 +8,29 @@ const getAllOpportunities = async (filter = {}, orderBy = {}) => {
     orderBy: orderBy,
     include: {
       feedbacks: true,
-      registrations: true
+      registrations: true,
+      organization: {
+        select: {
+          name: true,
+        }
+      }
     },
   });
 };
 
 // Function to get opportunity by ID
 const getOpportunityById = async (id) => {
+  
   return prisma.opportunity.findUnique({
     where: { opportunityId: parseInt(id) },
     include: {
       feedbacks: true,
-      registrations: true
+      registrations: true,
+      organization: {
+        select: {
+          name: true,
+        }
+      }
     },
   });
 };

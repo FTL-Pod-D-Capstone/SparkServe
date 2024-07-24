@@ -2,9 +2,9 @@ import React from 'react'
 import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
+import VolOppContainer from '../VolunteerCardContainer/VolunteerCardContainer'
 
-
-const Cards = ({ id, title, cover, organizationId, spots, cause }) => {
+const Cards = ({ id, title, cover, organizationName, spots, cause }) => {
 
     console.log('Opportunity ID:', id);//debug
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Cards = ({ id, title, cover, organizationId, spots, cause }) => {
                     {title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    By {organizationId}
+                    By {organizationName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     Related Cause: {cause}
