@@ -59,15 +59,13 @@
 }
 
 .collapse-button {
-    color: white; /* Changed to white */
+    color: white;
 }
-
-/* Messages Container */
 .messages-container {
     padding: 15px;
     background-color: #f8f9fa;
     overflow-y: auto;
-    flex-grow: 1; /* Ensure it grows to fill the container */
+    flex-grow: 1;
 }
 
 .message {
@@ -120,10 +118,10 @@
     border: none;
     cursor: pointer;
     color: #007bff;
-    width: 40px; /* Set width to desired size */
-    height: 40px; /* Set height to match width for a circle */
-    border-radius: 50%; /* Make it a circle */
-    display: flex; /* Center content inside the button */
+    width: 40px;
+    height: 40px; 
+    border-radius: 50%; 
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth transition */
