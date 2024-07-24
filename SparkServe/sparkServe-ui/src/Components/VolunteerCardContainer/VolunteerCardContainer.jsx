@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, CardActions, Button } from '@mui/material';
+import { Container, Grid, CardActions, Button, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 import Cards from '../../Components/Cards/Cards';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const VolOppContainer = ({ bgColor }) => {
     const [opportunities, setOpportunities] = useState([]);
+    const [filteredOpportunities, setFilteredOpportunities] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    // const [organizationName, setOrganizationName] = useState('');
-    // const [causes, setCauses] = useState([]);
-    // const [organizations, setOrganizations] = useState([]);
-    // const [causeFilter, setCauseFilter] = useState('');
-    // const [organizationFilter, setOrganizationFilter] = useState('');
-    // const [nameFilter, setNameFilter] = useState('');
-    // const [filteredOpportunities, setFilteredOpportunities] = useState([]);
-
+    const [nameFilter, setNameFilter] = useState('');
+    const [organizationFilter, setOrganizationFilter] = useState('');
+    const [causeFilter, setCauseFilter] = useState('');
+    const [organizations, setOrganizations] = useState([]);
+    const [causes, setCauses] = useState([]);
 
     useEffect(() => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
                 const response = await axios.get(`https://project-1-uljs.onrender.com/opps`);
-                console.log('Opportunities Data:', response.data);
+                const opportunitiesData = response.data;
 
-                const opportunitiesWithOrgNames = await Promise.all(response.data.map(async (opp) => {
+                const opportunitiesWithOrgNames = await Promise.all(opportunitiesData.map(async (opp) => {
                     if (!opp.organization || !opp.organization.name) {
                         try {
                             const orgResponse = await axios.get(`https://project-1-uljs.onrender.com/orgs/${opp.organizationId}`);
@@ -38,6 +36,15 @@ const VolOppContainer = ({ bgColor }) => {
                 }));
 
                 setOpportunities(opportunitiesWithOrgNames);
+                setFilteredOpportunities(opportunitiesWithOrgNames);
+
+                // Extract unique organizations and causes
+                const uniqueOrganizations = [...new Set(opportunitiesWithOrgNames.map(opp => opp.organizationName).filter(Boolean))];
+                const uniqueCauses = [...new Set(opportunitiesWithOrgNames.map(opp => opp.relatedCause).filter(Boolean))];
+                
+                setOrganizations(uniqueOrganizations);
+                setCauses(uniqueCauses);
+
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error getting opportunities:', err);
@@ -49,7 +56,14 @@ const VolOppContainer = ({ bgColor }) => {
         getOpportunities();
     }, []);
 
-    console.log('Current opportunities state:', opportunities);
+    useEffect(() => {
+        const filtered = opportunities.filter(opp => 
+            opp.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
+            (organizationFilter === '' || opp.organizationName === organizationFilter) &&
+            (causeFilter === '' || opp.relatedCause === causeFilter)
+        );
+        setFilteredOpportunities(filtered);
+    }, [nameFilter, organizationFilter, causeFilter, opportunities]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -64,6 +78,45 @@ const VolOppContainer = ({ bgColor }) => {
                     padding: '20px',
                 }}
             >
+                <Box sx={{ mb: 4 }}>
+                    <TextField
+                        label="Filter by Name"
+                        variant="outlined"
+                        value={nameFilter}
+                        onChange={(e) => setNameFilter(e.target.value)}
+                        sx={{ mr: 2, mb: 2 }}
+                    />
+                    <FormControl variant="outlined" sx={{ mr: 2, mb: 2, minWidth: 120 }}>
+                        <InputLabel >Organization</InputLabel>
+                        <Select
+                            value={organizationFilter}
+                            onChange={(e) => setOrganizationFilter(e.target.value)}
+                            label="Organization"
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            {organizations.map((org) => (
+                                <MenuItem key={org} value={org}>{org}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="outlined" sx={{ mb: 2, minWidth: 120 }}>
+                        <InputLabel>Cause</InputLabel>
+                        <Select
+                            value={causeFilter}
+                            onChange={(e) => setCauseFilter(e.target.value)}
+                            label="Cause"
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            {causes.map((cause) => (
+                                <MenuItem key={cause} value={cause}>{cause}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <Grid
                     container
                     rowSpacing={4}
@@ -72,14 +125,14 @@ const VolOppContainer = ({ bgColor }) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    {opportunities.map((opportunity) => (
+                    {filteredOpportunities.map((opportunity) => (
                         <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
                             <Cards
                                 className="Cards"
                                 id={opportunity.opportunityId}
                                 title={opportunity.title}
                                 cover={opportunity.pictureUrl || "default image"}
-                                organizationName={opportunity.organizationName || 'Unknown Organization'}
+                                organizationName={opportunity.organizationName}
                                 spots={opportunity.spotsAvailable}
                                 cause={opportunity.relatedCause}
                             >
