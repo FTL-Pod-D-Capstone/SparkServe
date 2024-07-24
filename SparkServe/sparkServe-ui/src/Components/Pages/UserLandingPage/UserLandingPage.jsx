@@ -1,13 +1,12 @@
+// UserLandingPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import { Container, Grid, Button, Box, IconButton } from '@mui/material';
 import Footer from '../../Footer/Footer';
-import Cards from '../../Cards/Cards';
-import { posts } from '../../DumyData/DummyData';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import VolunteerCardContainer from '../../VolunteerCardContainer/VolunteerCardContainer'
-
+import VolunteerCardContainer from '../../VolunteerCardContainer/VolunteerCardContainer';
+import Chatbot from '../../Chatbot/Chatbot';
 
 const UserLandingPage = () => {
     const navigate = useNavigate();
@@ -59,10 +58,9 @@ const UserLandingPage = () => {
                 </Container>
             </Box>
             <Footer />
+            <Chatbot /> 
         </>
     );
 };
 
 export default UserLandingPage;
-
-

@@ -17,5 +17,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'extends': [
+    'plugin:react/recommended'
+]
   },
 }
