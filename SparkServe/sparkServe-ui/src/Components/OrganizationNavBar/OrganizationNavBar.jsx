@@ -45,7 +45,7 @@ function OrganizationNavBar() {
             <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <AccountPopover />
+            <AccountPopover profileType="Organization Profile" />
           </Box>
         </Toolbar>
       </Container>

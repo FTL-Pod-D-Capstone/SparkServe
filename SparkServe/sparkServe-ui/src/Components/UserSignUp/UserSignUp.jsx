@@ -1,4 +1,3 @@
-// UserSignUp.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import UserSignIn from '../../Components/UserSignIn/UserSignIn'; 
 
 function Copyright(props) {
@@ -41,14 +41,25 @@ export default function UserSignUp() {
     setOpenSignIn(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const user = {
+      username: data.get('firstName') + data.get('lastName'), // Create a username by combining first and last name
       email: data.get('email'),
+      phoneNumber: data.get('phone'),
       password: data.get('password'),
-      phone: data.get('phone'),
-    });
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3000/users/register', user);
+      console.log(response.data);
+      // Show the sign-in modal with a message to log in
+      handleOpenSignIn();
+    } catch (error) {
+      console.error('Error registering user:', error);
+      // Handle error (e.g., show error message)
+    }
   };
 
   return (

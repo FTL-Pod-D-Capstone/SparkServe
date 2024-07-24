@@ -1,4 +1,3 @@
-// UserSignIn.js
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -13,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -32,13 +32,25 @@ const defaultTheme = createTheme();
 const UserSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const credentials = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3000/users/login', credentials);
+      console.log(response.data);
+      // Handle successful login, e.g., store token, navigate to another page
+      if (response.status === 200) {
+        navigate('/UserLandingPage'); // Redirect to UserLandingPage on successful login
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      // Handle error (e.g., show error message)
+    }
   };
 
   const handleSignUpRedirect = () => {
@@ -125,5 +137,4 @@ const UserSignIn = ({ open, handleClose }) => {
 };
 
 export default UserSignIn;
-
 

@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn'; // Adjust the import path accordingly
 
 function Copyright(props) {
@@ -28,6 +30,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function OrganizationSignUp() {
+  const navigate = useNavigate();
   const [openSignIn, setOpenSignIn] = React.useState(false);
 
   const handleOpenSignIn = () => {
@@ -38,13 +41,30 @@ export default function OrganizationSignUp() {
     setOpenSignIn(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const organization = {
+      name: data.get('Name'),
       email: data.get('email'),
+      phoneNumber: data.get('phone'),
       password: data.get('password'),
-    });
+      description: data.get('description') || '',
+      address: data.get('address') || '',
+      website: data.get('website') || '',
+      contactEmail: data.get('contactEmail') || '',
+      primaryCause: data.get('primaryCause') || '',
+      pictureUrl: data.get('pictureUrl') || '',
+      orgUrl: data.get('orgUrl') || '',
+    };
+
+    try {
+      const response = await axios.post('https://project-1-uljs.onrender.com/orgs/register', organization);
+      console.log(response.data);
+      handleOpenSignIn(); // Show the sign-in modal with a message to log in
+    } catch (error) {
+      console.error('Error registering organization:', error.response?.data || error.message);
+    }
   };
 
   return (
@@ -71,17 +91,17 @@ export default function OrganizationSignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="Organization Name"
+                  id="Name"
                   label="Organization Name"
                   name="Name"
-                  autoComplete="Name"
+                  autoComplete="name"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="Organization email"
+                  id="email"
                   label="Organization Email Address"
                   name="email"
                   autoComplete="email"
@@ -101,13 +121,76 @@ export default function OrganizationSignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="Organization password"
+                  name="password"
                   label="Organization Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
                 />
               </Grid>
+              {/* <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="description"
+                  label="Description"
+                  id="description"
+                  autoComplete="description"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="address"
+                  label="Address"
+                  id="address"
+                  autoComplete="address"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="website"
+                  label="Website"
+                  id="website"
+                  autoComplete="website"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="contactEmail"
+                  label="Contact Email"
+                  id="contactEmail"
+                  autoComplete="contactEmail"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="primaryCause"
+                  label="Primary Cause"
+                  id="primaryCause"
+                  autoComplete="primaryCause"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="pictureUrl"
+                  label="Picture URL"
+                  id="pictureUrl"
+                  autoComplete="pictureUrl"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="orgUrl"
+                  label="Organization URL"
+                  id="orgUrl"
+                  autoComplete="orgUrl"
+                />
+              </Grid> */}
             </Grid>
             <Button
               type="submit"
