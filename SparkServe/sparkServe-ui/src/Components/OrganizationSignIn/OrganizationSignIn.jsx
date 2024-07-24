@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -31,13 +32,23 @@ const defaultTheme = createTheme();
 const OrganizationSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const credentials = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    try {
+      const response = await axios.post('https://project-1-uljs.onrender.com/orgs/login', credentials);
+      console.log(response.data);
+      if (response.status === 200) {
+        navigate('/OrganizationLandingPage'); 
+      }
+    } catch (error) {
+      console.error('Error logging in:', error.response?.data || error.message);
+    }
   };
 
   const handleSignUpRedirect = () => {

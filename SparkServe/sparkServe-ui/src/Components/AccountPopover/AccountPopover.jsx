@@ -15,7 +15,7 @@ const account = {
   photoURL: 'https://via.placeholder.com/150',
 };
 
-export default function AccountPopover() {
+export default function AccountPopover({ profileType, isSignedIn }) {
   const [open, setOpen] = React.useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,22 +34,42 @@ export default function AccountPopover() {
   };
 
   const renderMenuOptions = () => {
-    if (location.pathname === '/OrgWelcomePage' || location.pathname === '/Calendar') {
+    if (!isSignedIn) {
       return (
         <>
-          <MenuItem onClick={() => handleNavigation('/organization-profile')}>Organization Profile</MenuItem>
-          <MenuItem onClick={() => handleNavigation('/notifications')}>Notifications</MenuItem>
+          <MenuItem onClick={() => handleNavigation('/UserLogInPage')}>Sign in</MenuItem>
+          <MenuItem onClick={() => handleNavigation('/UserSignUpPage')}>Sign up</MenuItem>
         </>
       );
-    } else if (location.pathname === '/NRLandingPage') {
+    } else {
+      if (location.pathname === '/OrganizationWelcomePage' || location.pathname === '/Calendar') {
+        return (
+          <>
+            <MenuItem onClick={() => handleNavigation('/notifications')}>Notifications</MenuItem>
+          </>
+        );
+      }
       return (
         <>
-          <MenuItem onClick={() => handleNavigation('/signin')}>Sign in</MenuItem>
-          <MenuItem onClick={() => handleNavigation('/signup')}>Sign up</MenuItem>
+          <MenuItem
+            disableRipple
+            disableTouchRipple
+            onClick={() => handleNavigation(`/${profileType.toLowerCase().replace(' ', '-')}`)}
+            sx={{ typography: 'body2', py: 1.5 }}
+          >
+            {profileType}
+          </MenuItem>
+          <MenuItem
+            disableRipple
+            disableTouchRipple
+            onClick={handleClose}
+            sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+          >
+            Logout
+          </MenuItem>
         </>
       );
     }
-    return null;
   };
 
   return (
@@ -66,17 +86,29 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar
-          src={account.photoURL}
-          alt={account.displayName}
-          sx={{
-            width: 36,
-            height: 36,
-            border: (theme) => `solid 2px ${theme.palette.background.default}`,
-          }}
-        >
-          {account.displayName.charAt(0).toUpperCase()}
-        </Avatar>
+        {isSignedIn ? (
+          <Avatar
+            src={account.photoURL}
+            alt={account.displayName}
+            sx={{
+              width: 36,
+              height: 36,
+              border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            }}
+          >
+            {account.displayName.charAt(0).toUpperCase()}
+          </Avatar>
+        ) : (
+          <Avatar
+            sx={{
+              width: 36,
+              height: 36,
+              border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            }}
+          >
+            A
+          </Avatar>
+        )}
       </IconButton>
 
       <Popover
@@ -94,34 +126,23 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2 }}>
-          <Typography variant="subtitle2" noWrap>
-            {account.displayName}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
-          </Typography>
-        </Box>
+        {isSignedIn && (
+          <Box sx={{ my: 1.5, px: 2 }}>
+            <Typography variant="subtitle2" noWrap>
+              {account.displayName}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+              {account.email}
+            </Typography>
+          </Box>
+        )}
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {isSignedIn && <Divider sx={{ borderStyle: 'dashed' }} />}
 
         {renderMenuOptions()}
 
-        <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
-
-        {location.pathname !== '/NRLandingPage' && (
-          <MenuItem
-            disableRipple
-            disableTouchRipple
-            onClick={handleClose}
-            sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
-          >
-            Logout
-          </MenuItem>
-        )}
+        {isSignedIn && <Divider sx={{ borderStyle: 'dashed', m: 0 }} />}
       </Popover>
     </>
   );
 }
-
-

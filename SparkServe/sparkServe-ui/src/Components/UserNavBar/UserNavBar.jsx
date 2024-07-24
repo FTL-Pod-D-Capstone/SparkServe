@@ -11,8 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import logo2 from '../../assets/logo2.png';
 import AccountPopover from '../AccountPopover/AccountPopover';
-import UserSignIn from '../UserSignIn/UserSignIn'; 
-
+import UserSignIn from '../UserSignIn/UserSignIn';
 
 const logoStyle = {
   width: '140px',
@@ -50,7 +49,7 @@ function UserNavBar() {
         </>
       );
     } else {
-      return <AccountPopover />;
+      return <AccountPopover profileType="User Profile" />;
     }
   };
 
@@ -119,7 +118,7 @@ function UserNavBar() {
                           Opportunities
                         </Button>
                       </MenuItem>
-                      <AccountPopover />
+                      <AccountPopover profileType="User Profile" />
                     </>
                   )}
                 </Box>
@@ -134,4 +133,3 @@ function UserNavBar() {
 }
 
 export default UserNavBar;
-

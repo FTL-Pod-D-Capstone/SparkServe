@@ -1,5 +1,6 @@
 const organizationModel = require("../models/organizationModels");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 // Function to register a new organization
 const registerOrganization = async (req, res) => {
@@ -44,13 +45,12 @@ const loginOrganization = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: organization.organizationId, email: organization.email }, process.env.JWT_SECRET_KEY , { expiresIn: '1h' });
+    const token = jwt.sign({ id: organization.organizationId, email: organization.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
     res.status(200).json({ token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 // Function to get all organizations 
 const getAllOrganizations = async (req, res) => {

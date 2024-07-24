@@ -72,7 +72,7 @@ const ProfileCards = () => {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           {profileData.map((profile, index) => (
-            <Card sx={{ maxWidth: 400, margin: 2, zIndex: 99 }} key={index}>
+            <Card sx={{ width: 300, margin: 2, zIndex: 99 }} key={index}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -80,7 +80,6 @@ const ProfileCards = () => {
                   image={profile.image}
                   alt={profile.name}
                 />
-                <CardContent sx={{ paddingTop: '2px' }}></CardContent>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     {profile.name}
@@ -117,3 +116,5 @@ const ProfileCards = () => {
 };
 
 export default ProfileCards;
+
+
