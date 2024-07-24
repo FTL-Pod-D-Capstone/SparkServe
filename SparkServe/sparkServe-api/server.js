@@ -6,7 +6,6 @@ const userRoutes = require("./src/routes/userRoutes");
 const organizationRoutes = require("./src/routes/organizationRoutes");
 const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
-require("dotenv").config();
 const { rateLimiter } = require("../sparkServe-api/utils/security");
 const chatbotRoutes = require("../sparkServe-api/src/routes/chatbotRoutes");
 
@@ -51,3 +50,7 @@ app.use("/api/chat", chatbotRoutes);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+app.use("/api/chat", (req, res, next) => {
+  console.log("Chat route hit");
+  next();
+}, chatbotRoutes);

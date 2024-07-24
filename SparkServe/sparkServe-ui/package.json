@@ -23,6 +23,8 @@
     "express": "^4.19.2",
     "faker": "^5.5.3",
     "install": "^0.13.0",
+    "lottie-react": "^2.4.0",
+    "lottie-web": "^5.12.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
     "npm": "^10.8.2",

@@ -1,33 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../Chatbot/Chatbot.css';
 import logo from '../../assets/logo2.png'; // Adjust this path if necessary
+import sparkieIcon from '../../assets/Sparkie.json'; // Adjust this path if necessary
 
-const predefinedEmojis = [
-    { character: '😀', slug: 'grinning' },
-    { character: '😁', slug: 'grin' },
-    { character: '😂', slug: 'joy' },
-    { character: '🤣', slug: 'rofl' },
-    { character: '😃', slug: 'smiley' },
-    { character: '😄', slug: 'smile' },
-    { character: '😅', slug: 'sweat_smile' },
-    { character: '😆', slug: 'laughing' },
-    { character: '😉', slug: 'wink' },
-    { character: '😊', slug: 'blush' },
-    // Add more emojis as needed
+
+const quickReplies = [
+    "Tell me about volunteer opportunities.",
+    "What is the latest event?",
+    "How can I get involved?",
+    "Can you recommend something for me?"
 ];
 
 const Chatbot = () => {
-    const [messages, setMessages] = useState([{ text: 'Hi, how can I help you?', from: 'bot' }]);
+    const [messages, setMessages] = useState([{ text: 'Hello! I am Sparkie. How can I help you?', from: 'bot' }]);
     const [message, setMessage] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     const handleSendMessage = async () => {
         if (message.trim() !== '') {
             const newMessages = [...messages, { text: message, from: 'user' }];
             setMessages(newMessages);
-            const userId = 3; // Replace with the actual user ID
+            const userId = 1; // Replace with the actual user ID not hardcoded 
 
             try {
                 const response = await fetch('http://localhost:3000/api/chat', {
@@ -52,6 +51,35 @@ const Chatbot = () => {
         }
     };
 
+    const handleQuickReply = async (text) => {
+        setMessage(text);
+        
+        const newMessages = [...messages, { text: text, from: 'user' }];
+        setMessages(newMessages);
+        const userId = 1; // Replace with the actual user ID not hardcoded 
+    
+        try {
+            const response = await fetch('http://localhost:3000/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, prompt: text }),
+            });
+    
+            const data = await response.json();
+    
+            setMessages([
+                ...newMessages,
+                { text: data.response, from: 'bot' },
+            ]);
+    
+            setMessage('');
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+    
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSendMessage();
@@ -66,18 +94,13 @@ const Chatbot = () => {
         setIsCollapsed(!isCollapsed);
     };
 
-    const handleEmojiClick = (emoji) => {
-        setMessage(message + emoji.character);
-        setShowEmojiPicker(false);
-    };
-
     return (
         <>
             {!isMinimized ? (
                 <div className={`chatbot-container ${isCollapsed ? 'collapsed' : ''}`}>
                     <div className="chatbot-header">
                         <img src={logo} alt="Website Logo" className="chatbot-logo" />
-                        <p>Hello, lets chat!</p>
+                        <p>Hello, let&apos;s chat!</p>
                         <div className="button-group">
                             <button onClick={handleCollapse} className="button collapse-button">
                                 {isCollapsed ? (
@@ -107,6 +130,14 @@ const Chatbot = () => {
                                         {msg.text}
                                     </div>
                                 ))}
+                                <div ref={messagesEndRef} />
+                            </div>
+                            <div className="quick-replies">
+                                {quickReplies.map((reply, index) => (
+                                    <button key={index} onClick={() => handleQuickReply(reply)} className="quick-reply-button">
+                                        {reply}
+                                    </button>
+                                ))}
                             </div>
                             <div className="input-container">
                                 <input
@@ -116,7 +147,6 @@ const Chatbot = () => {
                                     onChange={(e) => setMessage(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                 />
-                                <button className="emoji-button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>😊</button>
                                 <button className="send-button" onClick={handleSendMessage}>
                                     <div className="svg-wrapper-1">
                                         <div className="svg-wrapper">
@@ -136,21 +166,12 @@ const Chatbot = () => {
                                     </div>
                                 </button>
                             </div>
-                            {showEmojiPicker && (
-                                <div className="emoji-picker">
-                                    {predefinedEmojis.map((emoji) => (
-                                        <span key={emoji.slug} onClick={() => handleEmojiClick(emoji)}>
-                                            {emoji.character}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
                         </>
                     )}
                 </div>
             ) : (
                 <div className="chatbot-minimized" onClick={() => setIsMinimized(false)}>
-                    <img src={logo} alt="Chatbot Logo" className="minimized-logo" />
+                    <img src={sparkieIcon} alt="Chatbot Icon" className="minimized-logo" />
                     <p className="minimized-text">How can I help you?</p>
                 </div>
             )}

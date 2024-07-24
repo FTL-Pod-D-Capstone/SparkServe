@@ -8,7 +8,7 @@ import OrganizationWelcomePage from '../Components/Pages/OrganizationWelcomePage
 import OrganizationLandingPage from '../Components/Pages/OrganizationLandingpage/OrganizationLandingPage';
 import UserLogInPage from '../Components/Pages/UserLogInPage/UserLogInPage';
 import UserSignUpPage from '../Components/Pages/UserSignUpPage/UserSignUpPage'; 
-import Chatbot from '../Components/Chatbot/Chatbot'; // Import your ChatBot component
+import Chatbot from '../Components/Chatbot/Chatbot';
 import OrganizationSignInPage from '../Components/Pages/OrganizationSignInPage/OrganizationSignInPage'; 
 import OrganizationSignUpPage from '../Components/Pages/OrganizationSignUpPage/OrganizationSignUpPage';
 import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 

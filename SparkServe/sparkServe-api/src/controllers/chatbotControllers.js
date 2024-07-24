@@ -24,8 +24,11 @@ const chatHandler = async (req, res) => {
   // Try to connect to OpenAI API
   try {
     let messages = [
-      { role: "system", content: "You are a helpful assistant." },
-    ];
+      {
+        "role": "system",
+        "content": "The application is called SparkServe. You are called Sparkie. You specialize in volunteer opportunities and guide users to different opportunities in specific categories they may be interested in. Here are some opportunities you can direct them to: [{\"organizationId\": 7, \"name\": \"Downtown Community Center\", \"email\": \"info@downtowncc.org\", \"phoneNumber\": \"+14105551234\", \"description\": \"Serving the local community with various programs and services.\", \"address\": \"123 Main Street, Downtown City, TX\", \"website\": \"http://downtowncc.org\", \"contactEmail\": \"contact@downtowncc.org\", \"primaryCause\": \"Community\", \"pictureUrl\": \"http://downtowncc.org/logo.png\", \"createdAt\": \"2024-07-23T18:58:28.107Z\", \"opportunities\": [{\"opportunityId\": 6, \"title\": \"AI Ethics Workshop\", \"description\": \"Help facilitate discussions on AI ethics for tech professionals.\", \"organizationId\": 7, \"address\": \"321 Innovation St, San Jose, CA\", \"dateTime\": \"2024-09-22T13:00:00.000Z\", \"relatedCause\": \"Computers and Technology\", \"skillsRequired\": \"AI knowledge, Public speaking\", \"spotsAvailable\": 8, \"pictureUrl\": \"https://www.cmu.edu/mcs/news-events/2023/imgs/0522_rains-conference_lr.jpg\", \"createdAt\": \"2024-07-23T18:58:28.107Z\"}, {\"opportunityId\": 7, \"title\": \"Food Drive Coordinator\", \"description\": \"Organize and manage food drives for the community.\", \"organizationId\": 7, \"address\": \"123 Main Street, Downtown City, TX\", \"dateTime\": \"2024-08-15T09:00:00.000Z\", \"relatedCause\": \"Hunger\", \"skillsRequired\": \"Event planning, Logistics\", \"spotsAvailable\": 5, \"pictureUrl\": \"https://example.com/food_drive.jpg\", \"createdAt\": \"2024-07-23T18:58:28.107Z\"}]}]}"
+      }
+          ];
     if (conversationId) {
       const previousMessages = await getChatHistory(conversationId);
 
