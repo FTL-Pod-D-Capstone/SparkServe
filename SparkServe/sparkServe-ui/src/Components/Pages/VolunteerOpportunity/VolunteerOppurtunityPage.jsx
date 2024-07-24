@@ -12,6 +12,7 @@ const VolunOppPage = () => {
     const [opportunity, setOpportunity] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [organizationName, setOrganizationName] = useState('');
 
     const navigate = useNavigate(); 
 
@@ -19,12 +20,37 @@ const VolunOppPage = () => {
         navigate(-1);
     };
 
+    // useEffect(() => {
+    //     const getOpportunity = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const response = await axios.get(`https://project-1-uljs.onrender.com/opps/${opportunityId}`);
+    //             setOpportunity(response.data);
+    //             setIsLoading(false);
+    //         } catch (err) {
+    //             console.error('Error fetching specified opportunity:', err);
+    //             setError('Failed to load the opportunity details.');
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     if (opportunityId) {
+    //         getOpportunity();
+    //     }
+    //     getOpportunity();
+    // }, [opportunityId]);
+
     useEffect(() => {
         const getOpportunity = async () => {
             setIsLoading(true);
             try {
                 const response = await axios.get(`https://project-1-uljs.onrender.com/opps/${opportunityId}`);
                 setOpportunity(response.data);
+                
+                if (response.data.organizationId) {
+                    const orgResponse = await axios.get(`https://project-1-uljs.onrender.com/orgs/${response.data.organizationId}`);
+                    setOrganizationName(orgResponse.data.name);
+                }
+                
                 setIsLoading(false);
             } catch (err) {
                 console.error('Error fetching specified opportunity:', err);
@@ -32,11 +58,13 @@ const VolunOppPage = () => {
                 setIsLoading(false);
             }
         };
+        
         if (opportunityId) {
             getOpportunity();
         }
-        getOpportunity();
     }, [opportunityId]);
+
+    
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -68,11 +96,11 @@ const VolunOppPage = () => {
                     <CardMedia
                         component="img"
                         height="300"
-                        image={opportunity.cover || 'default-image-url'}
+                        image={opportunity.pictureUrl || 'default-image-url'}
                         alt={opportunity.title}
                         sx={{ mb: 2 }}
                     />
-                    <Typography variant="subtitle1">By {opportunity.organizationId}</Typography>
+                    <Typography variant="subtitle1">By {organizationName}</Typography>
                     <Typography variant="body1" sx={{ mt: 2 }}>
                     Spots Available: {opportunity.spotsAvailable} | Related Cause: {opportunity.relatedCause}
                     </Typography>
