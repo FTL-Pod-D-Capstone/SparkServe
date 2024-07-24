@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../Chatbot/Chatbot.css';
+import Lottie from 'lottie-react';
 import logo from '../../assets/logo2.png'; // Adjust this path if necessary
-import sparkieIcon from '../../assets/Sparkie.json'; // Adjust this path if necessary
-
-
+import sparkieAnimation from '../../assets/Sparkie.json'; //this is the sparkie.json for the lottie
 const quickReplies = [
     "Tell me about volunteer opportunities.",
     "What is the latest event?",
@@ -102,16 +101,20 @@ const Chatbot = () => {
                         <img src={logo} alt="Website Logo" className="chatbot-logo" />
                         <p>Hello, let&apos;s chat!</p>
                         <div className="button-group">
-                            <button onClick={handleCollapse} className="button collapse-button">
+                            <button onClick={handleCollapse} className="collapse-button">
                                 {isCollapsed ? (
-                                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z" fillRule="evenodd"></path>
-                                        <path d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" fillRule="evenodd"></path>
+                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" >
+                                        <title>collapse-line</title>
+                                        <path className="clr-i-outline clr-i-outline-path-1" d="M29,30.41a1,1,0,0,1-.71-.29L18,19.83,7.71,30.12a1,1,0,0,1-1.41-1.41L18,17,29.71,28.71A1,1,0,0,1,29,30.41Z"></path>
+                                        <path className="clr-i-outline clr-i-outline-path-2" d="M29,30.41a1,1,0,0,1-.71-.29L18,19.83,7.71,30.12a1,1,0,0,1-1.41-1.41L18,17,29.71,28.71A1,1,0,0,1,29,30.41Z"></path>
+                                        <rect x="0" y="0" width="36" height="36" fillOpacity="0"/>
                                     </svg>
                                 ) : (
-                                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" fillRule="evenodd"></path>
-                                        <path d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" fillRule="evenodd"></path>
+                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" >
+                                        <title>collapse-line</title>
+                                        <path className="clr-i-outline clr-i-outline-path-1" d="M29,19.41a1,1,0,0,1-.71-.29L18,8.83,7.71,19.12a1,1,0,0,1-1.41-1.41L18,6,29.71,17.71A1,1,0,0,1,29,19.41Z"></path>
+                                        <path className="clr-i-outline clr-i-outline-path-2" d="M29,30.41a1,1,0,0,1-.71-.29L18,19.83,7.71,30.12a1,1,0,0,1-1.41-1.41L18,17,29.71,28.71A1,1,0,0,1,29,30.41Z"></path>
+                                        <rect x="0" y="0" width="36" height="36" fillOpacity="0"/>
                                     </svg>
                                 )}
                             </button>
@@ -171,7 +174,7 @@ const Chatbot = () => {
                 </div>
             ) : (
                 <div className="chatbot-minimized" onClick={() => setIsMinimized(false)}>
-                    <img src={sparkieIcon} alt="Chatbot Icon" className="minimized-logo" />
+                    <Lottie animationData={sparkieAnimation} className="minimized-logo" />
                     <p className="minimized-text">How can I help you?</p>
                 </div>
             )}

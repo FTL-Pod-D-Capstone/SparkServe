@@ -1,11 +1,9 @@
-/* Chatbot Container */
 .chatbot-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 90%;
-    width: 350px;
-    height: 500px;
+    width: 300px; 
+    height: 550px; 
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -29,6 +27,12 @@
     background-color: #007bff;
     color: white;
     border-radius: 10px 10px 0 0;
+    transition: padding 0.3s ease; /* Smooth transition for padding change */
+}
+
+.chatbot-container.collapsed .chatbot-header {
+    padding: 15px 20px; /* Increase padding when collapsed */
+    font-size: 1.1em; /* Optional: Increase font size for better visibility */
 }
 
 .chatbot-logo {
@@ -54,12 +58,16 @@
     cursor: pointer;
 }
 
+.collapse-button {
+    color: white; /* Changed to white */
+}
+
 /* Messages Container */
 .messages-container {
     padding: 15px;
     background-color: #f8f9fa;
     overflow-y: auto;
-    max-height: 400px;
+    flex-grow: 1; /* Ensure it grows to fill the container */
 }
 
 .message {
@@ -88,9 +96,6 @@
     padding: 10px;
     background-color: white;
     border-top: 1px solid #e9ecef;
-    flex: bottom;
-    position: bottom;
-    /* margin-top: auto; */
 }
 
 .input-container input {
@@ -110,6 +115,26 @@
     cursor: pointer;
     color: #007bff;
 }
+.send-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    width: 40px; /* Set width to desired size */
+    height: 40px; /* Set height to match width for a circle */
+    border-radius: 50%; /* Make it a circle */
+    display: flex; /* Center content inside the button */
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+.send-button:hover {
+    background-color: lightgray;
+    box-shadow: rgba(224, 224, 224, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
 
 .emoji-picker {
     display: flex;
@@ -139,10 +164,10 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    height: 50px;
+    width: 70px; /* Increased width */
+    height: 70px; /* Increased height */
     border-radius: 50%;
-    background-color: #007BFF;
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,60 +175,68 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Ensure the image fits well within the circle */
 .chatbot-minimized img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
-/* Hide minimized text */
 .minimized-text {
     display: none;
 }
 
-
+/* Quick Replies Container */
 .quick-replies {
     display: flex;
+    flex-direction: column;
     margin-top: auto;
+    gap: 1px;
 }
 
 .quick-reply-button {
-    width: 80%;
-    height: 80%;
-    padding: 1rem;
-    min-width: 20px;
-    min-height: 20px;
-}
-
-.bottom-container {
-    display: flex;
-    margin-top: auto;
-}
-/* Minimized Chatbot */
-.chatbot-minimized {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #007BFF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    appearance: none;
+    background-color: transparent;
+    border: 2px solid #1A1A1A;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #3B3B3B;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: inline-block;
+    font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 15px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    min-height: 40px;
+    min-width: 0;
+    outline: none;
+    padding: 6px 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 100%;
+    will-change: transform;
 }
 
-/* Ensure the image fits well within the circle */
-.chatbot-minimized img {
-    width: 40px; /* Adjust the size according to your icon */
-    height: 40px; /* Adjust the size according to your icon */
-    border-radius: 50%;
+.quick-reply-button:disabled {
+    pointer-events: none;
 }
 
-/* Hide minimized text */
-.minimized-text {
-    display: none;
+.quick-reply-button:hover {
+    color: #fff;
+    background-color: #1A1A1A;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.quick-reply-button:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+.minimized-logo {
+    width: 150px;
+    height: 150px;
 }
