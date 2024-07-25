@@ -1,11 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserNavBar from '../../UserNavBar/UserNavBar';
-import { Container, Box, IconButton } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import Footer from '../../Footer/Footer';
-// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import VolunteerCardContainer from '../../VolunteerCardContainer/VolunteerCardContainer';
-import Chatbot from "../../Chatbot/Chatbot"
+import Chatbot from "../../Chatbot/Chatbot";
+
+const isUserAuthenticated = () => {
+  return localStorage.getItem('isUserAuthenticated') === 'true';
+};
 
 const UserLandingPage = () => {
   const navigate = useNavigate();
@@ -34,17 +37,12 @@ const UserLandingPage = () => {
               marginBottom: 2,
             }}
           >
-            {/* <IconButton
-              color="white"
-              onClick={handleBackClick}
-            >
-              <ArrowBackIosIcon />
-            </IconButton> */}
+            {/* Back button code can be added here if needed */}
           </Box>
           <VolunteerCardContainer />
         </Container>
       </Box>
-      <Chatbot/>
+      {isUserAuthenticated() && <Chatbot />}
       <Footer />
     </>
   );
