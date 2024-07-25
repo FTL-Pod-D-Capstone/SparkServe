@@ -23,6 +23,9 @@ const Chatbot = () => {
     const messagesEndRef = useRef(null);
     const [showPopup, setShowPopup] = useState(false);
 
+
+
+
     // Auto-scroll to the latest message
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,7 +51,7 @@ const Chatbot = () => {
             const userId = 1; // TODO: Replace with actual user ID
 
             try {
-                const response = await fetch('http://localhost:3000/api/chat', {
+                const response = await fetch(`https://project-1-uljs.onrender.com/api/chat`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -95,6 +98,7 @@ const Chatbot = () => {
     };
 
     return (
+        
         <div className={`chatbot-wrapper ${isMinimized ? 'minimized' : ''}`}>
             {isMinimized ? (
                 <>
