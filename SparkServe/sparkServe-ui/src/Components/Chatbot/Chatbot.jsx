@@ -1,4 +1,3 @@
-// Chatbot.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import '../Chatbot/Chatbot.css';
 import Lottie from 'lottie-react';
@@ -7,10 +6,12 @@ import sparkieAnimation from '../../assets/Sparkie.json';
 
 // Define quick reply options
 const QUICK_REPLIES = [
-    "Tell me about volunteer opportunities.",
+    "SparkServe?",
+
+    "Can you tell me about volunteer opportunities.",
     "What is the latest event?",
     "How can I get involved?",
-    "Can you recommend something for me?"
+    "Can you recommend something for me?",
 ];
 
 // Chatbot component
@@ -20,26 +21,37 @@ const Chatbot = () => {
     const [message, setMessage] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed
     const [isMinimized, setIsMinimized] = useState(true); // Start minimized
+    const [isQuickRepliesMinimized, setIsQuickRepliesMinimized] = useState(false);
     const messagesEndRef = useRef(null);
-    const [showPopup, setShowPopup] = useState(false);
-
-
-
+    const [showPopup, setShowPopup] = useState(true); // Start with popup visible
 
     // Auto-scroll to the latest message
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    // Handle popup visibility
     useEffect(() => {
-        // Show popup after a short delay
-        const timer = setTimeout(() => setShowPopup(true), 1000);
-        // Hide popup after 5 seconds
-        const hideTimer = setTimeout(() => setShowPopup(false), 6000);
-        
+        // Show popup immediately
+        setShowPopup(true);
+
+        // Hide popup after 3 seconds
+        const hidePopupTimeout = setTimeout(() => {
+            setShowPopup(false);
+        }, 3000);
+
+        // Set up interval for showing popup every 8 seconds
+        const showPopupInterval = setInterval(() => {
+            setShowPopup(true);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000); // Popup shows for 3 seconds
+        }, 8000); // Popup reappears every 8 seconds
+
+        // Cleanup function
         return () => {
-            clearTimeout(timer);
-            clearTimeout(hideTimer);
+            clearTimeout(hidePopupTimeout);
+            clearInterval(showPopupInterval);
         };
     }, []);
 
@@ -97,8 +109,12 @@ const Chatbot = () => {
         setIsCollapsed(!isCollapsed);
     };
 
+    // Toggle quick replies visibility
+    const toggleQuickReplies = () => {
+        setIsQuickRepliesMinimized(!isQuickRepliesMinimized);
+    };
+
     return (
-        
         <div className={`chatbot-wrapper ${isMinimized ? 'minimized' : ''}`}>
             {isMinimized ? (
                 <>
@@ -114,7 +130,6 @@ const Chatbot = () => {
                 <div className={`chatbot-container ${isCollapsed ? 'collapsed' : ''}`}>
                     <div className="chatbot-header">
                         <img src={logo} alt="Website Logo" className="chatbot-logo" />
-                        {/* <p>Hello, let's chat!</p> */}
                         <div className="button-group">
                             <button onClick={handleCollapse} className="collapse-button">
                                 {isCollapsed ? '▼' : '▲'}
@@ -134,12 +149,19 @@ const Chatbot = () => {
                                 ))}
                                 <div ref={messagesEndRef} />
                             </div>
-                            <div className="quick-replies">
-                                {QUICK_REPLIES.map((reply, index) => (
-                                    <button key={index} onClick={() => handleQuickReply(reply)} className="quick-reply-button">
-                                        {reply}
-                                    </button>
-                                ))}
+                            <div className="quick-replies-container">
+                                <div className="quick-replies-header" onClick={toggleQuickReplies}>
+                                    Quick Replies {isQuickRepliesMinimized ? '▼' : '▲'}
+                                </div>
+                                {!isQuickRepliesMinimized && (
+                                    <div className="quick-replies">
+                                        {QUICK_REPLIES.map((reply, index) => (
+                                            <button key={index} onClick={() => handleQuickReply(reply)} className="quick-reply-button">
+                                                {reply}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <div className="input-container">
                                 <input
