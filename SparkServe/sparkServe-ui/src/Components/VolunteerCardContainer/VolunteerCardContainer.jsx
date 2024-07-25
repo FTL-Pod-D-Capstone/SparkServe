@@ -79,7 +79,7 @@ const VolOppContainer = ({ bgColor }) => {
             >
                 <Box sx={{ mb: 4 }}>
                     <TextField
-                        label="Filter by Name"
+                        label="Search by Name"
                         variant="outlined"
                         value={nameFilter}
                         onChange={(e) => setNameFilter(e.target.value)}
