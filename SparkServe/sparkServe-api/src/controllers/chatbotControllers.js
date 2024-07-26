@@ -1,12 +1,10 @@
-const { getChatHistory, saveChatMessage } = require("../models/chatbotModels");
-
+const { getChatHistory: getChatHistoryModel, saveChatMessage } = require("../models/chatbotModels");
 const OpenAI = require("openai");
 
 // Get the OpenAI api key from env file
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
 
 // Chat handler function to handle chat prompts and response
 const chatHandler = async (req, res) => {
@@ -84,11 +82,8 @@ const chatHandler = async (req, res) => {
       messages: messages,
     });
 
- 
     // Process the response - specific to OpenAI API response
     let chatResponse = completion.choices[0].message.content.trim();
-
-
 
     // New conversation id and save the chat message to DB
     const newConversationId = conversationId || Date.now().toString();
@@ -104,7 +99,18 @@ const chatHandler = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 };
+const getChatHistory = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const history = await getChatHistoryModel(userId);
+    res.json(history);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Something went wrong");
+  }
+};
 
 module.exports = {
   chatHandler,
+  getChatHistory,
 };
