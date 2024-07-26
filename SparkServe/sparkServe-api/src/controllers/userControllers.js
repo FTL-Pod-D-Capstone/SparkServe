@@ -28,7 +28,7 @@ const findUserById = async (req, res) => {
 
 // Register User
 const register = async (req, res) => {
-  const { username, email, phoneNumber, password } = req.body;
+  const { username, email, phoneNumber, password,firstName,lastName } = req.body;
   try {
     // Check if user already exists by username, email, or phone number
     const existingUser =
@@ -51,6 +51,8 @@ const register = async (req, res) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      firstName,
+      lastName,
     });
 
     res.status(201).json(user);
