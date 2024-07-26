@@ -53,6 +53,7 @@ const UserSignIn = ({ open, handleClose }) => {
       const response = await axios.post('http://localhost:3000/users/login', credentials);
       console.log(response.data);
       localStorage.setItem('isUserAuthenticated', 'true');
+      localStorage.setItem('userId', response.data.userId);
       setLoginStatus('success');
       setTimeout(() => {
         navigate('/UserLandingPage');

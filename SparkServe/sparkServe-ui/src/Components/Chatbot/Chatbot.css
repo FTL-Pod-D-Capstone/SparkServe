@@ -108,6 +108,7 @@
 .message.bot {
   background-color: #e9ecef;
   align-self: flex-start;
+  margin-right: auto;
 }
 
 .message.user {
@@ -116,7 +117,6 @@
   align-self: flex-end;
   margin-left: auto;
 }
-
 .input-container {
   display: flex;
   align-items: center;
