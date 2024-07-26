@@ -14,6 +14,8 @@ import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as jwt_decode from 'jwt-decode';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 function Copyright(props) {
   return (
@@ -28,10 +30,17 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#4856f6', // This matches the color used for the Avatar
+    },
+  },
+});
 
 const UserSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
+  const [loginStatus, setLoginStatus] = React.useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,28 +49,16 @@ const UserSignIn = ({ open, handleClose }) => {
       email: data.get('email'),
       password: data.get('password'),
     };
-    try{
-      const response = await axios.post('https://project-1-uljs.onrender.com/users/login', credentials);
-        console.log(response.data);
-        const token = response.data.token;
-        const decodedToken = jwt_decode.jwt_decode(token);
-        const userId = decodedToken.userId;
 
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', userId);
-      
-        navigate('/UserLandingPage');
-        window.location.reload(); // Force a reload to update the nav bar
-
-          //   try {
-          //     const response = await axios.post('https://project-1-uljs.onrender.com/users/login', credentials);
-          //     console.log(response.data);
-          //     localStorage.setItem('isUserAuthenticated', 'true');
-          //     localStorage.setItem(userId, response.data.userId);
-          //     navigate('/UserLandingPage');
-          //     window.location.reload(); // Force a reload to update the nav bar
+    try {
+      const response = await axios.post('http://localhost:3000/users/login', credentials);
+      console.log(response.data);
+      localStorage.setItem('isUserAuthenticated', 'true');
+      navigate('/UserLandingPage');
+      window.location.reload(); // Force a reload to update the nav bar
     } catch (error) {
       console.error('Error logging in:', error);
+      setLoginStatus('error');
     }
   };   //jwt decode token to get user id and get user profile page using aws s3 bucket for profile picutre 
 
@@ -96,7 +93,17 @@ const UserSignIn = ({ open, handleClose }) => {
                 alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: '#4856f6' }}>
+              {loginStatus === 'success' && (
+                <Alert icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success" sx={{ width: '100%', mb: 2 }}>
+                  Hey there, welcome back to SparkServe!
+                </Alert>
+              )}
+              {loginStatus === 'error' && (
+                <Alert variant="filled" severity="error" sx={{ width: '100%', mb: 2 }}>
+                  Incorrect email or password. Please try again.
+                </Alert>
+              )}
+              <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
@@ -149,6 +156,3 @@ const UserSignIn = ({ open, handleClose }) => {
 };
 
 export default UserSignIn;
-
-
-

@@ -5,7 +5,7 @@ require('dotenv').config();
 // Function to register a new organization
 const registerOrganization = async (req, res) => {
   try {
-    const { name, email, password, phoneNumber, description, address, website, contactEmail, orgUrl,pictureUrl } = req.body;
+    const { name, email, password, phoneNumber, description, address, website, contactEmail, orgUrl, pictureUrl } = req.body;
 
     // Check if an organization with the same email or phone number already exists
     const existingOrganizationByEmail = await organizationModel.findOrganizationByEmail(email);
@@ -52,23 +52,22 @@ const loginOrganization = async (req, res) => {
   }
 };
 
-// Function to get all organizations 
+// Function to get all organizations
 const getAllOrganizations = async (req, res) => {
-    const { name } = req.query;
-    //sorting by name asc/desc
-    let orderBy = {};
-  
-    if (name) {
-      orderBy.name = name === "asc" ? "asc" : "desc";
-    }
-  
-    try {
-      const organizations = await organizationModel.getAllOrganizations(orderBy);
-      res.status(200).json(organizations);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
+  const { name } = req.query;
+  let orderBy = {};
+
+  if (name) {
+    orderBy.name = name === "asc" ? "asc" : "desc";
+  }
+
+  try {
+    const organizations = await organizationModel.getAllOrganizations(orderBy);
+    res.status(200).json(organizations);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 // Function to get organization by ID
 const getOrganizationById = async (req, res) => {
@@ -79,16 +78,6 @@ const getOrganizationById = async (req, res) => {
     } else {
       res.status(404).json({ error: "Organization not found" });
     }
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Function to create a new organization
-const createOrganization = async (req, res) => {
-  try {
-    const newOrganization = await organizationModel.createOrganization(req.body);
-    res.status(201).json(newOrganization);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -113,7 +102,7 @@ const deleteOrganization = async (req, res) => {
   try {
     const deletedOrganization = await organizationModel.deleteOrganization(req.params.id);
     if (deletedOrganization) {
-      res.status(200).json(deletedOrganization);
+      res.status(200).json({ message: "Organization deleted" });
     } else {
       res.status(404).json({ error: "Organization not found" });
     }
@@ -121,6 +110,7 @@ const deleteOrganization = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 // Function to get all opportunities by organization ID
 const getOppsByOrgId = async (req, res) => {
   const { id: organizationId } = req.params;
@@ -137,12 +127,10 @@ const getOppsByOrgId = async (req, res) => {
   }
 };
 
-
 // Export the functions
 module.exports = {
   getAllOrganizations,
   getOrganizationById,
-  createOrganization,
   updateOrganization,
   deleteOrganization,
   getOppsByOrgId,

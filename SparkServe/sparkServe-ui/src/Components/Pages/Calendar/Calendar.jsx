@@ -4,7 +4,6 @@ import './Calendar.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import IconButton from '@mui/material/IconButton';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import Footer from '../../Footer/Footer';
@@ -14,6 +13,17 @@ const CalendarApp = () => {
   const monthsOfYear = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  const causes = [
+    'Computers and technology',
+    'Hunger',
+    'Children and youth',
+    'Environment',
+    'Education and literacy',
+    'Health and medicine',
+    'Arts and culture',
+    'Seniors'
   ];
 
   const currentDate = new Date();
@@ -29,6 +39,7 @@ const CalendarApp = () => {
   const [eventText, setEventText] = useState('');
   const [eventName, setEventName] = useState('');
   const [eventLocation, setEventLocation] = useState('');
+  const [eventRelatedCause, setEventRelatedCause] = useState('');
   const [editingEvent, setEditingEvent] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
@@ -63,6 +74,7 @@ const CalendarApp = () => {
       setEventText('');
       setEventName('');
       setEventLocation('');
+      setEventRelatedCause('');
       setEditingEvent(null);
     }
   };
@@ -83,6 +95,7 @@ const CalendarApp = () => {
       text: eventText,
       name: eventName,
       location: eventLocation,
+      relatedCause: eventRelatedCause,
     };
 
     let updatedEvents = [...events];
@@ -102,6 +115,7 @@ const CalendarApp = () => {
     setEventText('');
     setEventName('');
     setEventLocation('');
+    setEventRelatedCause('');
     setShowEventPopup(false);
     setEditingEvent(null);
   };
@@ -115,6 +129,7 @@ const CalendarApp = () => {
     setEventText(event.text);
     setEventName(event.name);
     setEventLocation(event.location);
+    setEventRelatedCause(event.relatedCause);
     setEditingEvent(event);
     setShowEventPopup(true);
   };
@@ -141,18 +156,11 @@ const CalendarApp = () => {
     setEventTime((prevTime) => ({ ...prevTime, [name]: value.padStart(2, '0') }));
   };
 
-  // const handleBackClick = () => {
-  //   navigate('/OrganizationWelcomePage');
-  // };
-
   return (
     <>
       <OrganizationNavBar />
       <div className="calendar-app">
         <div className="header">
-          {/* <IconButton color="primary" onClick={handleBackClick}>
-            <ArrowBackIosIcon />
-          </IconButton> */}
           <h1 className="heading">
             Calendar
             <lord-icon
@@ -216,6 +224,7 @@ const CalendarApp = () => {
                 <div className="upcoming-event-name">{event.name}</div>
                 <div className="upcoming-event-location">{event.location}</div>
                 <div className="upcoming-event-text">{event.text}</div>
+                <div className="upcoming-event-cause">Related Cause: {event.relatedCause}</div>
               </div>
             ))}
           </div>
@@ -258,6 +267,17 @@ const CalendarApp = () => {
               value={eventLocation}
               onChange={(e) => setEventLocation(e.target.value)}
             />
+            <select
+              value={eventRelatedCause}
+              onChange={(e) => setEventRelatedCause(e.target.value)}
+            >
+              <option value="">Select Related Cause</option>
+              {causes.map((cause, index) => (
+                <option key={index} value={cause}>
+                  {cause}
+                </option>
+              ))}
+            </select>
             <textarea
               placeholder="Enter Event Description (Maximum 60 Characters)"
               value={eventText}
@@ -291,6 +311,7 @@ const CalendarApp = () => {
 };
 
 export default CalendarApp;
+
 
 
 

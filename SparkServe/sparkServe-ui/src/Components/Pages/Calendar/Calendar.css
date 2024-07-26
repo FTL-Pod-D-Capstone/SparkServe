@@ -1,21 +1,4 @@
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    outline: none;
-    font-family: 'Comfortaa', sans-serif;
-  }
-  
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-  } */
-  
+
   .calendar-app {
     width: 100%;
     height: 100%;
@@ -122,14 +105,15 @@
   } 
   
   .upcoming-events {
-    width: 35%;
+    width: 630px;
     padding: 1rem; 
     background-color: #fff;
     border-radius: 1rem;
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
     margin-left: 1rem; 
+    margin-right: 3rem;
     height: calc(100vh - 300px); 
-    overflow: auto;
+    /* overflow: auto; */
   }
   
   .upcoming-events h2 {
@@ -158,6 +142,13 @@
     font-size: 1.2rem;
     color: #555;
   }
+
+  .upcoming-event-cause {
+    font-size: 1rem; 
+    color: #555;
+    margin-top: 0.5rem;
+  }
+  
   
   .delete-event {
     position: absolute;

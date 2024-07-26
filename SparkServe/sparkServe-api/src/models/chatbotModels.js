@@ -2,17 +2,23 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const getChatHistory = async (conversationId) => {
+const getChatHistory = async (userId) => {
   return await prisma.chatBotInteraction.findMany({
-    where: { conversationId },
-    orderBy: { timestamp: "asc" },
+    where: { userId: parseInt(userId) },
+    orderBy: { timestamp: "desc" },
+    take: 20, 
+    select: {
+      prompt: true,
+      response: true,
+      timestamp: true
+    }// Limit to last 10 interactions
   });
 };
 
 const saveChatMessage = async (userId, conversationId, prompt, response) => {
     // Check if user exists
     const userExists = await prisma.user.findUnique({
-      where: { userId },
+      where: { userId: parseInt(userId) },
     });
   
     if (!userExists) {
@@ -21,7 +27,7 @@ const saveChatMessage = async (userId, conversationId, prompt, response) => {
   
     await prisma.chatBotInteraction.create({
       data: {
-        userId,
+        userId: parseInt(userId),
         conversationId,
         prompt,
         response,

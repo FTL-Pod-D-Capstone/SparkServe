@@ -13,6 +13,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 function Copyright(props) {
   return (
@@ -27,10 +29,17 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#4856f6', // This matches the color used for the Avatar
+    },
+  },
+});
 
 const OrganizationSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
+  const [loginStatus, setLoginStatus] = React.useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,11 +54,15 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       console.log(response.data);
       if (response.status === 200) {
         localStorage.setItem('isAuthenticated', 'true');
-        navigate('/OrganizationLandingPage');
-        window.location.reload(); // Force a reload to update the nav bar
+        setLoginStatus('success');
+        setTimeout(() => {
+          navigate('/OrganizationLandingPage');
+          window.location.reload(); // Force a reload to update the nav bar
+        }, 2000); // Delay navigation by 2 seconds to show the success message
       }
     } catch (error) {
       console.error('Error logging in:', error.response?.data || error.message);
+      setLoginStatus('error');
     }
   };
 
@@ -84,7 +97,17 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                 alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              {loginStatus === 'success' && (
+                <Alert icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success" sx={{ width: '100%', mb: 2 }}>
+                  Welcome back to SparkServe, Organization!
+                </Alert>
+              )}
+              {loginStatus === 'error' && (
+                <Alert variant="filled" severity="error" sx={{ width: '100%', mb: 2 }}>
+                  Incorrect email or password. Please try again.
+                </Alert>
+              )}
+              <Avatar sx={{ m: 1, bgcolor: 'ff66c4' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">

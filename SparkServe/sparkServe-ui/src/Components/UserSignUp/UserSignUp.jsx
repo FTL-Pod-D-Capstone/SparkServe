@@ -52,7 +52,7 @@ export default function UserSignUp() {
     };
 
     try {
-      const response = await axios.post('http://localhost:3000/users/register', user);
+      const response = await axios.post('https://project-1-uljs.onrender.com/users/register', user);
       console.log(response.data);
       // Show the sign-in modal with a message to log in
       handleOpenSignIn();
