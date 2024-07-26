@@ -90,7 +90,7 @@ import axios from 'axios';
 import "./Map.css";
 
 const LIBRARIES = ["places"];
-const API_URL = 'http://localhost:3000/opps/locations';
+const API_URL = 'https://project-1-uljs.onrender.com/opps/locations';
 
 const ReactGoogleMapComponent = () => {
   const { isLoaded, loadError } = useLoadScript({
