@@ -47,12 +47,12 @@ function OrganizationNavBar() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
             {!isAuthenticated && (
-              <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
+              <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
             )}
             {isAuthenticated && (
               <>
-                <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
-                <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
+                <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
+                <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
               </>
             )}
           </Box>
