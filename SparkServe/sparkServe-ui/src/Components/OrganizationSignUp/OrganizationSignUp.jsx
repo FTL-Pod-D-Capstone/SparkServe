@@ -60,7 +60,7 @@ export default function OrganizationSignUp() {
 
     try {
       const response = await axios.post('https://project-1-uljs.onrender.com/orgs/register', organization);
-      console.log(response.data);
+      // console.log(response.data);
       handleOpenSignIn(); // Show the sign-in modal with a message to log in
     } catch (error) {
       console.error('Error registering organization:', error.response?.data || error.message);

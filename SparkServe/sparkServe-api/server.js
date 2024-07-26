@@ -23,7 +23,7 @@ app.use(express.json());
 
 // Base route
 app.get("/", (req, res) => {
-    console.log(req); // This will avoid the unused variable warning
+    // console.log(req); // This will avoid the unused variable warning
 
   res.send("Hello from the backend -- You are currently at the / route");
 });
