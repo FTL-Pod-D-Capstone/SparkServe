@@ -17,14 +17,20 @@ const getAllUsers = async () => {
 const createUser = async (data) => {
   try {
     return await prisma.user.create({
-      data,
+      data: {
+        username: data.username,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      },
     });
   } catch (error) {
     console.error("Create User Error: ", error);
     throw new Error("Failed to create user");
   }
 };
-
 // Function to find user by username
 const findUserByUsername = async (username) => {
   return await prisma.user.findUnique({

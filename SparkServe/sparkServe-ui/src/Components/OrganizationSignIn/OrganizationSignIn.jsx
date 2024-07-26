@@ -51,7 +51,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
 
     try {
       const response = await axios.post('https://project-1-uljs.onrender.com/orgs/login', credentials);
-      console.log(response.data);
+      // console.log(response.data);
       if (response.status === 200) {
         localStorage.setItem('isAuthenticated', 'true');
         setLoginStatus('success');

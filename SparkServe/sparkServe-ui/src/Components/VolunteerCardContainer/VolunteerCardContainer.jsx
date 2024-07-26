@@ -68,6 +68,7 @@ const VolOppContainer = () => {
     if (error) return <div>{error}</div>;
 
     return (
+
         <Box sx={{ mt: 4 }}>
             <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
                 <Grid container spacing={2} alignItems="center">
@@ -104,6 +105,74 @@ const VolOppContainer = () => {
                                 value={causeFilter}
                                 onChange={(e) => setCauseFilter(e.target.value)}
                                 label="Cause"
+
+        <div>
+            <Container
+                sx={{
+                    my: 8,
+                    backgroundColor: bgColor || '#ffffff',
+                    minHeight: '100vh',
+                    padding: '20px',
+                }}
+            >
+                <Box sx={{ mb: 4 }}>
+                    <TextField
+                        label="Search by Name"
+                        variant="outlined"
+                        value={nameFilter}
+                        onChange={(e) => setNameFilter(e.target.value)}
+                        sx={{ mr: 2, mb: 2 }}
+                    />
+                    <FormControl variant="outlined" sx={{ mr: 2, mb: 2, minWidth: 120 }}>
+                        <InputLabel >Organization</InputLabel>
+                        <Select
+                            value={organizationFilter}
+                            onChange={(e) => setOrganizationFilter(e.target.value)}
+                            label="Organization"
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            {organizations.map((org) => (
+                                <MenuItem key={org} value={org}>{org}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="outlined" sx={{ mb: 2, minWidth: 120 }}>
+                        <InputLabel>Cause</InputLabel>
+                        <Select
+                            value={causeFilter}
+                            onChange={(e) => setCauseFilter(e.target.value)}
+                            label="Cause"
+                        >
+                            <MenuItem value="">
+                                <em>All</em>
+                            </MenuItem>
+                            {causes.map((cause) => (
+                                <MenuItem key={cause} value={cause}>{cause}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Grid
+                    container
+                    rowSpacing={4}
+                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    {filteredOpportunities.map((opportunity) => (
+                        <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
+                            <Cards
+                                className="Cards"
+                                id={opportunity.opportunityId}
+                                title={opportunity.title}
+                                cover={opportunity.pictureUrl || "default image"}
+                                organizationName={opportunity.organizationName}
+                                spots={opportunity.spotsAvailable}
+                                cause={opportunity.relatedCause}
+
                             >
                                 <MenuItem value="">
                                     <em>All</em>
