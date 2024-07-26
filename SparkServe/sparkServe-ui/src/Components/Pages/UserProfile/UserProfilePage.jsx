@@ -80,7 +80,7 @@ const UserProfilePage = () => {
                             <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <Avatar
                                     alt={user.name || 'User'}
-                                    src={user.profileImage || "/path-to-default-image.jpg"}
+                                    src={user.profilePicture || "/path-to-default-image.jpg"}
                                     sx={{ width: 200, height: 200, mb: 2 }}
                                 />
                                 <Upload onUploaded={handleFileUploaded} />
@@ -111,7 +111,7 @@ const UserProfilePage = () => {
                                     Contact Information
                                 </Typography>
                                 <Typography variant="body1">Email: {user.email || 'Not provided'}</Typography>
-                                <Typography variant="body1">Phone: {user.phone || 'Not provided'}</Typography>
+                                <Typography variant="body1">Phone: {user.phoneNumber || 'Not provided'}</Typography>
                                 <Typography variant="body1">Address: {user.address || 'Not provided'}</Typography>
                             </CardContent>
                         </Card>
