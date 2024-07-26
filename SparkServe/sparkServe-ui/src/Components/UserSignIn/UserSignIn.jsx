@@ -52,7 +52,7 @@ const UserSignIn = ({ open, handleClose }) => {
 
     try {
       const response = await axios.post('http://localhost:3000/users/login', credentials);
-      console.log(response.data);
+      localStorage.setItem('userId', response.data.userId)
       localStorage.setItem('isUserAuthenticated', 'true');
       navigate('/UserLandingPage');
       window.location.reload(); // Force a reload to update the nav bar
