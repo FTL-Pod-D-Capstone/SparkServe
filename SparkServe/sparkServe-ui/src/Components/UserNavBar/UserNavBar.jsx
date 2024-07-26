@@ -19,6 +19,30 @@ const logoStyle = {
   cursor: 'pointer',
 };
 
+const navButtonStyle = {
+  position: 'relative',
+  overflow: 'hidden',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: '2px',
+    backgroundColor: 'primary.main',
+    transform: 'scaleX(0)',
+    transformOrigin: 'bottom right',
+    transition: 'transform 0.3s ease-out',
+  },
+  '&:hover::after': {
+    transform: 'scaleX(1)',
+    transformOrigin: 'bottom left',
+  },
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+};
+
 function UserNavBar() {
   const [open, setOpen] = useState(false);
   const [signInModalOpen, setSignInModalOpen] = useState(false);
@@ -84,14 +108,32 @@ function UserNavBar() {
               <img src={logo2} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
-              <Button color="primary" variant="text" size="large" href="/">
+              <Button 
+                color="primary" 
+                variant="text" 
+                size="large" 
+                href="/"
+                sx={navButtonStyle}
+              >
                 Home
               </Button>
-              <Button color="primary" variant="text" size="large" href="/UserLandingPage">
+              <Button 
+                color="primary" 
+                variant="text" 
+                size="large" 
+                href="/UserLandingPage"
+                sx={navButtonStyle}
+              >
                 Opportunities
               </Button>
               {isUserAuthenticated && (
-                <Button color="primary" variant="text" size="large" href="/Map">
+                <Button 
+                  color="primary" 
+                  variant="text" 
+                  size="large" 
+                  href="/Map"
+                  sx={navButtonStyle}
+                >
                   Map
                 </Button>
               )}
@@ -121,18 +163,18 @@ function UserNavBar() {
                   ) : (
                     <>
                       <MenuItem>
-                        <Button color="primary" variant="text" size="small" href="/" sx={{ width: '100%' }}>
+                        <Button color="primary" variant="text" size="small" href="/" sx={{ width: '100%', ...navButtonStyle }}>
                           Home
                         </Button>
                       </MenuItem>
                       <MenuItem>
-                        <Button color="primary" variant="text" size="small" href="/UserLandingPage" sx={{ width: '100%' }}>
+                        <Button color="primary" variant="text" size="small" href="/UserLandingPage" sx={{ width: '100%', ...navButtonStyle }}>
                           Opportunities
                         </Button>
                       </MenuItem>
                       {isUserAuthenticated && (
                         <MenuItem>
-                          <Button color="primary" variant="text" size="small" href="/Map" sx={{ width: '100%' }}>
+                          <Button color="primary" variant="text" size="small" href="/Map" sx={{ width: '100%', ...navButtonStyle }}>
                             Map
                           </Button>
                         </MenuItem>
@@ -147,7 +189,7 @@ function UserNavBar() {
                 </Box>
               </Drawer>
             </Box>
-            </Toolbar>
+          </Toolbar>
         </Container>
       </AppBar>
       <UserSignIn open={signInModalOpen} handleClose={handleSignInClose} />
@@ -156,4 +198,3 @@ function UserNavBar() {
 }
 
 export default UserNavBar;
-

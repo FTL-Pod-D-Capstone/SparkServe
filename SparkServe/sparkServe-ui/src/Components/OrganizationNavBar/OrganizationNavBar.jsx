@@ -5,13 +5,38 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import logo from '../../assets/logo.png';
-import OrganizationAccountPopover from '../OrganizationAccountPopover/OrganizationAccountPopover'; // Update the import
+import OrganizationAccountPopover from '../OrganizationAccountPopover/OrganizationAccountPopover';
 import { useNavigate } from 'react-router-dom';
 
 const logoStyle = {
   width: '140px',
   height: 'auto',
   cursor: 'pointer',
+};
+
+const navButtonStyle = {
+  position: 'relative',
+  overflow: 'hidden',
+  color: '#ff66c4',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: '2px',
+    backgroundColor: '#ff66c4',
+    transform: 'scaleX(0)',
+    transformOrigin: 'bottom right',
+    transition: 'transform 0.3s ease-out',
+  },
+  '&:hover::after': {
+    transform: 'scaleX(1)',
+    transformOrigin: 'bottom left',
+  },
+  '&:hover': {
+    backgroundColor: 'rgba(255, 102, 196, 0.04)',
+  },
 };
 
 function OrganizationNavBar() {
@@ -47,17 +72,35 @@ function OrganizationNavBar() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
             {!isAuthenticated && (
-              <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
+              <Button 
+                size="large" 
+                sx={navButtonStyle} 
+                onClick={() => navigate('/OrganizationWelcomePage')}
+              >
+                Home
+              </Button>
             )}
             {isAuthenticated && (
               <>
-                <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
-                <Button size="large" sx={{ color: '#ff66c4' }} onClick={() => navigate('/Calendar')}>Calendar</Button>
+                <Button 
+                  size="large" 
+                  sx={navButtonStyle} 
+                  onClick={() => navigate('/OrganizationLandingPage')}
+                >
+                  Schedule
+                </Button>
+                <Button 
+                  size="large" 
+                  sx={navButtonStyle} 
+                  onClick={() => navigate('/Calendar')}
+                >
+                  Calendar
+                </Button>
               </>
             )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {isAuthenticated && <OrganizationAccountPopover profileType="Organization Profile" />} {/* Conditionally render the popover */}
+            {isAuthenticated && <OrganizationAccountPopover profileType="Organization Profile" />}
           </Box>
         </Toolbar>
       </Container>
