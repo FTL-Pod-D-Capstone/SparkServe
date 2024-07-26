@@ -10,7 +10,7 @@
 
 .google-map {
   padding-top: 100px; /* Adjusted to lower the map */
-  width: 1900px;
+  width: 1500px;
   height: 660px;
   display: flex;
   flex-direction: column;

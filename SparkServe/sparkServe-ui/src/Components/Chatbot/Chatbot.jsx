@@ -7,7 +7,6 @@ import axios from "axios";
 
 // Define quick reply options
 const QUICK_REPLIES = [
-  "SparkServe?",
   "Can you tell me about volunteer opportunities.",
   "What is the latest event?",
   "How can I get involved?",

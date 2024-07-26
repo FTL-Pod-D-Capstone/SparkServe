@@ -150,6 +150,7 @@
 .send-button:hover {
   transform: scale(1.2);
   color: black;
+  
 }
 
 .send-button svg {
@@ -197,6 +198,10 @@
 
 .chatbot-minimized:hover {
   transform: scale(1.1);
+  background: linear-gradient(120deg,  lightblue,black,blue);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position .5s;
 }
 
 .minimized-logo {
