@@ -4,6 +4,8 @@ const opportunityController = require("../controllers/opportunityControllers");
 
 // get all opportunities with filters
 router.get("/", opportunityController.getAllOpportunities);
+// getting locations
+router.get("/locations", opportunityController.getAllOpportunitiesLocations);
 // get opportunity by ID
 router.get("/:id", opportunityController.getOpportunityById);
 // add a new opportunity

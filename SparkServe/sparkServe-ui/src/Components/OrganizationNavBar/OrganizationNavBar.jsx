@@ -46,7 +46,9 @@ function OrganizationNavBar() {
             <img src={logo} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
-            <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
+            {!isAuthenticated && (
+              <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationWelcomePage')}>Home</Button>
+            )}
             {isAuthenticated && (
               <>
                 <Button sx={{ color: '#ff66c4' }} onClick={() => navigate('/OrganizationLandingPage')}>Schedule</Button>
@@ -64,5 +66,6 @@ function OrganizationNavBar() {
 }
 
 export default OrganizationNavBar;
+
 
 

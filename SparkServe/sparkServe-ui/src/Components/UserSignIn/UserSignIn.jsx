@@ -50,7 +50,7 @@ const UserSignIn = ({ open, handleClose }) => {
     };
 
     try {
-      const response = await axios.post('http://localhost:3000/users/login', credentials);
+      const response = await axios.post('https://project-1-uljs.onrender.com/users/login', credentials);
       console.log(response.data);
       localStorage.setItem('isUserAuthenticated', 'true');
       setLoginStatus('success');

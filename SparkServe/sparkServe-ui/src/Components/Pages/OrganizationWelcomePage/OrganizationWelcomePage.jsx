@@ -4,17 +4,17 @@ import OrganizationWelcomeCard from '../../OrganizationWelcomeCard/OrganizationW
 import backgroundImage from '../../../assets/SparkServe-Organization-Background.jpg'; 
 
 const OrganizationWelcomePage = () => {
-  const backgroundStyle = {
+   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
-    backgroundPosition: 'center',
+   backgroundPosition: 'center',
     width: '100%',
     height: '100vh', 
     position: 'relative',
   };
 
   return (
-    <div style={backgroundStyle}>
+     <div style={backgroundStyle} >
       <OrganizationNavBar />
       <OrganizationWelcomeCard />
     </div>
@@ -22,3 +22,5 @@ const OrganizationWelcomePage = () => {
 }
 
 export default OrganizationWelcomePage;
+
+// style={backgroundStyle}
