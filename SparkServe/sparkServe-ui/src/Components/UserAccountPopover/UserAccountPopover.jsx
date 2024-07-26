@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
@@ -54,7 +54,7 @@ function UserAccountPopover({ profileType }) {
           },
         }}
       >
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem component={Link} to={`/UserProfile/:id`}>
           <Typography textAlign="center" sx={{ color: 'white' }}>{profileType}</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>

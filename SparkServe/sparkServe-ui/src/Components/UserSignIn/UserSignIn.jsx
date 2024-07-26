@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import * as jwt_decode from 'jwt-decode';
 
 function Copyright(props) {
   return (
@@ -39,17 +40,30 @@ const UserSignIn = ({ open, handleClose }) => {
       email: data.get('email'),
       password: data.get('password'),
     };
+    try{
+      const response = await axios.post('https://project-1-uljs.onrender.com/users/login', credentials);
+        console.log(response.data);
+        const token = response.data.token;
+        const decodedToken = jwt_decode.jwt_decode(token);
+        const userId = decodedToken.userId;
 
-    try {
-      const response = await axios.post('http://localhost:3000/users/login', credentials);
-      console.log(response.data);
-      localStorage.setItem('isUserAuthenticated', 'true');
-      navigate('/UserLandingPage');
-      window.location.reload(); // Force a reload to update the nav bar
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', userId);
+      
+        navigate('/UserLandingPage');
+        window.location.reload(); // Force a reload to update the nav bar
+
+          //   try {
+          //     const response = await axios.post('https://project-1-uljs.onrender.com/users/login', credentials);
+          //     console.log(response.data);
+          //     localStorage.setItem('isUserAuthenticated', 'true');
+          //     localStorage.setItem(userId, response.data.userId);
+          //     navigate('/UserLandingPage');
+          //     window.location.reload(); // Force a reload to update the nav bar
     } catch (error) {
       console.error('Error logging in:', error);
     }
-  };
+  };   //jwt decode token to get user id and get user profile page using aws s3 bucket for profile picutre 
 
   const handleSignUpRedirect = () => {
     handleClose();
