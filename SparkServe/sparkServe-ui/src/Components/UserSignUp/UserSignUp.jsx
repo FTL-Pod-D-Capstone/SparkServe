@@ -10,7 +10,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UserSignIn from '../../Components/UserSignIn/UserSignIn'; 
 
@@ -28,10 +27,13 @@ function Copyright(props) {
 }
 
 const defaultTheme = createTheme();
+const API_URL =  'https://project-1-uljs.onrender.com';
+// process.env.REACT_APP_API_URL ||
 
 export default function UserSignUp() {
-  const navigate = useNavigate();
   const [openSignIn, setOpenSignIn] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const [formErrors, setFormErrors] = React.useState({});
 
   const handleOpenSignIn = () => {
     setOpenSignIn(true);
@@ -41,24 +43,48 @@ export default function UserSignUp() {
     setOpenSignIn(false);
   };
 
+  const validateForm = (data) => {
+    const errors = {};
+    if (!data.get('username')) errors.username = 'Username is required';
+    if (!data.get('email')) errors.email = 'Email is required';
+    if (!data.get('firstName')) errors.firstName = 'First name is required';
+    if (!data.get('lastName')) errors.lastName = 'Last name is required';
+    if (!data.get('phoneNumber')) errors.phoneNumber = 'Phone number is required';
+    if (!data.get('password')) errors.password = 'Password is required';
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    
+    if (!validateForm(data)) {
+      return;
+    }
+
     const user = {
-      username: data.get('firstName') + data.get('lastName'), // Create a username by combining first and last name
+      username: data.get('username'),
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
       email: data.get('email'),
-      phoneNumber: data.get('phone'),
+      phoneNumber: data.get('phoneNumber'),
       password: data.get('password'),
     };
 
     try {
+
       const response = await axios.post('https://project-1-uljs.onrender.com/users/register', user);
       console.log(response.data);
       // Show the sign-in modal with a message to log in
+
+      const response = await axios.post(`${API_URL}/users/register`, user);
+
       handleOpenSignIn();
+      setError('');
     } catch (error) {
       console.error('Error registering user:', error);
-      // Handle error (e.g., show error message)
+      setError('An error occurred while registering. Please try again.');
     }
   };
 
@@ -91,6 +117,8 @@ export default function UserSignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  error={Boolean(formErrors.firstName)}
+                  helperText={formErrors.firstName}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -101,6 +129,20 @@ export default function UserSignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  error={Boolean(formErrors.lastName)}
+                  helperText={formErrors.lastName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  error={Boolean(formErrors.username)}
+                  helperText={formErrors.username}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -111,16 +153,20 @@ export default function UserSignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  error={Boolean(formErrors.email)}
+                  helperText={formErrors.email}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="phone"
+                  id="phoneNumber"
                   label="Phone Number"
-                  name="phone"
+                  name="phoneNumber"
                   autoComplete="tel"
+                  error={Boolean(formErrors.phoneNumber)}
+                  helperText={formErrors.phoneNumber}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -132,6 +178,8 @@ export default function UserSignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  error={Boolean(formErrors.password)}
+                  helperText={formErrors.password}
                 />
               </Grid>
             </Grid>
@@ -152,10 +200,14 @@ export default function UserSignUp() {
             </Grid>
           </Box>
         </Box>
+        {error && (
+          <Typography color="error" align="center" sx={{ mt: 2 }}>
+            {error}
+          </Typography>
+        )}
         <Copyright sx={{ mt: 5 }} />
       </Container>
       <UserSignIn open={openSignIn} handleClose={handleCloseSignIn} />
     </ThemeProvider>
   );
 }
-

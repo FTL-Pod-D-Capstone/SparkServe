@@ -28,7 +28,7 @@ const findUserById = async (req, res) => {
 
 // Register User
 const register = async (req, res) => {
-  const { username, email, phoneNumber, password } = req.body;
+  const { username, email, phoneNumber, password,firstName,lastName } = req.body;
   try {
     // Check if user already exists by username, email, or phone number
     const existingUser =
@@ -51,6 +51,8 @@ const register = async (req, res) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      firstName,
+      lastName,
     });
 
     res.status(201).json(user);
@@ -79,7 +81,7 @@ const login = async (req, res) => {
       { userId: user.userId, username: user.username }, //as a token encode info and respond to the client
       process.env.JWT_SECRET_KEY //setup env variable for secret key
     );
-    res.status(200).json({ token });
+    res.status(200).json({ token, userId: user.userId });
   } else {
     res.status(401).json({ error: "Invalid Credentials" });
   }

@@ -16,7 +16,8 @@ const profileData = [
     name: 'Ahmed Hamouda',
     description: 'City College of New York 26.',
     linkedin: 'https://www.linkedin.com/in/ahmedhamouda1/',
-    github: 'https://github.com/Ahmedh27'
+    github: 'https://github.com/Ahmedh27',
+    objectPosition: 'top'
   },
   {
     image: larnelle,
@@ -30,7 +31,8 @@ const profileData = [
     name: 'Morgan Villanueva',
     description: 'Florida International University 26.',
     linkedin: 'https://www.linkedin.com/in/villanuevam305/',
-    github: 'https://github.com/Morgan-AV'
+    github: 'https://github.com/Morgan-AV',
+    
   },
 ];
 
@@ -43,7 +45,7 @@ const ProfileCards = () => {
           backgroundColor: 'white',
           borderRadius: 2,
           boxShadow: 3,
-          mt: 4, // Lower the card a bit
+          mt: 4,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
@@ -79,6 +81,10 @@ const ProfileCards = () => {
                   height="200"
                   image={profile.image}
                   alt={profile.name}
+                  sx={{ 
+                    objectFit: 'cover',
+                    objectPosition: profile.objectPosition || 'center' // Use objectPosition if specified, otherwise default to 'center'
+                  }}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
@@ -116,5 +122,3 @@ const ProfileCards = () => {
 };
 
 export default ProfileCards;
-
-

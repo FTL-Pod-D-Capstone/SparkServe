@@ -6,7 +6,7 @@ import VolOppContainer from '../VolunteerCardContainer/VolunteerCardContainer'
 
 const Cards = ({ id, title, cover, organizationName, spots, cause }) => {
 
-    console.log('Opportunity ID:', id);//debug
+    // console.log('Opportunity ID:', id);//debug
     const navigate = useNavigate();
 
 
