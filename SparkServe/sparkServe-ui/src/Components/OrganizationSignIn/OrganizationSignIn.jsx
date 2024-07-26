@@ -107,7 +107,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                   Incorrect email or password. Please try again.
                 </Alert>
               )}
-              <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+              <Avatar sx={{ m: 1, bgcolor: 'ff66c4' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">

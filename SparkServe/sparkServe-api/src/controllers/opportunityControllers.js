@@ -66,6 +66,17 @@ const updateOpportunity = async (req, res) => {
   }
 };
 
+const getAllOpportunitiesLocations = async (req, res) => {
+  try {
+    console.log('Fetching all opportunity locations');
+    const locations = await opportunityModel.getAllOpportunitiesLocations();
+    console.log('Locations fetched:', locations.length);
+    res.status(200).json(locations);
+  } catch (error) {
+    console.error('Error in getAllOpportunitiesLocations controller:', error);
+    res.status(400).json({ error: error.message });
+  }
+};
 // Function to delete opportunity
 const deleteOpportunity = async (req, res) => {
   try {
@@ -83,6 +94,7 @@ const deleteOpportunity = async (req, res) => {
 // Export the functions
 module.exports = {
   getAllOpportunities,
+  getAllOpportunitiesLocations,
   getOpportunityById,
   createOpportunity,
   updateOpportunity,

@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Typography, Paper, Card, CardContent } from '@mui/material';
 
 const UpcomingEvents = ({ events }) => {
-  // Sort events by date and time
   const sortedEvents = events.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
   return (
@@ -18,6 +17,7 @@ const UpcomingEvents = ({ events }) => {
               <Typography sx={{ color: '#ff66c4' }}>{`${new Date(event.date).toLocaleDateString()} at ${event.time}`}</Typography>
               <Typography sx={{ color: '#ff66c4' }}>{event.location}</Typography>
               <Typography sx={{ color: '#ff66c4' }}>{event.text}</Typography>
+              <Typography sx={{ color: '#ff66c4' }}>{`Related Cause: ${event.relatedCause}`}</Typography>
             </Paper>
           ))
         )}
@@ -27,6 +27,7 @@ const UpcomingEvents = ({ events }) => {
 };
 
 export default UpcomingEvents;
+
 
 
 

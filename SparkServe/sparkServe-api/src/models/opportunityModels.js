@@ -20,7 +20,6 @@ const getAllOpportunities = async (filter = {}, orderBy = {}) => {
 
 // Function to get opportunity by ID
 const getOpportunityById = async (id) => {
-  
   return prisma.opportunity.findUnique({
     where: { opportunityId: parseInt(id) },
     include: {
@@ -70,6 +69,31 @@ const updateOpportunity = async (id, opportunityData) => {
   });
 };
 
+// Function to get all opportunity locations
+const getAllOpportunitiesLocations = async () => {
+  try {
+    const opportunities = await getAllOpportunities();
+    const locationsData = opportunities.map(opp => ({
+      id: opp.opportunityId,
+      title: opp.title,
+      address: opp.address,
+      description: opp.description,
+      dateTime: opp.dateTime,
+      relatedCause: opp.relatedCause,
+      skillsRequired: opp.skillsRequired,
+      spotsAvailable: opp.spotsAvailable,
+      ageRange: opp.ageRange,
+      pictureUrl: opp.pictureUrl,
+      opportunityUrl: opp.opportunityUrl,
+      organizationName: opp.organization?.name
+    }));
+    return locationsData;
+  } catch (error) {
+    console.error('Error in getAllOpportunitiesLocations model:', error);
+    throw new Error(`Error fetching opportunity locations: ${error.message}`);
+  }
+};
+
 // Function to delete an opportunity
 const deleteOpportunity = async (id) => {
   return prisma.opportunity.delete({
@@ -79,6 +103,7 @@ const deleteOpportunity = async (id) => {
 
 module.exports = {
   getAllOpportunities,
+  getAllOpportunitiesLocations,
   getOpportunityById,
   createOpportunity,
   updateOpportunity,
