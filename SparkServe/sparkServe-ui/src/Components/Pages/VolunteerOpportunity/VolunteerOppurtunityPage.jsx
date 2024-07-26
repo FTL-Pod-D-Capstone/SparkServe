@@ -20,6 +20,25 @@ const VolunOppPage = () => {
         navigate(-1);
     };
 
+    // useEffect(() => {
+    //     const getOpportunity = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const response = await axios.get(`https://project-1-uljs.onrender.com/opps/${opportunityId}`);
+    //             setOpportunity(response.data);
+    //             setIsLoading(false);
+    //         } catch (err) {
+    //             console.error('Error fetching specified opportunity:', err);
+    //             setError('Failed to load the opportunity details.');
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     if (opportunityId) {
+    //         getOpportunity();
+    //     }
+    //     getOpportunity();
+    // }, [opportunityId]);
+
     useEffect(() => {
         const getOpportunity = async () => {
             setIsLoading(true);
