@@ -15,7 +15,7 @@ const UserLandingPage = () => {
       <UserNavBar />
       <Box
         sx={{
-          backgroundImage: 'linear-gradient(rgb(135, 175, 255), rgb(255, 255, 255))',
+          backgroundImage: 'linear-gradient(rgb(180, 200, 255), rgb(255, 255, 255))',
           backgroundSize: '100% 50%',
           backgroundRepeat: 'no-repeat',
           backgroundColor: 'white',
