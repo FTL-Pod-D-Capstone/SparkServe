@@ -84,14 +84,14 @@ function UserNavBar() {
               <img src={logo2} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
-              <Button color="primary" variant="text" size="small" href="/">
+              <Button color="primary" variant="text" size="large" href="/">
                 Home
               </Button>
-              <Button color="primary" variant="text" size="small" href="/UserLandingPage">
+              <Button color="primary" variant="text" size="large" href="/UserLandingPage">
                 Opportunities
               </Button>
               {isUserAuthenticated && (
-                <Button color="primary" variant="text" size="small" href="/Map">
+                <Button color="primary" variant="text" size="large" href="/Map">
                   Map
                 </Button>
               )}

@@ -72,8 +72,8 @@ export default function Footer() {
           justifyContent: 'space-between',
           pt: { xs: 4, sm: 8 },
           width: '100%',
-          borderTop: '1px solid',
-          borderColor: 'divider',
+          borderTop: '2px solid',
+          borderColor: 'grey.300',
         }}
       >
         <Copyright />
