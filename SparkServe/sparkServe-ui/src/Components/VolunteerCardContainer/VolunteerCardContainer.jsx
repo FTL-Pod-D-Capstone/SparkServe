@@ -3,6 +3,7 @@ import { Container, Grid, CardActions, Button, TextField, Select, MenuItem, Form
 import Cards from '../../Components/Cards/Cards';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import LinearGradientLoading from './LinearGradientLoading'; // Import the loading component
 
 const VolOppContainer = ({ bgColor }) => {
     const [opportunities, setOpportunities] = useState([]);
@@ -65,7 +66,8 @@ const VolOppContainer = ({ bgColor }) => {
         setFilteredOpportunities(filtered);
     }, [nameFilter, organizationFilter, causeFilter, opportunities]);
 
-    if (isLoading) return <div>Loading...</div>;
+    // Replace the loading message with the LinearGradientLoading component
+    if (isLoading) return <LinearGradientLoading />;
     if (error) return <div>{error}</div>;
 
     return (
@@ -87,7 +89,7 @@ const VolOppContainer = ({ bgColor }) => {
                         sx={{ mr: 2, mb: 2 }}
                     />
                     <FormControl variant="outlined" sx={{ mr: 2, mb: 2, minWidth: 120 }}>
-                        <InputLabel >Organization</InputLabel>
+                        <InputLabel>Organization</InputLabel>
                         <Select
                             value={organizationFilter}
                             onChange={(e) => setOrganizationFilter(e.target.value)}

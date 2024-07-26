@@ -66,17 +66,22 @@ const updateOpportunity = async (req, res) => {
   }
 };
 
+// Function to get all opportunity locations
 const getAllOpportunitiesLocations = async (req, res) => {
   try {
-    console.log('Fetching all opportunity locations');
+    console.log('Fetching all opportunities locations');
+    console.log('Request details:', req.method, req.url, req.headers);
     const locations = await opportunityModel.getAllOpportunitiesLocations();
-    console.log('Locations fetched:', locations.length);
+    console.log('Locations fetched:', locations);
     res.status(200).json(locations);
   } catch (error) {
     console.error('Error in getAllOpportunitiesLocations controller:', error);
     res.status(400).json({ error: error.message });
   }
 };
+
+
+
 // Function to delete opportunity
 const deleteOpportunity = async (req, res) => {
   try {
