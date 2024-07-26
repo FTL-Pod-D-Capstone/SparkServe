@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel, Paper, Container } from '@mui/material';
+import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import LinearGradientLoading from './LinearGradientLoading';
 
-const VolOppContainer = ({ bgColor }) => {
+const VolOppContainer = () => {
     const [opportunities, setOpportunities] = useState([]);
     const [filteredOpportunities, setFilteredOpportunities] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -68,21 +68,28 @@ const VolOppContainer = ({ bgColor }) => {
     if (error) return <div>{error}</div>;
 
     return (
-        <Container sx={{ my: 8, backgroundColor: bgColor || '#ffffff', minHeight: '100vh', padding: '20px' }}>
-            <Box sx={{ mb: 4 }}>
+        <Box sx={{ width: '100%', mt: 4 }}>
+            <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                 <TextField
-                    label="Search by Name"
+                    label="Search opportunities"
                     variant="outlined"
                     value={nameFilter}
                     onChange={(e) => setNameFilter(e.target.value)}
-                    sx={{ mr: 2, mb: 2 }}
+                    sx={{ 
+                        flexGrow: 1, 
+                        minWidth: '200px',
+                        '& .MuiOutlinedInput-root': {
+                            backgroundColor: 'white',
+                        },
+                    }}
                 />
-                <FormControl variant="outlined" sx={{ mr: 2, mb: 2, minWidth: 120 }}>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
                     <InputLabel>Organization</InputLabel>
                     <Select
                         value={organizationFilter}
                         onChange={(e) => setOrganizationFilter(e.target.value)}
                         label="Organization"
+                        sx={{ backgroundColor: 'white' }}
                     >
                         <MenuItem value=""><em>All</em></MenuItem>
                         {organizations.map((org) => (
@@ -90,12 +97,13 @@ const VolOppContainer = ({ bgColor }) => {
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl variant="outlined" sx={{ mb: 2, minWidth: 120 }}>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
                     <InputLabel>Cause</InputLabel>
                     <Select
                         value={causeFilter}
                         onChange={(e) => setCauseFilter(e.target.value)}
                         label="Cause"
+                        sx={{ backgroundColor: 'white' }}
                     >
                         <MenuItem value=""><em>All</em></MenuItem>
                         {causes.map((cause) => (
@@ -104,6 +112,7 @@ const VolOppContainer = ({ bgColor }) => {
                     </Select>
                 </FormControl>
             </Box>
+
             <Grid container spacing={3}>
                 {filteredOpportunities.map((opportunity) => (
                     <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
@@ -115,8 +124,11 @@ const VolOppContainer = ({ bgColor }) => {
                                 height: '100%', 
                                 display: 'flex', 
                                 flexDirection: 'column',
+                                border: 'none',
+                                boxShadow: 'none',
+                                transition: 'transform 0.2s',
                                 '&:hover': {
-                                    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+                                    transform: 'scale(1.03)',
                                 },
                             }}
                         >
@@ -125,9 +137,10 @@ const VolOppContainer = ({ bgColor }) => {
                                 height="200"
                                 image={opportunity.pictureUrl || "https://via.placeholder.com/300x200"}
                                 alt={opportunity.title}
+                                sx={{ borderRadius: '8px' }}
                             />
-                            <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                                <Typography variant="subtitle1" component="div" noWrap>
+                            <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
+                                <Typography variant="subtitle1" component="div" noWrap fontWeight="bold">
                                     {opportunity.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap>
@@ -146,7 +159,7 @@ const VolOppContainer = ({ bgColor }) => {
                     </Grid>
                 ))}
             </Grid>
-        </Container>
+        </Box>
     );
 };
 

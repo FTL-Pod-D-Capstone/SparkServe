@@ -1,7 +1,7 @@
 import React from 'react';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import OrganizationWelcomeCard from '../../OrganizationWelcomeCard/OrganizationWelcomeCard';
-import backgroundImage from '../../../assets/SparkServe-Organization-Background.jpg'; 
+import backgroundImage from '../../../assets/background.image.jpg'; 
 
 const OrganizationWelcomePage = () => {
    const backgroundStyle = {
