@@ -121,4 +121,4 @@ const VolunOppPage = () => {
     )
 }
 
-export default VolunOppPage
+export default VolunOppPage;
