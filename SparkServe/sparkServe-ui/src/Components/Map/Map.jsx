@@ -161,14 +161,16 @@ const ReactGoogleMapComponent = () => {
   const onPlaceChanged = () => {
     if (autocompleteRef.current !== null) {
       const place = autocompleteRef.current.getPlace();
-      const location = place.geometry.location;
-      mapRef.current.setCenter({ lat: location.lat(), lng: location.lng() });
-
-      new window.google.maps.Marker({
-        position: { lat: location.lat(), lng: location.lng() },
-        map: mapRef.current,
-        title: place.name,
-      });
+      if (place.geometry && place.geometry.location) {
+        const newLocation = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        };
+        
+        // Center the map on the new location and zoom in
+        mapRef.current.panTo(newLocation);
+        mapRef.current.setZoom(14);
+      }
     }
   };
 
@@ -197,7 +199,9 @@ const ReactGoogleMapComponent = () => {
         mapContainerClassName="google-map"
         center={{ lat: 37.7749, lng: -122.4194 }}
         zoom={12}
-        ref={mapRef}
+        onLoad={(map) => {
+          mapRef.current = map;
+        }}
       >
         {markers.map((marker, index) => (
           <Marker
@@ -224,4 +228,3 @@ const ReactGoogleMapComponent = () => {
 };
 
 export default ReactGoogleMapComponent;
-
