@@ -45,12 +45,14 @@ export default function UserSignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const user = {
-      username: data.get('firstName') + data.get('lastName'), // Create a username by combining first and last name
+      username: data.get('username'), // Create a username by combining first and last name
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
       email: data.get('email'),
       phoneNumber: data.get('phone'),
       password: data.get('password'),
     };
-
+console.log("user,",user)
     try {
       const response = await axios.post('https://project-1-uljs.onrender.com/users/register', user);
       console.log(response.data);
@@ -101,6 +103,16 @@ export default function UserSignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Username"
+                  name="username"
+                  autoComplete="usernames"
                 />
               </Grid>
               <Grid item xs={12}>
