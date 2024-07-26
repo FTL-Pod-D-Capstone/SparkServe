@@ -38,7 +38,6 @@ const VolOppContainer = ({ bgColor }) => {
                 setOpportunities(opportunitiesWithOrgNames);
                 setFilteredOpportunities(opportunitiesWithOrgNames);
 
-                // Extract unique organizations and causes
                 const uniqueOrganizations = [...new Set(opportunitiesWithOrgNames.map(opp => opp.organizationName).filter(Boolean))];
                 const uniqueCauses = [...new Set(opportunitiesWithOrgNames.map(opp => opp.relatedCause).filter(Boolean))];
                 
@@ -80,7 +79,7 @@ const VolOppContainer = ({ bgColor }) => {
             >
                 <Box sx={{ mb: 4 }}>
                     <TextField
-                        label="Filter by Name"
+                        label="Search by Name"
                         variant="outlined"
                         value={nameFilter}
                         onChange={(e) => setNameFilter(e.target.value)}
