@@ -63,7 +63,7 @@ const Chatbot = () => {
   const fetchChatHistory = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/chat/history/${userId}`
+        `https://project-1-uljs.onrender.com/api/chat/history/${userId}`
       );
       // Transform the data to match the format of current messages
       const formattedHistory = response.data.flatMap((interaction) => [
@@ -78,13 +78,13 @@ const Chatbot = () => {
 
   // Handle sending a message
   const handleSendMessage = async (textToSend) => {
-    if (textToSend.trim() !== '') {
+    if (textToSend.trim() !== '') {  
         const newMessages = [...messages, { text: textToSend, from: 'user' }];
         setMessages(newMessages);
         const userId = localStorage.getItem('userId') || 1;
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/chat`, {
+            const response = await axios.post(`https://project-1-uljs.onrender.com/api/chat`, {
                 userId,
                 prompt: textToSend,
             });
