@@ -45,7 +45,7 @@ app.use("/registration", registrationRoutes);
 app.use(rateLimiter);
 
 app.use("/api/chat", chatbotRoutes);
-app.use('/', bookmarkRoutes);
+app.use('/bookmarks', bookmarkRoutes);
 
 
 // Start the server

@@ -15,6 +15,10 @@ const VolunOppPage = () => {
     const [error, setError] = useState(null);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const userId = localStorage.getItem('userId');
+    // const baseUrl ="http://localhost:3000";
+    
+    // const baseUrl ="https://project-1-uljs.onrender.com";
+    const baseUrl =import.meta.env.VITE_BACKEND_URL;
 
     const navigate = useNavigate();
 
@@ -26,16 +30,16 @@ const VolunOppPage = () => {
         const getOpportunityAndOrganization = async () => {
             setIsLoading(true);
             try {
-                const oppResponse = await axios.get(`https://project-1-uljs.onrender.com/opps/${opportunityId}`);
+                const oppResponse = await axios.get(`${baseUrl}/opps/${opportunityId}`);
                 setOpportunity(oppResponse.data);
 
                 if (oppResponse.data.organizationId) {
-                    const orgResponse = await axios.get(`https://project-1-uljs.onrender.com/orgs/${oppResponse.data.organizationId}`);
+                    const orgResponse = await axios.get(`${baseUrl}/orgs/${oppResponse.data.organizationId}`);
                     setOrganization(orgResponse.data);
                 }
 
                 if (userId) {
-                    const bookmarkResponse = await axios.get(`https://project-1-uljs.onrender.com/users/${userId}/bookmarks`);
+                    const bookmarkResponse = await axios.get(`${baseUrl}/bookmarks/users/${userId}/bookmarks`);
                     const isBookmarked = bookmarkResponse.data.some(bookmark => bookmark.opportunityId === opportunityId);
                     setIsBookmarked(isBookmarked);
                 }
@@ -61,9 +65,9 @@ const VolunOppPage = () => {
 
         try {
             if (isBookmarked) {
-                await axios.delete(`https://project-1-uljs.onrender.com/users/${userId}/bookmarks/${opportunityId}`);
+                await axios.delete(`${baseUrl}/bookmarks/users/${userId}/bookmarks/${opportunityId}`);
             } else {
-                await axios.post(`https://project-1-uljs.onrender.com/users/${userId}/bookmarks`, { opportunityId });
+                await axios.post(`${baseUrl}/bookmarks/users/${userId}/bookmarks`, { opportunityId });
             }
             setIsBookmarked(!isBookmarked);
         } catch (err) {

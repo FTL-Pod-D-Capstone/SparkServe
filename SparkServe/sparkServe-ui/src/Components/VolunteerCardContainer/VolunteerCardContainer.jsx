@@ -23,12 +23,13 @@ const VolOppContainer = () => {
     const [causes, setCauses] = useState([]);
     const [ageRanges, setAgeRanges] = useState([]);
     const [opportunitiesByDate, setOpportunitiesByDate] = useState({});
+    const baseUrl =import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(`http://localhost:3000/opps`);
+                const response = await axios.get(`${baseUrl}/opps`);
                 const opportunitiesData = response.data;
 
                 setOpportunities(opportunitiesData);
