@@ -48,20 +48,45 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       email: data.get('email'),
       password: data.get('password'),
     };
-
+  
     try {
+      console.log('Sending login request with credentials:', credentials);
       const response = await axios.post('https://project-1-uljs.onrender.com/orgs/login', credentials);
-      // console.log(response.data);
-      if (response.status === 200) {
+      console.log('Full login response:', response);
+      
+      if (response.status === 200 && response.data.token) {
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('token', response.data.token);
+        
+        if (response.data.organizationId) {
+          localStorage.setItem('organizationId', response.data.organizationId.toString());
+          console.log('Stored organizationId:', response.data.organizationId.toString());
+        } else {
+          console.warn('No organizationId in response, attempting to extract from token');
+          const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
+          if (decodedToken.id) {
+            localStorage.setItem('organizationId', decodedToken.id.toString());
+            console.log('Extracted and stored organizationId from token:', decodedToken.id);
+          } else {
+            console.error('Unable to extract organizationId from token');
+          }
+        }
+        
         setLoginStatus('success');
         setTimeout(() => {
           navigate('/OrganizationLandingPage');
-          window.location.reload(); // Force a reload to update the nav bar
-        }, 2000); // Delay navigation by 2 seconds to show the success message
+          window.location.reload();
+        }, 2000);
+      } else {
+        console.error('Unexpected response:', response);
+        setLoginStatus('error');
       }
     } catch (error) {
-      console.error('Error logging in:', error.response?.data || error.message);
+      console.error('Error logging in:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        console.error('Error status:', error.response.status);
+      }
       setLoginStatus('error');
     }
   };
