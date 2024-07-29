@@ -7,7 +7,7 @@ import { ArrowBack, FileUpload } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom'
 import '../UserProfile/UserProfilePage.css'
 import axios from 'axios';
-import Upload from './Upload';
+import UserUpload from './UserUpload';
 
 const UserProfilePage = () => {
     const navigate = useNavigate(); 
@@ -83,7 +83,7 @@ const UserProfilePage = () => {
                                     src={user.profilePicture || "/path-to-default-image.jpg"}
                                     sx={{ width: 200, height: 200, mb: 2 }}
                                 />
-                                <Upload onUploaded={handleFileUploaded} />
+                                <UserUpload onUploaded={handleFileUploaded} />
 
                                 <Typography variant="h5" component="div">
                                     {user.username || 'Unknown User'}
