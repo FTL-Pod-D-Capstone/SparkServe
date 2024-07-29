@@ -3,6 +3,8 @@ import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select,
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import Badge from '@mui/material/Badge';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import LinearGradientLoading from './LinearGradientLoading';
@@ -20,6 +22,7 @@ const VolOppContainer = () => {
     const [organizations, setOrganizations] = useState([]);
     const [causes, setCauses] = useState([]);
     const [ageRanges, setAgeRanges] = useState([]);
+    const [opportunitiesByDate, setOpportunitiesByDate] = useState({});
 
     useEffect(() => {
         const getOpportunities = async () => {
@@ -30,6 +33,17 @@ const VolOppContainer = () => {
 
                 setOpportunities(opportunitiesData);
                 setFilteredOpportunities(opportunitiesData);
+
+                // Process opportunities by date
+                const oppsByDate = opportunitiesData.reduce((acc, opp) => {
+                    const date = new Date(opp.dateTime).toDateString();
+                    if (!acc[date]) {
+                        acc[date] = 0;
+                    }
+                    acc[date]++;
+                    return acc;
+                }, {});
+                setOpportunitiesByDate(oppsByDate);
 
                 const uniqueOrganizations = [...new Set(opportunitiesData.map(opp => opp.organization?.name).filter(Boolean))];
                 const uniqueCauses = [...new Set(opportunitiesData.map(opp => opp.relatedCause).filter(Boolean))];
@@ -60,6 +74,23 @@ const VolOppContainer = () => {
         );
         setFilteredOpportunities(filtered);
     }, [nameFilter, organizationFilter, causeFilter, dateFilter, ageRangeFilter, opportunities]);
+
+    // Custom rendering function for calendar days
+    const renderDay = (date, selectedDates, pickersDayProps) => {
+        const dateString = date.toDateString();
+        const numOpportunities = opportunitiesByDate[dateString] || 0;
+
+        return (
+            <Badge
+                key={dateString}
+                overlap="circular"
+                badgeContent={numOpportunities > 0 ? numOpportunities : undefined}
+                color="primary"
+            >
+                <PickersDay {...pickersDayProps} />
+            </Badge>
+        );
+    };
 
     if (isLoading) return <LinearGradientLoading />;
     if (error) return <div>{error}</div>;
@@ -114,6 +145,7 @@ const VolOppContainer = () => {
                         value={dateFilter}
                         onChange={(newValue) => setDateFilter(newValue)}
                         renderInput={(params) => <TextField {...params} sx={{ backgroundColor: 'white' }} />}
+                        renderDay={renderDay}
                     />
                 </LocalizationProvider>
                 <FormControl variant="outlined" sx={{ minWidth: '150px' }}>

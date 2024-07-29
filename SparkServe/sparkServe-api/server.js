@@ -8,6 +8,7 @@ const opportunityRoutes = require("./src/routes/opportunityRoutes");
 const registrationRoutes = require("./src/routes/registrationRoutes");
 const { rateLimiter } = require("../sparkServe-api/utils/security");
 const chatbotRoutes = require("../sparkServe-api/src/routes/chatbotRoutes");
+const bookmarkRoutes = require('../sparkServe-api/src/routes/bookmarkRoutes');
 
 const app = express();
 const port = 3000;
@@ -44,6 +45,7 @@ app.use("/registration", registrationRoutes);
 app.use(rateLimiter);
 
 app.use("/api/chat", chatbotRoutes);
+app.use('/', bookmarkRoutes);
 
 
 // Start the server
