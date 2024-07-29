@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import LinearGradientLoading from './LinearGradientLoading';
@@ -12,8 +15,11 @@ const VolOppContainer = () => {
     const [nameFilter, setNameFilter] = useState('');
     const [organizationFilter, setOrganizationFilter] = useState('');
     const [causeFilter, setCauseFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState(null);
+    const [ageRangeFilter, setAgeRangeFilter] = useState('');
     const [organizations, setOrganizations] = useState([]);
     const [causes, setCauses] = useState([]);
+    const [ageRanges, setAgeRanges] = useState([]);
 
     useEffect(() => {
         const getOpportunities = async () => {
@@ -27,9 +33,11 @@ const VolOppContainer = () => {
 
                 const uniqueOrganizations = [...new Set(opportunitiesData.map(opp => opp.organization?.name).filter(Boolean))];
                 const uniqueCauses = [...new Set(opportunitiesData.map(opp => opp.relatedCause).filter(Boolean))];
+                const uniqueAgeRanges = [...new Set(opportunitiesData.map(opp => opp.ageRange).filter(Boolean))];
                 
                 setOrganizations(uniqueOrganizations);
                 setCauses(uniqueCauses);
+                setAgeRanges(uniqueAgeRanges);
 
                 setIsLoading(false);
             } catch (err) {
@@ -46,10 +54,12 @@ const VolOppContainer = () => {
         const filtered = opportunities.filter(opp => 
             opp.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
             (organizationFilter === '' || opp.organization?.name === organizationFilter) &&
-            (causeFilter === '' || opp.relatedCause === causeFilter)
+            (causeFilter === '' || opp.relatedCause === causeFilter) &&
+            (dateFilter === null || new Date(opp.dateTime).toDateString() === dateFilter.toDateString()) &&
+            (ageRangeFilter === '' || opp.ageRange === ageRangeFilter)
         );
         setFilteredOpportunities(filtered);
-    }, [nameFilter, organizationFilter, causeFilter, opportunities]);
+    }, [nameFilter, organizationFilter, causeFilter, dateFilter, ageRangeFilter, opportunities]);
 
     if (isLoading) return <LinearGradientLoading />;
     if (error) return <div>{error}</div>;
@@ -95,6 +105,28 @@ const VolOppContainer = () => {
                         <MenuItem value=""><em>All</em></MenuItem>
                         {causes.map((cause) => (
                             <MenuItem key={cause} value={cause}>{cause}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Date"
+                        value={dateFilter}
+                        onChange={(newValue) => setDateFilter(newValue)}
+                        renderInput={(params) => <TextField {...params} sx={{ backgroundColor: 'white' }} />}
+                    />
+                </LocalizationProvider>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
+                    <InputLabel>Age Range</InputLabel>
+                    <Select
+                        value={ageRangeFilter}
+                        onChange={(e) => setAgeRangeFilter(e.target.value)}
+                        label="Age Range"
+                        sx={{ backgroundColor: 'white' }}
+                    >
+                        <MenuItem value=""><em>All</em></MenuItem>
+                        {ageRanges.map((range) => (
+                            <MenuItem key={range} value={range}>{range}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
