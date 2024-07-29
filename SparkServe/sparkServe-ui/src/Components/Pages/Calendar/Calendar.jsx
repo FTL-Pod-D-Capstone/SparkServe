@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Calendar.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -31,10 +32,8 @@ const CalendarApp = () => {
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [showEventPopup, setShowEventPopup] = useState(false);
-  const [events, setEvents] = useState(() => {
-    const savedEvents = localStorage.getItem('events');
-    return savedEvents ? JSON.parse(savedEvents) : [];
-  });
+  const [events, setEvents] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
   const [eventTime, setEventTime] = useState({ hours: '00', minutes: '00' });
   const [eventText, setEventText] = useState('');
   const [eventName, setEventName] = useState('');
@@ -43,6 +42,7 @@ const CalendarApp = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
+  const [spotsAvailable, setSpotsAvailable] = useState(10);
 
   const navigate = useNavigate();
 
@@ -50,8 +50,19 @@ const CalendarApp = () => {
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
   useEffect(() => {
-    localStorage.setItem('events', JSON.stringify(events));
-  }, [events]);
+    const fetchOpportunities = async () => {
+      const startDate = new Date(currentYear, currentMonth, 1);
+      const endDate = new Date(currentYear, currentMonth + 1, 0);
+      try {
+        const response = await axios.get(`http://localhost:3000/opps/date-range?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+        setOpportunities(response.data);
+      } catch (error) {
+        console.error('Error fetching opportunities:', error);
+      }
+    };
+
+    fetchOpportunities();
+  }, [currentYear, currentMonth]);
 
   const prevMonth = () => {
     setCurrentMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1));
@@ -75,6 +86,7 @@ const CalendarApp = () => {
       setEventName('');
       setEventLocation('');
       setEventRelatedCause('');
+      setSpotsAvailable(10);
       setEditingEvent(null);
     }
   };
@@ -87,49 +99,69 @@ const CalendarApp = () => {
     );
   };
 
-  const handleEventSubmit = () => {
-    const newEvent = {
-      id: editingEvent ? editingEvent.id : Date.now(),
-      date: selectedDate.toISOString().split('T')[0],
-      time: `${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}`,
-      text: eventText,
-      name: eventName,
-      location: eventLocation,
-      relatedCause: eventRelatedCause,
-    };
-
-    let updatedEvents = [...events];
-
-    if (editingEvent) {
-      updatedEvents = updatedEvents.map((event) =>
-        event.id === editingEvent.id ? newEvent : event,
-      );
-    } else {
-      updatedEvents.push(newEvent);
+  const handleEventSubmit = async () => {
+    const organizationId = parseInt(localStorage.getItem('organizationId'));
+    if (!organizationId || isNaN(organizationId)) {
+      console.error('Invalid organizationId');
+      // Handle this error, maybe show a message to the user or redirect to login
+      return;
     }
-
-    updatedEvents.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
-
-    setEvents(updatedEvents);
-    setEventTime({ hours: '00', minutes: '00' });
-    setEventText('');
-    setEventName('');
-    setEventLocation('');
-    setEventRelatedCause('');
-    setShowEventPopup(false);
-    setEditingEvent(null);
+  
+    const newEvent = {
+      title: eventName,
+      description: eventText,
+      dateTime: `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`,
+      address: eventLocation,
+      relatedCause: eventRelatedCause,
+      spotsAvailable: parseInt(spotsAvailable),
+      organizationId: organizationId,
+      skillsRequired: '',
+      ageRange: '',
+      pictureUrl: '',
+      opportunityUrl: ''
+    };
+  
+    try {
+      console.log('Sending data:', newEvent);
+      let response;
+      if (editingEvent) {
+        response = await axios.put(`http://localhost:3000/opps/${editingEvent.opportunityId}`, newEvent);
+      } else {
+        response = await axios.post('http://localhost:3000/opps', newEvent);
+      }
+      console.log('Response:', response.data);
+      setOpportunities(prev => editingEvent 
+        ? prev.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
+        : [...prev, response.data]
+      );
+      setShowEventPopup(false);
+      resetForm();
+    } catch (error) {
+      console.error('Error creating/updating opportunity:', error.response ? error.response.data : error.message);
+    }
   };
 
+  useEffect(() => {
+    const organizationId = localStorage.getItem('organizationId');
+    if (!organizationId) {
+      console.warn('No organizationId found in localStorage. User might need to log in.');
+      // You might want to redirect to login page or show a message
+    } else {
+      console.log('organizationId found:', organizationId);
+    }
+  }, []);
+
   const handleEditEvent = (event) => {
-    setSelectedDate(new Date(event.date));
+    setSelectedDate(new Date(event.dateTime));
     setEventTime({
-      hours: event.time.split(':')[0],
-      minutes: event.time.split(':')[1],
+      hours: event.dateTime.split('T')[1].substring(0, 2),
+      minutes: event.dateTime.split('T')[1].substring(3, 5),
     });
-    setEventText(event.text);
-    setEventName(event.name);
-    setEventLocation(event.location);
+    setEventText(event.description);
+    setEventName(event.title);
+    setEventLocation(event.address);
     setEventRelatedCause(event.relatedCause);
+    setSpotsAvailable(event.spotsAvailable);
     setEditingEvent(event);
     setShowEventPopup(true);
   };
@@ -139,11 +171,15 @@ const CalendarApp = () => {
     setShowConfirmModal(true);
   };
 
-  const confirmDeleteEvent = () => {
-    const updatedEvents = events.filter((event) => event.id !== eventIdToDelete);
-    setEvents(updatedEvents);
-    setShowConfirmModal(false);
-    setEventIdToDelete(null);
+  const confirmDeleteEvent = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/opps/${eventIdToDelete}`);
+      setOpportunities(opportunities.filter(opp => opp.id !== eventIdToDelete));
+      setShowConfirmModal(false);
+      setEventIdToDelete(null);
+    } catch (error) {
+      console.error('Error deleting opportunity:', error);
+    }
   };
 
   const cancelDeleteEvent = () => {
@@ -154,6 +190,16 @@ const CalendarApp = () => {
   const handleTimeChange = (e) => {
     const { name, value } = e.target;
     setEventTime((prevTime) => ({ ...prevTime, [name]: value.padStart(2, '0') }));
+  };
+
+  const resetForm = () => {
+    setEventTime({ hours: '00', minutes: '00' });
+    setEventText('');
+    setEventName('');
+    setEventLocation('');
+    setEventRelatedCause('');
+    setSpotsAvailable(10);
+    setEditingEvent(null);
   };
 
   return (
@@ -206,25 +252,34 @@ const CalendarApp = () => {
                   onClick={() => handleDayClick(day + 1)}
                 >
                   {day + 1}
+                  {opportunities.filter(opp => 
+                    new Date(opp.dateTime).getDate() === day + 1 &&
+                    new Date(opp.dateTime).getMonth() === currentMonth &&
+                    new Date(opp.dateTime).getFullYear() === currentYear
+                  ).map(opp => (
+                    <div key={opp.id} className="opportunity-dot"></div>
+                  ))}
                 </span>
               ))}
             </div>
           </div>
           <div className="upcoming-events">
-            <h2>Scheduled Events</h2>
-            {events.map((event, index) => (
-              <div className="upcoming-event" key={index}>
-                <button className="delete-event" onClick={() => handleDeleteEvent(event.id)}>
+            <h2>Scheduled Opportunities</h2>
+            {opportunities.map((opportunity) => (
+              <div className="upcoming-event" key={opportunity.id}>
+                <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.id)}>
                   <CloseSharpIcon />
                 </button>
                 <div className="event-date-wrapper">
-                  <div className="upcoming-event-date">{`${monthsOfYear[new Date(event.date).getMonth()]} ${new Date(event.date).getDate()}, ${new Date(event.date).getFullYear()}`}</div>
-                  <div className="upcoming-event-time">{event.time}</div>
+                  <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
+                  <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                 </div>
-                <div className="upcoming-event-name">{event.name}</div>
-                <div className="upcoming-event-location">{event.location}</div>
-                <div className="upcoming-event-text">{event.text}</div>
-                <div className="upcoming-event-cause">Related Cause: {event.relatedCause}</div>
+                <div className="upcoming-event-name">{opportunity.title}</div>
+                <div className="upcoming-event-location">{opportunity.address}</div>
+                <div className="upcoming-event-text">{opportunity.description}</div>
+                <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
+                <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
+                <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
               </div>
             ))}
           </div>
@@ -240,7 +295,7 @@ const CalendarApp = () => {
                 type="number"
                 name="hours"
                 min={0}
-                max={24}
+                max={23}
                 className="hours"
                 value={eventTime.hours}
                 onChange={handleTimeChange}
@@ -249,7 +304,7 @@ const CalendarApp = () => {
                 type="number"
                 name="minutes"
                 min={0}
-                max={60}
+                max={59}
                 className="minutes"
                 value={eventTime.minutes}
                 onChange={handleTimeChange}
@@ -278,6 +333,12 @@ const CalendarApp = () => {
                 </option>
               ))}
             </select>
+            <input
+              type="number"
+              placeholder="Enter Spots Available"
+              value={spotsAvailable}
+              onChange={(e) => setSpotsAvailable(parseInt(e.target.value))}
+            />
             <textarea
               placeholder="Enter Event Description (Maximum 60 Characters)"
               value={eventText}
@@ -288,7 +349,7 @@ const CalendarApp = () => {
               }}
             ></textarea>
             <button className="event-popup-btn" onClick={handleEventSubmit}>
-              {editingEvent ? 'Update Event' : 'Add Event'}
+              {editingEvent ? 'Update Opportunity' : 'Add Opportunity'}
             </button>
             <button className="close-event-popup" onClick={() => setShowEventPopup(false)}>
               <CloseSharpIcon />
@@ -297,7 +358,7 @@ const CalendarApp = () => {
         )}
         {showConfirmModal && (
           <div className="confirm-modal">
-            <div className="confirm-message">Are you sure you want to cancel this event?</div>
+            <div className="confirm-message">Are you sure you want to delete this opportunity?</div>
             <div className="confirm-buttons">
               <button className="confirm-button" onClick={confirmDeleteEvent}>Yes</button>
               <button className="confirm-button" onClick={cancelDeleteEvent}>No</button>

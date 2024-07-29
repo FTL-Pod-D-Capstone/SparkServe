@@ -14,5 +14,7 @@ router.post("/", opportunityController.createOpportunity);
 router.put("/:id", opportunityController.updateOpportunity);
 // delete an opportunity
 router.delete("/:id", opportunityController.deleteOpportunity);
+// getting opportunitie sfor a specific date range
+router.get('/date-range', opportunityController.getOpportunitiesByDateRange);
 
 module.exports = router;

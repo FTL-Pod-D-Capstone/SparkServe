@@ -18,6 +18,24 @@ const getAllOpportunities = async (filter = {}, orderBy = {}) => {
   });
 };
 
+const getOpportunitiesByDateRange = async (startDate, endDate) => {
+  return prisma.opportunity.findMany({
+    where: {
+      dateTime: {
+        gte: startDate,
+        lte: endDate
+      }
+    },
+    include: {
+      organization: {
+        select: {
+          name: true,
+        }
+      }
+    },
+  });
+};
+
 // Function to get opportunity by ID
 const getOpportunityById = async (id) => {
   return prisma.opportunity.findUnique({
@@ -34,29 +52,34 @@ const getOpportunityById = async (id) => {
   });
 };
 
-// Function to create a new opportunity
 const createOpportunity = async (opportunityData) => {
   return prisma.opportunity.create({
     data: {
       title: opportunityData.title,
       description: opportunityData.description,
-      organizationId: opportunityData.organizationId,
       address: opportunityData.address,
-      dateTime: new Date(opportunityData.dateTime),
+      dateTime: opportunityData.dateTime ? new Date(opportunityData.dateTime) : null,
       relatedCause: opportunityData.relatedCause,
       skillsRequired: opportunityData.skillsRequired,
       spotsAvailable: opportunityData.spotsAvailable,
       ageRange: opportunityData.ageRange,
       pictureUrl: opportunityData.pictureUrl,
       opportunityUrl: opportunityData.opportunityUrl,
+      organization: {
+        connect: { organizationId: opportunityData.organizationId }
+      }
     },
     include: {
       feedbacks: true,
-      registrations: true
+      registrations: true,
+      organization: {
+        select: {
+          name: true,
+        }
+      }
     },
   });
 };
-
 // Function to update an opportunity
 const updateOpportunity = async (id, opportunityData) => {
   return prisma.opportunity.update({
@@ -104,6 +127,7 @@ const deleteOpportunity = async (id) => {
 module.exports = {
   getAllOpportunities,
   getAllOpportunitiesLocations,
+  getOpportunitiesByDateRange,
   getOpportunityById,
   createOpportunity,
   updateOpportunity,
