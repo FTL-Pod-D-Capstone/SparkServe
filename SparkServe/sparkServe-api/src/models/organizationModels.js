@@ -29,6 +29,7 @@ const validateOrganizationCredentials = async (email, password) => {
   const organization = await findOrganizationByEmail(email);
   if (!organization) return null;
   const isValid = await bcrypt.compare(password, organization.password);
+  console.log('Validated organization:', isValid ? organization : null);
   return isValid ? organization : null;
 };
 
