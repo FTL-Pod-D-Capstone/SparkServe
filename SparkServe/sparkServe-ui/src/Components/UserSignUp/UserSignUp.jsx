@@ -27,13 +27,20 @@ function Copyright(props) {
 }
 
 const defaultTheme = createTheme();
-const API_URL =  'https://project-1-uljs.onrender.com';
-// process.env.REACT_APP_API_URL ||
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function UserSignUp() {
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const [error, setError] = React.useState('');
   const [formErrors, setFormErrors] = React.useState({});
+  const [formData, setFormData] = React.useState({
+    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: ''
+  });
 
   const handleOpenSignIn = () => {
     setOpenSignIn(true);
@@ -45,46 +52,58 @@ export default function UserSignUp() {
 
   const validateForm = (data) => {
     const errors = {};
-    if (!data.get('username')) errors.username = 'Username is required';
-    if (!data.get('email')) errors.email = 'Email is required';
-    if (!data.get('firstName')) errors.firstName = 'First name is required';
-    if (!data.get('lastName')) errors.lastName = 'Last name is required';
-    if (!data.get('phoneNumber')) errors.phoneNumber = 'Phone number is required';
-    if (!data.get('password')) errors.password = 'Password is required';
+    if (!data.username) errors.username = 'Username is required';
+    if (!data.email) errors.email = 'Email is required';
+    if (!data.firstName) errors.firstName = 'First name is required';
+    if (!data.lastName) errors.lastName = 'Last name is required';
+    if (!data.phoneNumber) errors.phoneNumber = 'Phone number is required';
+    if (!data.password) errors.password = 'Password is required';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const clearForm = () => {
+    setFormData({
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      password: ''
+    });
+    setFormErrors({});
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     
-    if (!validateForm(data)) {
+    if (!validateForm(formData)) {
       return;
     }
 
-    const user = {
-      username: data.get('username'),
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      phoneNumber: data.get('phoneNumber'),
-      password: data.get('password'),
-    };
-
     try {
-
-      // const response = await axios.post('https://project-1-uljs.onrender.com/users/register', user);
-      // console.log(response.data);
-      // Show the sign-in modal with a message to log in
-
-      const response = await axios.post(`${API_URL}/users/register`, user);
-
-      handleOpenSignIn();
-      setError('');
+      const response = await axios.post(`${baseUrl}/users/register`, formData);
+      
+      if (response.data && response.status === 201) {
+        // console.log('Registration successful:', response.data);
+        setError('');
+        clearForm();
+        handleOpenSignIn();
+      } else {
+        console.error('Unexpected response:', response);
+        setError('An unexpected error occurred. Please try again.');
+      }
     } catch (error) {
-      console.error('Error registering user:', error);
-      setError('An error occurred while registering. Please try again.');
+      console.error('Error registering user:', error.response?.data || error.message);
+      setError(error.response?.data?.message || 'An error occurred while registering. Please try again.');
     }
   };
 
@@ -117,6 +136,8 @@ export default function UserSignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={formData.firstName}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.firstName)}
                   helperText={formErrors.firstName}
                 />
@@ -129,6 +150,8 @@ export default function UserSignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.lastName)}
                   helperText={formErrors.lastName}
                 />
@@ -141,6 +164,8 @@ export default function UserSignUp() {
                   label="Username"
                   name="username"
                   autoComplete="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.username)}
                   helperText={formErrors.username}
                 />
@@ -153,6 +178,8 @@ export default function UserSignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.email)}
                   helperText={formErrors.email}
                 />
@@ -165,6 +192,8 @@ export default function UserSignUp() {
                   label="Phone Number"
                   name="phoneNumber"
                   autoComplete="tel"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.phoneNumber)}
                   helperText={formErrors.phoneNumber}
                 />
@@ -178,6 +207,8 @@ export default function UserSignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   error={Boolean(formErrors.password)}
                   helperText={formErrors.password}
                 />
