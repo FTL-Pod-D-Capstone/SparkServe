@@ -52,18 +52,24 @@ const CalendarApp = () => {
 
   useEffect(() => {
     const fetchOpportunities = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
+      const organizationId = localStorage.getItem('organizationId');
+      if (!organizationId) {
+        console.error('No organization ID found');
+        setLoading(false);
+        return;
+      }
       try {
-        const response = await axios.get(`http://localhost:3000/opps`);
+        const response = await axios.get(`http://localhost:3000/opps?organizationId=${organizationId}`);
         setOpportunities(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
       } catch (error) {
         console.error('Error fetching opportunities:', error);
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
-
+  
     fetchOpportunities();
   }, []);
 
@@ -267,7 +273,7 @@ const CalendarApp = () => {
               </div>
             ) : (
               <div className="upcoming-events-scroll">
-                {opportunities.map((opportunity) => (
+                {opportunities.filter(opp => opp.organizationId === parseInt(localStorage.getItem('organizationId'))).map((opportunity) => (
                   <div className="upcoming-event" key={opportunity.opportunityId}>
                     <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
                       <CloseSharpIcon />
