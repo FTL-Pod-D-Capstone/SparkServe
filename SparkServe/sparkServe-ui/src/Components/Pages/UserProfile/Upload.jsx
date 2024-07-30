@@ -15,8 +15,8 @@ function Upload({ onUploaded }) {
         region: REGION,
     });
 
-    const s3 = new AWS.S3();
-    const params = {
+    const s3 = new window.AWS.S3();
+        const params = {
         Bucket: S3_BUCKET,
         Key: file.name,
         Body: file,
