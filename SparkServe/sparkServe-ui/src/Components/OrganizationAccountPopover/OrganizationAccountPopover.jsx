@@ -1,11 +1,18 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 function OrganizationAccountPopover({ profileType }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [organizationId, setOrganizationId] = React.useState("")
+
+  React.useEffect( () => {
+    if (localStorage.getItem("organizationId")){
+      setOrganizationId(localStorage.getItem("organizationId"))
+    }
+  }, [] )
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +61,7 @@ function OrganizationAccountPopover({ profileType }) {
           },
         }}
       >
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem component={Link} to={`/OrganizationProfile/${organizationId}`}>
           <Typography textAlign="center" sx={{ color: 'white' }}>{profileType}</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>

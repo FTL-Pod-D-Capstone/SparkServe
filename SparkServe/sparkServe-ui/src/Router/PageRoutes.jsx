@@ -13,7 +13,7 @@ import OrganizationSignInPage from '../Components/Pages/OrganizationSignInPage/O
 import OrganizationSignUpPage from '../Components/Pages/OrganizationSignUpPage/OrganizationSignUpPage';
 import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 
 import UserProfilePage from '../Components/Pages/UserProfile/UserProfilePage';
-import OrganizationProfilePage from '../Components/Pages/OrgProfile/OrganizationProfilePage';
+import OrganizationProfilePage from '../Components/Pages/OrganizationProfile/OrganizationProfilePage';
 
 const PageRoutes = () => {
   return (
