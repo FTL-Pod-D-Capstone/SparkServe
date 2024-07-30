@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+// import AWS from 'aws-sdk';
 import { useState } from 'react';
 
 
@@ -9,7 +9,7 @@ function Upload({ onUploaded }) {
         const S3_BUCKET = "sparkserve";
         const REGION = "us-east-2";
 
-    AWS.config.update({
+        window.AWS.config.update({
         accessKeyId: import.meta.env.VITE_ACCESS_KEY,
         secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
         region: REGION,
