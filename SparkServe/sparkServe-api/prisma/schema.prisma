@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   userId              Int                  @id @default(autoincrement())
-  username            String?               @unique
+  username            String?              @unique
   firstName           String?
   lastName            String?
   email               String?              @unique
@@ -29,6 +29,7 @@ model User {
   chatBotInteractions ChatBotInteraction[] // One-to-many relation with ChatBotInteraction
   notifications       Notification[] // One-to-many relation with Notification
   registrations       Registration[] // One-to-many relation with Registration
+  bookmarks           Bookmark[] // One-to-many relation with UserBookmarks
 }
 
 model Organization {
@@ -65,16 +66,17 @@ model Opportunity {
   organization   Organization   @relation(fields: [organizationId], references: [organizationId], onDelete: Cascade) // Relation to Organization
   feedbacks      Feedback[] // One-to-many relation with Feedback
   registrations  Registration[] // One-to-many relation with Registration
+  bookmarks      Bookmark[]
 }
 
 model ChatBotInteraction {
-  interactionId Int      @id @default(autoincrement())
-  userId        Int
+  interactionId  Int      @id @default(autoincrement())
+  userId         Int
   conversationId String
-  prompt       String
-  response      String
-  timestamp     DateTime @default(now())
-  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  prompt         String
+  response       String
+  timestamp      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model Feedback {
@@ -106,4 +108,15 @@ model Registration {
   status           String
   user             User        @relation(fields: [userId], references: [userId], onDelete: Cascade) // Relation to User
   opportunity      Opportunity @relation(fields: [opportunityId], references: [opportunityId], onDelete: Cascade) // Relation to Opportunity
+}
+
+model Bookmark {
+  bookmarkId    Int         @id @default(autoincrement())
+  userId        Int
+  opportunityId Int
+  createdAt     DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [opportunityId], onDelete: Cascade)
+
+  @@unique([userId, opportunityId])
 }

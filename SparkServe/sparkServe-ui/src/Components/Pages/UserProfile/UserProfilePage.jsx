@@ -35,7 +35,7 @@ const UserProfilePage = () => {
             setIsLoading(true);
             try {
                 const response = await axios.get(`https://project-1-uljs.onrender.com/users/${id}`);
-                console.log('API response:', response.data);
+                // console.log('API response:', response.data);
                 setUser(response.data);
                 setIsLoading(false);
             } catch (err) {
