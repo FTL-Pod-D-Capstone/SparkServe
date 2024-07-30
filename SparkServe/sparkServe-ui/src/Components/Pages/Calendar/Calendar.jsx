@@ -50,18 +50,17 @@ const CalendarApp = () => {
 
   useEffect(() => {
     const fetchOpportunities = async () => {
-      const startDate = new Date(currentYear, currentMonth, 1);
-      const endDate = new Date(currentYear, currentMonth + 1, 0);
       try {
-        const response = await axios.get(`http://localhost:3000/opps/date-range?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+        const response = await axios.get(`http://localhost:3000/opps`);
         setOpportunities(response.data);
+        localStorage.setItem('events', JSON.stringify(response.data));
       } catch (error) {
         console.error('Error fetching opportunities:', error);
       }
     };
 
     fetchOpportunities();
-  }, [currentYear, currentMonth]);
+  }, []);
 
   const prevMonth = () => {
     setCurrentMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1));
@@ -106,14 +105,13 @@ const CalendarApp = () => {
     }
   
     const newEvent = {
-      title: eventName || '',  // Provide a default empty string
-      description: eventText || '',  // Provide a default empty string
+      title: eventName || '',
+      description: eventText || '',
       organizationId: organizationId,
-      skillsRequired: '',  // Default empty string
-      ageRange: '',  // Default empty string
+      skillsRequired: '',
+      ageRange: '',
     };
   
-    // Only add optional fields if they have a value
     if (eventTime.hours && eventTime.minutes) {
       newEvent.dateTime = `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`;
     }
@@ -130,10 +128,11 @@ const CalendarApp = () => {
         response = await axios.post('http://localhost:3000/opps', newEvent);
       }
       console.log('Response:', response.data);
-      setOpportunities(prev => editingEvent 
-        ? prev.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
-        : [...prev, response.data]
-      );
+      const updatedOpportunities = editingEvent 
+        ? opportunities.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
+        : [...opportunities, response.data];
+      setOpportunities(updatedOpportunities);
+      localStorage.setItem('events', JSON.stringify(updatedOpportunities));
       setShowEventPopup(false);
       resetForm();
     } catch (error) {
@@ -164,7 +163,9 @@ const CalendarApp = () => {
   const confirmDeleteEvent = async () => {
     try {
       await axios.delete(`http://localhost:3000/opps/${eventIdToDelete}`);
-      setOpportunities(opportunities.filter(opp => opp.opportunityId !== eventIdToDelete));
+      const updatedOpportunities = opportunities.filter(opp => opp.opportunityId !== eventIdToDelete);
+      setOpportunities(updatedOpportunities);
+      localStorage.setItem('events', JSON.stringify(updatedOpportunities));
       setShowConfirmModal(false);
       setEventIdToDelete(null);
     } catch (error) {
@@ -212,12 +213,12 @@ const CalendarApp = () => {
           <div className="calendar">
             <div className="navigate-date">
               <button onClick={prevMonth} className="button">
-                <ChevronLeftIcon />
+                <ChevronLeftIcon style={{ color: '#ff66c4' }} />
               </button>
               <h2 className="month">{monthsOfYear[currentMonth]},</h2>
               <h2 className="year">{currentYear}</h2>
               <button onClick={nextMonth} className="button">
-                <ChevronRightIcon />
+                <ChevronRightIcon style={{ color: '#ff66c4' }} />
               </button>
             </div>
             <div className="weekdays">
@@ -253,26 +254,28 @@ const CalendarApp = () => {
               ))}
             </div>
           </div>
-          <div className="upcoming-events">
+          <div className="upcoming-events-container">
             <h2>Scheduled Opportunities</h2>
-            {opportunities.map((opportunity) => (
-              <div className="upcoming-event" key={opportunity.opportunityId}>
-                <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
-                  <CloseSharpIcon />
-                </button>
-                <div className="event-date-wrapper">
-                  <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
-                  <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-                </div>
-                <div className="upcoming-event-name">{opportunity.title}</div>
-                <div className="upcoming-event-location">{opportunity.address}</div>
-                <div className="upcoming-event-text">{opportunity.description}</div>
-                <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
-                <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
-                <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
-              </div>
+            <div className="upcoming-events-scroll">
+              {opportunities.map((opportunity) => (
+                <div className="upcoming-event" key={opportunity.opportunityId}>
+                  <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
+                    <CloseSharpIcon />
+                  </button>
+                  <div className="event-date-wrapper">
+                    <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
+                    <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                  </div>
+                  <div className="upcoming-event-name">{opportunity.title}</div>
+                  <div className="upcoming-event-location">{opportunity.address}</div>
+                  <div className="upcoming-event-text">{opportunity.description}</div>
+                  <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
+                  <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
+                  <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
+            </div>
             ))}
           </div>
+        </div>
         </div>
         {showEventPopup && (
           <div className="event-popup">
@@ -362,9 +365,6 @@ const CalendarApp = () => {
 };
 
 export default CalendarApp;
-
-
-
 
 
 
