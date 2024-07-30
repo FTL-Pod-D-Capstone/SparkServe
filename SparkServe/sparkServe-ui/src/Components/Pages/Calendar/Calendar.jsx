@@ -102,24 +102,25 @@ const CalendarApp = () => {
     const organizationId = parseInt(localStorage.getItem('organizationId'));
     if (!organizationId || isNaN(organizationId)) {
       console.error('Invalid organizationId');
-      // Handle this error, maybe show a message to the user
       return;
     }
-
+  
     const newEvent = {
-      title: eventName,
-      description: eventText,
-      dateTime: `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`,
-      address: eventLocation,
-      relatedCause: eventRelatedCause,
-      spotsAvailable: parseInt(spotsAvailable),
+      title: eventName || '',  // Provide a default empty string
+      description: eventText || '',  // Provide a default empty string
       organizationId: organizationId,
-      skillsRequired: '',
-      ageRange: '',
-      pictureUrl: '',
-      opportunityUrl: ''
+      skillsRequired: '',  // Default empty string
+      ageRange: '',  // Default empty string
     };
-
+  
+    // Only add optional fields if they have a value
+    if (eventTime.hours && eventTime.minutes) {
+      newEvent.dateTime = `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`;
+    }
+    if (eventLocation) newEvent.address = eventLocation;
+    if (eventRelatedCause) newEvent.relatedCause = eventRelatedCause;
+    if (spotsAvailable) newEvent.spotsAvailable = parseInt(spotsAvailable);
+  
     try {
       console.log('Sending data:', newEvent);
       let response;
