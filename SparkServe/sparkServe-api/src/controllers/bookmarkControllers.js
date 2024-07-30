@@ -15,7 +15,7 @@ const removeBookmarkController = async (req, res) => {
     try {
         const { userId, opportunityId } = req.params;
         await bookmarkModels.removeBookmark(userId, opportunityId);
-        res.status(204).send();
+        res.status(204).send('Bookmark Successfully Removed');
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

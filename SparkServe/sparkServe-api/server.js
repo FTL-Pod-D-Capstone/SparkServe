@@ -42,9 +42,9 @@ app.use("/users", userRoutes);
 app.use("/registration", registrationRoutes);
 
 //use rate limiter for OpenAPI
-// app.use(rateLimiter);
+app.use("/api/chat", rateLimiter, chatbotRoutes);
 
-app.use("/api/chat", chatbotRoutes);
+//Bookmarks routes
 app.use('/bookmarks', bookmarkRoutes);
 
 
