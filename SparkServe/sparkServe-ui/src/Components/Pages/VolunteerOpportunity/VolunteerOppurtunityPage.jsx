@@ -42,7 +42,6 @@ const VolunOppPage = () => {
                     const bookmarkResponse = await axios.get(`${baseUrl}/bookmarks/users/${userId}/bookmarks`);
                     const checkBookmarked = bookmarkResponse.data.some(bookmark => bookmark.opportunityId === parseInt(opportunityId));
                     setIsBookmarked(checkBookmarked);
-                    console.log("ALEX AND AHMED ADDED THIS SHI", typeof(opportunityId), bookmarkResponse, checkBookmarked);
                 }
 
                 setIsLoading(false);
