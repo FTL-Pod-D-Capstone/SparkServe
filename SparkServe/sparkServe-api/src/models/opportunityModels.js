@@ -84,22 +84,10 @@ const createOpportunity = async (opportunityData) => {
   }
 
   return prisma.opportunity.create({
-    data: {
-      title: opportunityData.title,
-      description: opportunityData.description,
-      organizationId: opportunityData.organizationId,
-      address: opportunityData.address,
-      dateTime: new Date(opportunityData.dateTime),
-      relatedCause: opportunityData.relatedCause,
-      skillsRequired: opportunityData.skillsRequired,
-      spotsAvailable: opportunityData.spotsAvailable,
-      ageRange: opportunityData.ageRange,
-      pictureUrl: opportunityData.pictureUrl,
-      opportunityUrl: opportunityData.opportunityUrl,
-    },
+    data,
     include: {
       feedbacks: true,
-      registrations: true
+      registrations: true,
     },
   });
 };

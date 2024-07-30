@@ -56,6 +56,23 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       
       if (response.status === 200 && response.data.token) {
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('organizationId', response.data.organizationId)
+        
+        if (response.data.organizationId) {
+          localStorage.setItem('organizationId', response.data.organizationId.toString());
+          console.log('Stored organizationId:', response.data.organizationId.toString());
+        } else {
+          console.warn('No organizationId in response, attempting to extract from token');
+          const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
+          if (decodedToken.id) {
+            localStorage.setItem('organizationId', decodedToken.id.toString());
+            console.log('Extracted and stored organizationId from token:', decodedToken.id);
+          } else {
+            console.error('Unable to extract organizationId from token');
+          }
+        }
+        
         setLoginStatus('success');
         setTimeout(() => {
           navigate('/OrganizationLandingPage');
