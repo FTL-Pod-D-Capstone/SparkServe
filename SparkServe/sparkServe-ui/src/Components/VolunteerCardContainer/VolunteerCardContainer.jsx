@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel, Paper, Container } from '@mui/material';
+import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import Badge from '@mui/material/Badge';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import LinearGradientLoading from './LinearGradientLoading';
 
-const VolOppContainer = ({ bgColor }) => {
+const VolOppContainer = () => {
     const [opportunities, setOpportunities] = useState([]);
     const [filteredOpportunities, setFilteredOpportunities] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -12,14 +17,23 @@ const VolOppContainer = ({ bgColor }) => {
     const [nameFilter, setNameFilter] = useState('');
     const [organizationFilter, setOrganizationFilter] = useState('');
     const [causeFilter, setCauseFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState(null);
+    const [ageRangeFilter, setAgeRangeFilter] = useState('');
     const [organizations, setOrganizations] = useState([]);
     const [causes, setCauses] = useState([]);
+    const [ageRanges, setAgeRanges] = useState([]);
+    const [opportunitiesByDate, setOpportunitiesByDate] = useState({});
+    const baseUrl =import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
+
                 const response = await axios.get(`https://project-1-uljs.onrender.com/opps`);
+=======
+                const response = await axios.get(`${baseUrl}/opps`);
+
                 const opportunitiesData = response.data;
 
                 const opportunitiesWithOrgNames = await Promise.all(opportunitiesData.map(async (opp) => {
@@ -35,14 +49,32 @@ const VolOppContainer = ({ bgColor }) => {
                     return { ...opp, organizationName: opp.organization.name };
                 }));
 
+
                 setOpportunities(opportunitiesWithOrgNames);
                 setFilteredOpportunities(opportunitiesWithOrgNames);
 
                 const uniqueOrganizations = [...new Set(opportunitiesWithOrgNames.map(opp => opp.organizationName).filter(Boolean))];
                 const uniqueCauses = [...new Set(opportunitiesWithOrgNames.map(opp => opp.relatedCause).filter(Boolean))];
+=======
+                // Process opportunities by date
+                const oppsByDate = opportunitiesData.reduce((acc, opp) => {
+                    const date = new Date(opp.dateTime).toDateString();
+                    if (!acc[date]) {
+                        acc[date] = 0;
+                    }
+                    acc[date]++;
+                    return acc;
+                }, {});
+                setOpportunitiesByDate(oppsByDate);
+
+                const uniqueOrganizations = [...new Set(opportunitiesData.map(opp => opp.organization?.name).filter(Boolean))];
+                const uniqueCauses = [...new Set(opportunitiesData.map(opp => opp.relatedCause).filter(Boolean))];
+                const uniqueAgeRanges = [...new Set(opportunitiesData.map(opp => opp.ageRange).filter(Boolean))];
+
                 
                 setOrganizations(uniqueOrganizations);
                 setCauses(uniqueCauses);
+                setAgeRanges(uniqueAgeRanges);
 
                 setIsLoading(false);
             } catch (err) {
@@ -58,31 +90,62 @@ const VolOppContainer = ({ bgColor }) => {
     useEffect(() => {
         const filtered = opportunities.filter(opp => 
             opp.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
+
             (organizationFilter === '' || opp.organizationName === organizationFilter) &&
             (causeFilter === '' || opp.relatedCause === causeFilter)
+=======
+            (organizationFilter === '' || opp.organization?.name === organizationFilter) &&
+            (causeFilter === '' || opp.relatedCause === causeFilter) &&
+            (dateFilter === null || new Date(opp.dateTime).toDateString() === dateFilter.toDateString()) &&
+            (ageRangeFilter === '' || opp.ageRange === ageRangeFilter)
+
         );
         setFilteredOpportunities(filtered);
-    }, [nameFilter, organizationFilter, causeFilter, opportunities]);
+    }, [nameFilter, organizationFilter, causeFilter, dateFilter, ageRangeFilter, opportunities]);
+
+    // Custom rendering function for calendar days
+    const renderDay = (date, selectedDates, pickersDayProps) => {
+        const dateString = date.toDateString();
+        const numOpportunities = opportunitiesByDate[dateString] || 0;
+
+        return (
+            <Badge
+                key={dateString}
+                overlap="circular"
+                badgeContent={numOpportunities > 0 ? numOpportunities : undefined}
+                color="primary"
+            >
+                <PickersDay {...pickersDayProps} />
+            </Badge>
+        );
+    };
 
     if (isLoading) return <LinearGradientLoading />;
     if (error) return <div>{error}</div>;
 
     return (
-        <Container sx={{ my: 8, backgroundColor: bgColor || '#ffffff', minHeight: '100vh', padding: '20px' }}>
-            <Box sx={{ mb: 4 }}>
+        <Box sx={{ width: '100%', mt: 4 }}>
+            <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                 <TextField
-                    label="Search by Name"
+                    label="Search opportunities"
                     variant="outlined"
                     value={nameFilter}
                     onChange={(e) => setNameFilter(e.target.value)}
-                    sx={{ mr: 2, mb: 2 }}
+                    sx={{ 
+                        flexGrow: 1, 
+                        minWidth: '200px',
+                        '& .MuiOutlinedInput-root': {
+                            backgroundColor: 'white',
+                        },
+                    }}
                 />
-                <FormControl variant="outlined" sx={{ mr: 2, mb: 2, minWidth: 120 }}>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
                     <InputLabel>Organization</InputLabel>
                     <Select
                         value={organizationFilter}
                         onChange={(e) => setOrganizationFilter(e.target.value)}
                         label="Organization"
+                        sx={{ backgroundColor: 'white' }}
                     >
                         <MenuItem value=""><em>All</em></MenuItem>
                         {organizations.map((org) => (
@@ -90,12 +153,13 @@ const VolOppContainer = ({ bgColor }) => {
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl variant="outlined" sx={{ mb: 2, minWidth: 120 }}>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
                     <InputLabel>Cause</InputLabel>
                     <Select
                         value={causeFilter}
                         onChange={(e) => setCauseFilter(e.target.value)}
                         label="Cause"
+                        sx={{ backgroundColor: 'white' }}
                     >
                         <MenuItem value=""><em>All</em></MenuItem>
                         {causes.map((cause) => (
@@ -103,7 +167,31 @@ const VolOppContainer = ({ bgColor }) => {
                         ))}
                     </Select>
                 </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Date"
+                        value={dateFilter}
+                        onChange={(newValue) => setDateFilter(newValue)}
+                        renderInput={(params) => <TextField {...params} sx={{ backgroundColor: 'white' }} />}
+                        renderDay={renderDay}
+                    />
+                </LocalizationProvider>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
+                    <InputLabel>Age Range</InputLabel>
+                    <Select
+                        value={ageRangeFilter}
+                        onChange={(e) => setAgeRangeFilter(e.target.value)}
+                        label="Age Range"
+                        sx={{ backgroundColor: 'white' }}
+                    >
+                        <MenuItem value=""><em>All</em></MenuItem>
+                        {ageRanges.map((range) => (
+                            <MenuItem key={range} value={range}>{range}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </Box>
+
             <Grid container spacing={3}>
                 {filteredOpportunities.map((opportunity) => (
                     <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
@@ -115,8 +203,11 @@ const VolOppContainer = ({ bgColor }) => {
                                 height: '100%', 
                                 display: 'flex', 
                                 flexDirection: 'column',
+                                border: 'none',
+                                boxShadow: 'none',
+                                transition: 'transform 0.2s',
                                 '&:hover': {
-                                    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+                                    transform: 'scale(1.03)',
                                 },
                             }}
                         >
@@ -125,9 +216,10 @@ const VolOppContainer = ({ bgColor }) => {
                                 height="200"
                                 image={opportunity.pictureUrl || "https://via.placeholder.com/300x200"}
                                 alt={opportunity.title}
+                                sx={{ borderRadius: '8px' }}
                             />
-                            <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                                <Typography variant="subtitle1" component="div" noWrap>
+                            <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
+                                <Typography variant="subtitle1" component="div" noWrap fontWeight="bold">
                                     {opportunity.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap>
@@ -146,7 +238,7 @@ const VolOppContainer = ({ bgColor }) => {
                     </Grid>
                 ))}
             </Grid>
-        </Container>
+        </Box>
     );
 };
 

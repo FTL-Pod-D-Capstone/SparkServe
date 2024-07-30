@@ -16,7 +16,8 @@ import axios from 'axios';
 import * as jwt_decode from 'jwt-decode';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
-
+// const baseUrl ="http://localhost:3000";
+const baseUrl =import.meta.env.VITE_BACKEND_URL;
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -51,7 +52,7 @@ const UserSignIn = ({ open, handleClose }) => {
     };
 
     try {
-      const response = await axios.post('http://localhost:3000/users/login', credentials);
+      const response = await axios.post(`${baseUrl}/users/login`, credentials);
       localStorage.setItem('userId', response.data.userId)
       localStorage.setItem('isUserAuthenticated', 'true');
       navigate('/UserLandingPage');

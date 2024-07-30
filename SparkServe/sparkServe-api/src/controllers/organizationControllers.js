@@ -46,18 +46,12 @@ const loginOrganization = async (req, res) => {
     }
 
     const token = jwt.sign({ id: organization.organizationId, email: organization.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-    console.log('Sending response with organizationId:', organization.organizationId);
-    res.status(200).json({ 
-      token, 
-      organizationId: organization.organizationId,
-      message: 'Login successful'
-    });
+    res.status(200).json({ token });
   } catch (error) {
     console.error('Login error:', error);
     res.status(400).json({ error: error.message });
   }
 };
-
 // Function to get all organizations
 const getAllOrganizations = async (req, res) => {
   const { name } = req.query;

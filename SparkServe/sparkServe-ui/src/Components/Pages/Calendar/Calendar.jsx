@@ -32,8 +32,10 @@ const CalendarApp = () => {
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [showEventPopup, setShowEventPopup] = useState(false);
-  const [events, setEvents] = useState([]);
-  const [opportunities, setOpportunities] = useState([]);
+  const [events, setEvents] = useState(() => {
+    const savedEvents = localStorage.getItem('events');
+    return savedEvents ? JSON.parse(savedEvents) : [];
+  });
   const [eventTime, setEventTime] = useState({ hours: '00', minutes: '00' });
   const [eventText, setEventText] = useState('');
   const [eventName, setEventName] = useState('');
@@ -99,57 +101,38 @@ const CalendarApp = () => {
     );
   };
 
-  const handleEventSubmit = async () => {
-    const organizationId = parseInt(localStorage.getItem('organizationId'));
-    if (!organizationId || isNaN(organizationId)) {
-      console.error('Invalid organizationId');
-      // Handle this error, maybe show a message to the user or redirect to login
-      return;
-    }
-  
+  const handleEventSubmit = () => {
     const newEvent = {
-      title: eventName,
-      description: eventText,
-      dateTime: `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`,
-      address: eventLocation,
+      id: editingEvent ? editingEvent.id : Date.now(),
+      date: selectedDate.toISOString().split('T')[0],
+      time: `${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}`,
+      text: eventText,
+      name: eventName,
+      location: eventLocation,
       relatedCause: eventRelatedCause,
-      spotsAvailable: parseInt(spotsAvailable),
-      organizationId: organizationId,
-      skillsRequired: '',
-      ageRange: '',
-      pictureUrl: '',
-      opportunityUrl: ''
     };
-  
-    try {
-      console.log('Sending data:', newEvent);
-      let response;
-      if (editingEvent) {
-        response = await axios.put(`http://localhost:3000/opps/${editingEvent.opportunityId}`, newEvent);
-      } else {
-        response = await axios.post('http://localhost:3000/opps', newEvent);
-      }
-      console.log('Response:', response.data);
-      setOpportunities(prev => editingEvent 
-        ? prev.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
-        : [...prev, response.data]
-      );
-      setShowEventPopup(false);
-      resetForm();
-    } catch (error) {
-      console.error('Error creating/updating opportunity:', error.response ? error.response.data : error.message);
-    }
-  };
 
-  useEffect(() => {
-    const organizationId = localStorage.getItem('organizationId');
-    if (!organizationId) {
-      console.warn('No organizationId found in localStorage. User might need to log in.');
-      // You might want to redirect to login page or show a message
+    let updatedEvents = [...events];
+
+    if (editingEvent) {
+      updatedEvents = updatedEvents.map((event) =>
+        event.id === editingEvent.id ? newEvent : event,
+      );
     } else {
-      console.log('organizationId found:', organizationId);
+      updatedEvents.push(newEvent);
     }
-  }, []);
+
+    updatedEvents.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+
+    setEvents(updatedEvents);
+    setEventTime({ hours: '00', minutes: '00' });
+    setEventText('');
+    setEventName('');
+    setEventLocation('');
+    setEventRelatedCause('');
+    setShowEventPopup(false);
+    setEditingEvent(null);
+  };
 
   const handleEditEvent = (event) => {
     setSelectedDate(new Date(event.dateTime));
@@ -171,15 +154,11 @@ const CalendarApp = () => {
     setShowConfirmModal(true);
   };
 
-  const confirmDeleteEvent = async () => {
-    try {
-      await axios.delete(`http://localhost:3000/opps/${eventIdToDelete}`);
-      setOpportunities(opportunities.filter(opp => opp.id !== eventIdToDelete));
-      setShowConfirmModal(false);
-      setEventIdToDelete(null);
-    } catch (error) {
-      console.error('Error deleting opportunity:', error);
-    }
+  const confirmDeleteEvent = () => {
+    const updatedEvents = events.filter((event) => event.id !== eventIdToDelete);
+    setEvents(updatedEvents);
+    setShowConfirmModal(false);
+    setEventIdToDelete(null);
   };
 
   const cancelDeleteEvent = () => {
@@ -252,22 +231,15 @@ const CalendarApp = () => {
                   onClick={() => handleDayClick(day + 1)}
                 >
                   {day + 1}
-                  {opportunities.filter(opp => 
-                    new Date(opp.dateTime).getDate() === day + 1 &&
-                    new Date(opp.dateTime).getMonth() === currentMonth &&
-                    new Date(opp.dateTime).getFullYear() === currentYear
-                  ).map(opp => (
-                    <div key={opp.id} className="opportunity-dot"></div>
-                  ))}
                 </span>
               ))}
             </div>
           </div>
           <div className="upcoming-events">
-            <h2>Scheduled Opportunities</h2>
-            {opportunities.map((opportunity) => (
-              <div className="upcoming-event" key={opportunity.id}>
-                <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.id)}>
+            <h2>Scheduled Events</h2>
+            {events.map((event, index) => (
+              <div className="upcoming-event" key={index}>
+                <button className="delete-event" onClick={() => handleDeleteEvent(event.id)}>
                   <CloseSharpIcon />
                 </button>
                 <div className="event-date-wrapper">

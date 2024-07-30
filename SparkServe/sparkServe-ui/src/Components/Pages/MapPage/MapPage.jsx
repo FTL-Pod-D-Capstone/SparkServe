@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import ReactGoogleMapComponent from '../../Map/Map';
 import Footer from '../../Footer/Footer';
-import { Box, IconButton } from '@mui/material';
-// import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Box, Container } from '@mui/material';
 
 const MapPage = () => {
   const navigate = useNavigate();
@@ -14,46 +13,39 @@ const MapPage = () => {
   };
 
   return (
-    <Box
-      sx={{
-        background: 'linear-gradient(to bottom, #4685f6, white)',
-        minHeight: '100vh', 
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <>
       <UserNavBar />
       <Box
-        id="map-container"
         sx={{
-          mt:'60px',
+          backgroundImage: 'linear-gradient(rgb(180, 200, 255), rgb(255, 255, 255))',
+          backgroundSize: '100% 50%',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: 'white',
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: '100px', 
+          mt: 1,
+          width: '100%',
         }}
       >
-        <input id="place-input" type="text" placeholder="Search for a place" />
-        <ReactGoogleMapComponent className="google-map" />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: 2,
-          marginBottom: 2,
-        }}
-      >
-        {/* <IconButton
-          color="primary"
-          onClick={handleBackClick}
-        >
-          <ArrowBackIosIcon />
-        </IconButton> */}
+        <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4, mt: 8 }}>
+          <Box
+            id="map-container"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              height: 'calc(100vh - 200px)', // Adjust this value as needed
+            }}
+          >
+            <ReactGoogleMapComponent className="google-map" />
+          </Box>
+        </Container>
       </Box>
       <Footer />
-    </Box>
+    </>
   );
 };
 
