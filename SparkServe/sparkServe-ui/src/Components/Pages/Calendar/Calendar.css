@@ -104,22 +104,29 @@
     padding: 0.1rem;   */
   } 
   
-  .upcoming-events {
-    width: 630px;
-    padding: 1rem; 
+  .upcoming-events-container {
+    width: 35%;
+    padding: 1rem;
     background-color: #fff;
     border-radius: 1rem;
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
-    margin-left: 1rem; 
-    margin-right: 3rem;
-    height: calc(100vh - 300px); 
-    /* overflow: auto; */
+    margin-right: 4rem; 
+    margin-left: 1rem;
+    height: 100%; /* Take full height of the content container */
+    display: flex;
+    flex-direction: column;
   }
   
-  .upcoming-events h2 {
+  .upcoming-events-container h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
+  }
+  
+  .upcoming-events-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px; /* Add some padding for the scrollbar */
   }
   
   .upcoming-event {
@@ -129,6 +136,24 @@
     margin-bottom: 1rem;
     position: relative;
   }
+  
+  /* ... (rest of the CSS remains the same) */
+  
+  /* @media (max-width: 850px) {
+    .content {
+      flex-direction: column;
+      height: auto;
+    }
+  
+    .calendar,
+    .upcoming-events-container {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+  
+    .upcoming-events-container {
+      height: 50vh; /* Set a fixed height on smaller screens */
+    } */
   
   .event-date-wrapper {
     margin-bottom: 0.5rem;
