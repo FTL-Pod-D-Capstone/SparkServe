@@ -24,7 +24,6 @@ const findOrganizationByPhoneNumber = async (phoneNumber) => {
   });
 };
 
-// Function to validate organization credentials
 const validateOrganizationCredentials = async (email, password) => {
   const organization = await findOrganizationByEmail(email);
   if (!organization) return null;

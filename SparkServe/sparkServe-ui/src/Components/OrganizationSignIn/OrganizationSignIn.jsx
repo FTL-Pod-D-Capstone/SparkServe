@@ -32,7 +32,7 @@ function Copyright(props) {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#4856f6', // This matches the color used for the Avatar
+      main: '#4856f6',
     },
   },
 });
@@ -57,6 +57,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       if (response.status === 200 && response.data.token) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('organizationId', response.data.organizationId)
         
         if (response.data.organizationId) {
           localStorage.setItem('organizationId', response.data.organizationId.toString());
@@ -90,6 +91,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       setLoginStatus('error');
     }
   };
+      
 
   const handleSignUpRedirect = () => {
     handleClose();

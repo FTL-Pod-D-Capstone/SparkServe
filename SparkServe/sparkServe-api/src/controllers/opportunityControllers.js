@@ -45,9 +45,37 @@ const getOpportunityById = async (req, res) => {
 // Function to create a new opportunity
 const createOpportunity = async (req, res) => {
   try {
-    const newOpportunity = await opportunityModel.createOpportunity(req.body);
+    const { 
+      title, 
+      description, 
+      organizationId, 
+      address, 
+      dateTime, 
+      relatedCause, 
+      skillsRequired, 
+      spotsAvailable, 
+      ageRange, 
+      pictureUrl, 
+      opportunityUrl 
+    } = req.body;
+
+    const newOpportunity = await opportunityModel.createOpportunity({
+      title,
+      description,
+      organizationId: parseInt(organizationId),
+      address,
+      dateTime: new Date(dateTime),
+      relatedCause,
+      skillsRequired,
+      spotsAvailable: parseInt(spotsAvailable),
+      ageRange,
+      pictureUrl,
+      opportunityUrl
+    });
+
     res.status(201).json(newOpportunity);
   } catch (error) {
+    console.error('Error creating opportunity:', error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -61,6 +89,16 @@ const updateOpportunity = async (req, res) => {
     } else {
       res.status(404).json({ error: "Opportunity not found" });
     }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getOpportunitiesByDateRange = async (req, res) => {
+  const { startDate, endDate } = req.query;
+  try {
+    const opportunities = await opportunityModel.getOpportunitiesByDateRange(new Date(startDate), new Date(endDate));
+    res.status(200).json(opportunities);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -101,6 +139,7 @@ module.exports = {
   getAllOpportunities,
   getAllOpportunitiesLocations,
   getOpportunityById,
+  getOpportunitiesByDateRange,
   createOpportunity,
   updateOpportunity,
   deleteOpportunity,
