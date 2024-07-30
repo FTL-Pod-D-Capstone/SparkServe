@@ -19,14 +19,27 @@ const VolOppContainer = () => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(`http://localhost:3000/opps`);
+                const response = await axios.get(`https://project-1-uljs.onrender.com/opps`);
                 const opportunitiesData = response.data;
 
-                setOpportunities(opportunitiesData);
-                setFilteredOpportunities(opportunitiesData);
+                const opportunitiesWithOrgNames = await Promise.all(opportunitiesData.map(async (opp) => {
+                    if (!opp.organization || !opp.organization.name) {
+                        try {
+                            const orgResponse = await axios.get(`https://project-1-uljs.onrender.com/orgs/${opp.organizationId}`);
+                            return { ...opp, organizationName: orgResponse.data.name };
+                        } catch (orgError) {
+                            console.error(`Error fetching organization for ID ${opp.organizationId}:`, orgError);
+                            return { ...opp, organizationName: 'Unknown Organization' };
+                        }
+                    }
+                    return { ...opp, organizationName: opp.organization.name };
+                }));
 
-                const uniqueOrganizations = [...new Set(opportunitiesData.map(opp => opp.organization?.name).filter(Boolean))];
-                const uniqueCauses = [...new Set(opportunitiesData.map(opp => opp.relatedCause).filter(Boolean))];
+                setOpportunities(opportunitiesWithOrgNames);
+                setFilteredOpportunities(opportunitiesWithOrgNames);
+
+                const uniqueOrganizations = [...new Set(opportunitiesWithOrgNames.map(opp => opp.organizationName).filter(Boolean))];
+                const uniqueCauses = [...new Set(opportunitiesWithOrgNames.map(opp => opp.relatedCause).filter(Boolean))];
                 
                 setOrganizations(uniqueOrganizations);
                 setCauses(uniqueCauses);
@@ -45,7 +58,7 @@ const VolOppContainer = () => {
     useEffect(() => {
         const filtered = opportunities.filter(opp => 
             opp.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
-            (organizationFilter === '' || opp.organization?.name === organizationFilter) &&
+            (organizationFilter === '' || opp.organizationName === organizationFilter) &&
             (causeFilter === '' || opp.relatedCause === causeFilter)
         );
         setFilteredOpportunities(filtered);
@@ -131,7 +144,7 @@ const VolOppContainer = () => {
                                     {opportunity.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap>
-                                    {opportunity.organization?.name}
+                                    {opportunity.organizationName}
                                 </Typography>
                                 <Box sx={{ mt: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography variant="caption" color="text.secondary">
