@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Card, CardMedia, CardContent, Typography, Box, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import Badge from '@mui/material/Badge';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import LinearGradientLoading from './LinearGradientLoading';
@@ -12,24 +17,64 @@ const VolOppContainer = () => {
     const [nameFilter, setNameFilter] = useState('');
     const [organizationFilter, setOrganizationFilter] = useState('');
     const [causeFilter, setCauseFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState(null);
+    const [ageRangeFilter, setAgeRangeFilter] = useState('');
     const [organizations, setOrganizations] = useState([]);
     const [causes, setCauses] = useState([]);
+    const [ageRanges, setAgeRanges] = useState([]);
+    const [opportunitiesByDate, setOpportunitiesByDate] = useState({});
+    const baseUrl =import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const getOpportunities = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(`http://localhost:3000/opps`);
+
+                const response = await axios.get(`https://project-1-uljs.onrender.com/opps`);
+=======
+                const response = await axios.get(`${baseUrl}/opps`);
+
                 const opportunitiesData = response.data;
 
-                setOpportunities(opportunitiesData);
-                setFilteredOpportunities(opportunitiesData);
+                const opportunitiesWithOrgNames = await Promise.all(opportunitiesData.map(async (opp) => {
+                    if (!opp.organization || !opp.organization.name) {
+                        try {
+                            const orgResponse = await axios.get(`https://project-1-uljs.onrender.com/orgs/${opp.organizationId}`);
+                            return { ...opp, organizationName: orgResponse.data.name };
+                        } catch (orgError) {
+                            console.error(`Error fetching organization for ID ${opp.organizationId}:`, orgError);
+                            return { ...opp, organizationName: 'Unknown Organization' };
+                        }
+                    }
+                    return { ...opp, organizationName: opp.organization.name };
+                }));
+
+
+                setOpportunities(opportunitiesWithOrgNames);
+                setFilteredOpportunities(opportunitiesWithOrgNames);
+
+                const uniqueOrganizations = [...new Set(opportunitiesWithOrgNames.map(opp => opp.organizationName).filter(Boolean))];
+                const uniqueCauses = [...new Set(opportunitiesWithOrgNames.map(opp => opp.relatedCause).filter(Boolean))];
+=======
+                // Process opportunities by date
+                const oppsByDate = opportunitiesData.reduce((acc, opp) => {
+                    const date = new Date(opp.dateTime).toDateString();
+                    if (!acc[date]) {
+                        acc[date] = 0;
+                    }
+                    acc[date]++;
+                    return acc;
+                }, {});
+                setOpportunitiesByDate(oppsByDate);
 
                 const uniqueOrganizations = [...new Set(opportunitiesData.map(opp => opp.organization?.name).filter(Boolean))];
                 const uniqueCauses = [...new Set(opportunitiesData.map(opp => opp.relatedCause).filter(Boolean))];
+                const uniqueAgeRanges = [...new Set(opportunitiesData.map(opp => opp.ageRange).filter(Boolean))];
+
                 
                 setOrganizations(uniqueOrganizations);
                 setCauses(uniqueCauses);
+                setAgeRanges(uniqueAgeRanges);
 
                 setIsLoading(false);
             } catch (err) {
@@ -45,11 +90,35 @@ const VolOppContainer = () => {
     useEffect(() => {
         const filtered = opportunities.filter(opp => 
             opp.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
-            (organizationFilter === '' || opp.organization?.name === organizationFilter) &&
+
+            (organizationFilter === '' || opp.organizationName === organizationFilter) &&
             (causeFilter === '' || opp.relatedCause === causeFilter)
+=======
+            (organizationFilter === '' || opp.organization?.name === organizationFilter) &&
+            (causeFilter === '' || opp.relatedCause === causeFilter) &&
+            (dateFilter === null || new Date(opp.dateTime).toDateString() === dateFilter.toDateString()) &&
+            (ageRangeFilter === '' || opp.ageRange === ageRangeFilter)
+
         );
         setFilteredOpportunities(filtered);
-    }, [nameFilter, organizationFilter, causeFilter, opportunities]);
+    }, [nameFilter, organizationFilter, causeFilter, dateFilter, ageRangeFilter, opportunities]);
+
+    // Custom rendering function for calendar days
+    const renderDay = (date, selectedDates, pickersDayProps) => {
+        const dateString = date.toDateString();
+        const numOpportunities = opportunitiesByDate[dateString] || 0;
+
+        return (
+            <Badge
+                key={dateString}
+                overlap="circular"
+                badgeContent={numOpportunities > 0 ? numOpportunities : undefined}
+                color="primary"
+            >
+                <PickersDay {...pickersDayProps} />
+            </Badge>
+        );
+    };
 
     if (isLoading) return <LinearGradientLoading />;
     if (error) return <div>{error}</div>;
@@ -98,6 +167,29 @@ const VolOppContainer = () => {
                         ))}
                     </Select>
                 </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Date"
+                        value={dateFilter}
+                        onChange={(newValue) => setDateFilter(newValue)}
+                        renderInput={(params) => <TextField {...params} sx={{ backgroundColor: 'white' }} />}
+                        renderDay={renderDay}
+                    />
+                </LocalizationProvider>
+                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
+                    <InputLabel>Age Range</InputLabel>
+                    <Select
+                        value={ageRangeFilter}
+                        onChange={(e) => setAgeRangeFilter(e.target.value)}
+                        label="Age Range"
+                        sx={{ backgroundColor: 'white' }}
+                    >
+                        <MenuItem value=""><em>All</em></MenuItem>
+                        {ageRanges.map((range) => (
+                            <MenuItem key={range} value={range}>{range}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </Box>
 
             <Grid container spacing={3}>
@@ -131,7 +223,7 @@ const VolOppContainer = () => {
                                     {opportunity.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap>
-                                    {opportunity.organization?.name}
+                                    {opportunity.organizationName}
                                 </Typography>
                                 <Box sx={{ mt: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography variant="caption" color="text.secondary">

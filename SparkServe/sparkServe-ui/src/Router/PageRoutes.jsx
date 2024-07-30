@@ -14,6 +14,7 @@ import OrganizationSignUpPage from '../Components/Pages/OrganizationSignUpPage/O
 import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppurtunityPage'; 
 import UserProfilePage from '../Components/Pages/UserProfile/UserProfilePage';
 import OrganizationProfilePage from '../Components/Pages/OrganizationProfile/OrganizationProfilePage';
+import BookmarksPage from '../Components/Pages/BookMarksPage/BookMarksPage';
 
 const PageRoutes = () => {
   return (
@@ -30,8 +31,8 @@ const PageRoutes = () => {
       <Route path="/Map" element={<MapPage />} />
       <Route path="/ChatBot" element={<Chatbot />} /> {/* Add this line for ChatBot route */}
       <Route path="/UserProfile/:id" element={<UserProfilePage />} />
+      <Route path="/bookmarks" element={<BookmarksPage />} />      
       <Route path="/OrganizationProfile/:id" element={<OrganizationProfilePage />} />
-
 
       <Route path="/opportunity/:opportunityId" element={<VolunOppPage />} />
     </Routes>

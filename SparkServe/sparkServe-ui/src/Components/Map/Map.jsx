@@ -24,7 +24,7 @@ const ReactGoogleMapComponent = () => {
         const response = await axios.get(API_URL);
         const addresses = response.data;
 
-        console.log('Fetched addresses:', addresses);
+        // console.log('Fetched addresses:', addresses);
 
         const newMarkers = await Promise.all(addresses.map(async (address) => {
           if (!address.address) {
@@ -55,7 +55,7 @@ const ReactGoogleMapComponent = () => {
   const geocodeAddress = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
     return new Promise((resolve, reject) => {
-      console.log('Geocoding address:', address);
+      // console.log('Geocoding address:', address);
       geocoder.geocode({ address }, (results, status) => {
         if (status === "OK") {
           resolve({

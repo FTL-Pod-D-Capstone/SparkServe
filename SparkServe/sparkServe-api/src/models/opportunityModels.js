@@ -36,27 +36,44 @@ const getOpportunityById = async (id) => {
 
 // Function to create a new opportunity
 const createOpportunity = async (opportunityData) => {
+  const requiredFields = ['title', 'description', 'organizationId'];
+  const optionalFields = ['address', 'dateTime', 'relatedCause', 'skillsRequired', 'spotsAvailable', 'pictureUrl', 'opportunityUrl', 'ageRange'];
+  
+  // Check if all required fields are present
+  for (const field of requiredFields) {
+    if (!(field in opportunityData)) {
+      throw new Error(`Missing required field: ${field}`);
+    }
+  }
+
+  // Prepare the data object
+  const data = {
+    title: opportunityData.title,
+    description: opportunityData.description,
+    organizationId: parseInt(opportunityData.organizationId),
+  };
+
+  // Add optional fields if they are present
+  for (const field of optionalFields) {
+    if (field in opportunityData && opportunityData[field] !== null && opportunityData[field] !== undefined) {
+      if (field === 'dateTime') {
+        data[field] = new Date(opportunityData[field]);
+      } else if (field === 'spotsAvailable') {
+        data[field] = parseInt(opportunityData[field]);
+      } else {
+        data[field] = opportunityData[field];
+      }
+    }
+  }
+
   return prisma.opportunity.create({
-    data: {
-      title: opportunityData.title,
-      description: opportunityData.description,
-      organizationId: opportunityData.organizationId,
-      address: opportunityData.address,
-      dateTime: new Date(opportunityData.dateTime),
-      relatedCause: opportunityData.relatedCause,
-      skillsRequired: opportunityData.skillsRequired,
-      spotsAvailable: opportunityData.spotsAvailable,
-      ageRange: opportunityData.ageRange,
-      pictureUrl: opportunityData.pictureUrl,
-      opportunityUrl: opportunityData.opportunityUrl,
-    },
+    data,
     include: {
       feedbacks: true,
-      registrations: true
+      registrations: true,
     },
   });
 };
-
 // Function to update an opportunity
 const updateOpportunity = async (id, opportunityData) => {
   return prisma.opportunity.update({
