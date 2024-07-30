@@ -32,7 +32,7 @@ function Copyright(props) {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#4856f6', // This matches the color used for the Avatar
+      main: '#4856f6',
     },
   },
 });
@@ -91,6 +91,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       setLoginStatus('error');
     }
   };
+      
 
   const handleSignUpRedirect = () => {
     handleClose();

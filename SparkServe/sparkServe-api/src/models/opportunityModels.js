@@ -18,6 +18,24 @@ const getAllOpportunities = async (filter = {}, orderBy = {}) => {
   });
 };
 
+const getOpportunitiesByDateRange = async (startDate, endDate) => {
+  return prisma.opportunity.findMany({
+    where: {
+      dateTime: {
+        gte: startDate,
+        lte: endDate
+      }
+    },
+    include: {
+      organization: {
+        select: {
+          name: true,
+        }
+      }
+    },
+  });
+};
+
 // Function to get opportunity by ID
 const getOpportunityById = async (id) => {
   return prisma.opportunity.findUnique({
@@ -34,7 +52,6 @@ const getOpportunityById = async (id) => {
   });
 };
 
-// Function to create a new opportunity
 const createOpportunity = async (opportunityData) => {
   const requiredFields = ['title', 'description', 'organizationId'];
   const optionalFields = ['address', 'dateTime', 'relatedCause', 'skillsRequired', 'spotsAvailable', 'pictureUrl', 'opportunityUrl', 'ageRange'];
@@ -121,6 +138,7 @@ const deleteOpportunity = async (id) => {
 module.exports = {
   getAllOpportunities,
   getAllOpportunitiesLocations,
+  getOpportunitiesByDateRange,
   getOpportunityById,
   createOpportunity,
   updateOpportunity,
