@@ -57,6 +57,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
       if (response.status === 200 && response.data.token) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('organizationId', response.data.organizationId)
         
         if (response.data.organizationId) {
           localStorage.setItem('organizationId', response.data.organizationId.toString());
