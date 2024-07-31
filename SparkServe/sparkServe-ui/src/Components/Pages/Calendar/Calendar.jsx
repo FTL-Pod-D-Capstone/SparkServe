@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Calendar.css';
+import CircularProgress from '@mui/material/CircularProgress';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import IconButton from '@mui/material/IconButton';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import Footer from '../../Footer/Footer';
+import './Calendar.css';
 
 const CalendarApp = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -42,6 +43,7 @@ const CalendarApp = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
   const [spotsAvailable, setSpotsAvailable] = useState(10);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const navigate = useNavigate();
 
@@ -50,15 +52,24 @@ const CalendarApp = () => {
 
   useEffect(() => {
     const fetchOpportunities = async () => {
+      setLoading(true);
+      const organizationId = localStorage.getItem('organizationId');
+      if (!organizationId) {
+        console.error('No organization ID found');
+        setLoading(false);
+        return;
+      }
       try {
-        const response = await axios.get(`http://localhost:3000/opps`);
+        const response = await axios.get(`http://localhost:3000/opps?organizationId=${organizationId}`);
         setOpportunities(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
       } catch (error) {
         console.error('Error fetching opportunities:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     fetchOpportunities();
   }, []);
 
@@ -103,7 +114,7 @@ const CalendarApp = () => {
       console.error('Invalid organizationId');
       return;
     }
-  
+
     const newEvent = {
       title: eventName || '',
       description: eventText || '',
@@ -111,14 +122,14 @@ const CalendarApp = () => {
       skillsRequired: '',
       ageRange: '',
     };
-  
+
     if (eventTime.hours && eventTime.minutes) {
       newEvent.dateTime = `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`;
     }
     if (eventLocation) newEvent.address = eventLocation;
     if (eventRelatedCause) newEvent.relatedCause = eventRelatedCause;
     if (spotsAvailable) newEvent.spotsAvailable = parseInt(spotsAvailable);
-  
+
     try {
       console.log('Sending data:', newEvent);
       let response;
@@ -256,26 +267,32 @@ const CalendarApp = () => {
           </div>
           <div className="upcoming-events-container">
             <h2>Scheduled Opportunities</h2>
-            <div className="upcoming-events-scroll">
-              {opportunities.map((opportunity) => (
-                <div className="upcoming-event" key={opportunity.opportunityId}>
-                  <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
-                    <CloseSharpIcon />
-                  </button>
-                  <div className="event-date-wrapper">
-                    <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
-                    <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            {loading ? (
+              <div className="loading-container">
+                <CircularProgress sx={{ color: '#ff66c4' }} />
+              </div>
+            ) : (
+              <div className="upcoming-events-scroll">
+                {opportunities.filter(opp => opp.organizationId === parseInt(localStorage.getItem('organizationId'))).map((opportunity) => (
+                  <div className="upcoming-event" key={opportunity.opportunityId}>
+                    <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
+                      <CloseSharpIcon />
+                    </button>
+                    <div className="event-date-wrapper">
+                      <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
+                      <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                    <div className="upcoming-event-name">{opportunity.title}</div>
+                    <div className="upcoming-event-location">{opportunity.address}</div>
+                    <div className="upcoming-event-text">{opportunity.description}</div>
+                    <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
+                    <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
+                    <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
                   </div>
-                  <div className="upcoming-event-name">{opportunity.title}</div>
-                  <div className="upcoming-event-location">{opportunity.address}</div>
-                  <div className="upcoming-event-text">{opportunity.description}</div>
-                  <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
-                  <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
-                  <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
-            </div>
-            ))}
+                ))}
+              </div>
+            )}
           </div>
-        </div>
         </div>
         {showEventPopup && (
           <div className="event-popup">
