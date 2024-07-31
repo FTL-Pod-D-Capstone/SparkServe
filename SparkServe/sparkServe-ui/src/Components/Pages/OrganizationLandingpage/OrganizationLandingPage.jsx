@@ -18,7 +18,7 @@ const OrgLandingPage = () => {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:3000/opps?organizationId=${organizationId}`);
+        const response = await axios.get(`https://project-1-uljs.onrender.com/opps?organizationId=${organizationId}`);
         const filteredEvents = response.data.filter(event => event.organizationId === parseInt(organizationId));
         setEvents(filteredEvents);
         // Update localStorage to ensure consistency with the Calendar component

@@ -62,7 +62,7 @@ const CalendarApp = () => {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:3000/opps?organizationId=${organizationId}`);
+        const response = await axios.get(`https://project-1-uljs.onrender.com/opps?organizationId=${organizationId}`);
         setOpportunities(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
       } catch (error) {
@@ -159,14 +159,14 @@ const CalendarApp = () => {
     }
   
     try {
-      console.log('Sending data:', newEvent);
+      // console.log('Sending data:', newEvent);
       let response;
       if (editingEvent) {
-        response = await axios.put(`http://localhost:3000/opps/${editingEvent.opportunityId}`, newEvent);
+        response = await axios.put(`https://project-1-uljs.onrender.com/opps/${editingEvent.opportunityId}`, newEvent);
       } else {
-        response = await axios.post('http://localhost:3000/opps', newEvent);
+        response = await axios.post('https://project-1-uljs.onrender.com/opps', newEvent);
       }
-      console.log('Response:', response.data);
+      // console.log('Response:', response.data);
       const updatedOpportunities = editingEvent 
         ? opportunities.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
         : [...opportunities, response.data];
@@ -202,7 +202,7 @@ const CalendarApp = () => {
 
   const confirmDeleteEvent = async () => {
     try {
-      await axios.delete(`http://localhost:3000/opps/${eventIdToDelete}`);
+      await axios.delete(`https://project-1-uljs.onrender.com/opps/${eventIdToDelete}`);
       const updatedOpportunities = opportunities.filter(opp => opp.opportunityId !== eventIdToDelete);
       setOpportunities(updatedOpportunities);
       localStorage.setItem('events', JSON.stringify(updatedOpportunities));
