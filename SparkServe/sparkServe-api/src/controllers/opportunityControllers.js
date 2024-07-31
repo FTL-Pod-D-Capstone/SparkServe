@@ -51,12 +51,12 @@ const createOpportunity = async (req, res) => {
       organizationId, 
       address, 
       dateTime, 
-      relatedCause, 
-      skillsRequired, 
-      spotsAvailable, 
-      ageRange, 
-      pictureUrl, 
-      opportunityUrl 
+      relatedCause, //optional
+      skillsRequired, //optional in progress
+      spotsAvailable, //optional in progress
+      ageRange, //optional in progress
+      pictureUrl, //optional in progress
+      opportunityUrl //optional in progress
     } = req.body;
 
     const newOpportunity = await opportunityModel.createOpportunity({

@@ -68,7 +68,7 @@ function OrganizationNavBar() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logo} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
+            <img src={logo} style={logoStyle} alt="Logo" onClick={() => navigate('/OrganizationWelcomePage')} />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1, gap: 2 }}>
             {!isAuthenticated && (

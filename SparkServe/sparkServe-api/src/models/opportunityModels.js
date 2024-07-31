@@ -55,7 +55,7 @@ const getOpportunityById = async (id) => {
 const createOpportunity = async (opportunityData) => {
   const requiredFields = ['title', 'description', 'organizationId'];
   const optionalFields = ['address', 'dateTime', 'relatedCause', 'skillsRequired', 'spotsAvailable', 'pictureUrl', 'opportunityUrl', 'ageRange'];
-  
+  console.log(opportunityData)
   // Check if all required fields are present
   for (const field of requiredFields) {
     if (!(field in opportunityData)) {
@@ -82,7 +82,7 @@ const createOpportunity = async (opportunityData) => {
       }
     }
   }
-
+  console.log(data)
   return prisma.opportunity.create({
     data,
     include: {
