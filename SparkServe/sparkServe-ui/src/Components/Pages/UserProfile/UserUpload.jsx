@@ -48,7 +48,7 @@ function Upload({ onUploaded }) {
         <div className="file-upload">
         <div className="file-input-container">
             <input type="file" onChange={handleFileChange} className="file-input" />
-            <button onClick={uploadFile} className="upload-button">Create Listing</button>
+            <button onClick={uploadFile} className="upload-button">Upload Image</button>
         </div>
         </div>
     );
