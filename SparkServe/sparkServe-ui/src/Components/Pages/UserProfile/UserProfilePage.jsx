@@ -9,6 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from '@mui/system';
+import UserUpload from './UserUpload';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -31,19 +32,6 @@ const ProfileImage = styled('div')({
 const StyledAvatar = styled(Avatar)({
   width: '100%',
   height: '100%',
-});
-
-const UploadButton = styled('label')({
-  position: 'absolute',
-  bottom: 10,
-  right: 10,
-  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  padding: '5px 10px',
-  borderRadius: 20,
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 1)',
-  },
 });
 
 const UserProfilePage = () => {
@@ -113,26 +101,8 @@ const UserProfilePage = () => {
         }
     };
 
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            // Replace this with your actual file upload API endpoint
-            const response = await axios.post('https://your-upload-api-endpoint.com/upload', formData);
-            const url = response.data.url;
-            setProfilePicture(url);
-            handleFileUploaded(url);
-        } catch (error) {
-            console.error('Failed to upload file:', error);
-            setSnackbar({ open: true, message: 'Failed to upload image', severity: 'error' });
-        }
-    };
-
     const handleFileUploaded = async (url) => {
+        setProfilePicture(url);
         try {
             const response = await axios.put(`https://project-1-uljs.onrender.com/users/${id}`, {
                 ...editedUser,
@@ -168,17 +138,8 @@ const UserProfilePage = () => {
                                         alt={user.name || 'User'}
                                         src={profilePicture || "/path-to-default-image.jpg"}
                                     />
-                                    <UploadButton htmlFor="profile-picture-upload">
-                                        Upload
-                                        <input
-                                            id="profile-picture-upload"
-                                            type="file"
-                                            accept="image/*"
-                                            style={{ display: 'none' }}
-                                            onChange={handleFileUpload}
-                                        />
-                                    </UploadButton>
                                 </ProfileImage>
+                                <UserUpload onUploaded={handleFileUploaded} />
                                 <Typography variant="h5" component="div">
                                     {user.username || 'Unknown User'}
                                 </Typography>
