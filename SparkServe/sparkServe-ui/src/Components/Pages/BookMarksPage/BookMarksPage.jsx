@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, CircularProgress, Box, Card, CardMedia, CardContent } from '@mui/material';
+import { Container, Typography, Grid, CircularProgress, Box, Card, CardMedia, CardContent, Button } from '@mui/material';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import Footer from '../../Footer/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// const baseUrl = "http://localhost:3000";
-// const baseUrl = "https://project-1-uljs.onrender.com";
-const baseUrl =import.meta.env.VITE_BACKEND_URL;
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-
-const BookmarksPage = () => {
+const UserBookmarksPage = () => {
     const [bookmarks, setBookmarks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [username, setUsername] = useState('');
     const userId = localStorage.getItem('userId');
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (userId) {
+            fetchUserData();
             fetchBookmarks();
         } else {
             setError('User ID not found. Please log in.');
             setIsLoading(false);
         }
     }, [userId]);
+
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/users/${userId}`);
+            setUsername(response.data.username);
+        } catch (err) {
+            console.error('Error fetching user data:', err);
+        }
+    };
 
     const fetchBookmarks = async () => {
         setIsLoading(true);
@@ -32,7 +41,6 @@ const BookmarksPage = () => {
             const bookmarksResponse = await axios.get(`${baseUrl}/bookmarks/users/${userId}/bookmarks`);
             const bookmarkIds = bookmarksResponse.data.map(bookmark => bookmark.opportunityId);
             
-            // Fetch full details for each bookmarked opportunity
             const opportunitiesPromises = bookmarkIds.map(id => 
                 axios.get(`${baseUrl}/opps/${id}`)
             );
@@ -42,7 +50,7 @@ const BookmarksPage = () => {
             setBookmarks(bookmarkedOpportunities);
         } catch (err) {
             console.error('Error fetching bookmarks:', err);
-            setError('Failed to fetch bookmarks. Please try again later.');
+            setError('Failed to fetch your favorites. Please try again later.');
         } finally {
             setIsLoading(false);
         }
@@ -60,10 +68,20 @@ const BookmarksPage = () => {
         <>
             <UserNavBar />
             <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
-                <Typography variant="h4" gutterBottom>Your Favorites</Typography>
+                <Typography variant="h4" gutterBottom>{username}'s Favorites</Typography>
                 {error && <Typography color="error">{error}</Typography>}
                 {bookmarks.length === 0 ? (
-                    <Typography>You haven't favorited any opportunities yet.</Typography>
+                    <Box>
+                        <Typography>You haven't favorited any opportunities yet.</Typography>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            sx={{ mt: 2 }}
+                            onClick={() => navigate('/UserLandingPage')}
+                        >
+                            Explore Opportunities
+                        </Button>
+                    </Box>
                 ) : (
                     <Grid container spacing={3}>
                         {bookmarks.map((opportunity) => (
@@ -110,4 +128,4 @@ const BookmarksPage = () => {
     );
 };
 
-export default BookmarksPage;
+export default UserBookmarksPage;
