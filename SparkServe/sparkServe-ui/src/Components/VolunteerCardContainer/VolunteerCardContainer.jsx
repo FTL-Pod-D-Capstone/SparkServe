@@ -189,7 +189,7 @@ const VolOppContainer = () => {
                                 height="200"
                                 image={opportunity.pictureUrl || "https://via.placeholder.com/300x200"}
                                 alt={opportunity.title}
-                                sx={{ borderRadius: '8px' }}
+                                sx={{ borderRadius: '8px', objectFit: 'cover' }}
                             />
                             <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
                                 <Typography variant="subtitle1" component="div" noWrap fontWeight="bold">
