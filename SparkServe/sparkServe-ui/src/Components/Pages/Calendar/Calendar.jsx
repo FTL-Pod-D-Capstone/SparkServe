@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import AWS from 'aws-sdk';
 import CircularProgress from '@mui/material/CircularProgress';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -137,13 +136,13 @@ const CalendarApp = () => {
       const S3_BUCKET = "sparkserve";
       const REGION = "us-east-2";
   
-      AWS.config.update({
+      window.AWS.config.update({
         accessKeyId: import.meta.env.VITE_ACCESS_KEY,
         secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
         region: REGION,
       });
   
-      const s3 = new AWS.S3();
+      const s3 = new window.AWS.S3();
       const params = {
         Bucket: S3_BUCKET,
         Key: `opportunities/${Date.now()}-${opportunityImage.name}`,

@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import logo2 from "../../assets/logo2.png";
 import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
+import axios from "axios";
 
 const logoStyle = {
   width: "140px",
@@ -43,15 +44,30 @@ const navButtonStyle = {
   },
 };
 
-function UserNavBar({profilePicture}) {
+function UserNavBar() {
   const [open, setOpen] = useState(false);
   const [signInModalOpen, setSignInModalOpen] = useState(false);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [profilePicture, setProfilePicture] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const authStatus = localStorage.getItem("isUserAuthenticated");
+    const id = localStorage.getItem('userId');
+    const getUser = async () => {
+
+
+      try {
+          const response = await axios.get(`https://project-1-uljs.onrender.com/users/${id}`);
+
+          setProfilePicture(response.data.profilePicture || '');
+      } catch (err) {
+          console.error(`Error getting User:`, err);
+      }
+  };
+    getUser();
+
     setIsUserAuthenticated(authStatus === "true");
   }, []);
 
