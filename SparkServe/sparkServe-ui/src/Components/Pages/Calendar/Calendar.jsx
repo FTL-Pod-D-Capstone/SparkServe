@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AWS from 'aws-sdk';
 import CircularProgress from '@mui/material/CircularProgress';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -43,7 +44,8 @@ const CalendarApp = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
   const [spotsAvailable, setSpotsAvailable] = useState(10);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
+  const [opportunityImage, setOpportunityImage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -97,6 +99,7 @@ const CalendarApp = () => {
       setEventRelatedCause('');
       setSpotsAvailable(10);
       setEditingEvent(null);
+      setOpportunityImage(null);
     }
   };
 
@@ -114,7 +117,7 @@ const CalendarApp = () => {
       console.error('Invalid organizationId');
       return;
     }
-
+  
     const newEvent = {
       title: eventName || '',
       description: eventText || '',
@@ -122,14 +125,39 @@ const CalendarApp = () => {
       skillsRequired: '',
       ageRange: '',
     };
-
+  
     if (eventTime.hours && eventTime.minutes) {
       newEvent.dateTime = `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`;
     }
     if (eventLocation) newEvent.address = eventLocation;
     if (eventRelatedCause) newEvent.relatedCause = eventRelatedCause;
     if (spotsAvailable) newEvent.spotsAvailable = parseInt(spotsAvailable);
-
+  
+    if (opportunityImage) {
+      const S3_BUCKET = "sparkserve";
+      const REGION = "us-east-2";
+  
+      AWS.config.update({
+        accessKeyId: import.meta.env.VITE_ACCESS_KEY,
+        secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
+        region: REGION,
+      });
+  
+      const s3 = new AWS.S3();
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: `opportunities/${Date.now()}-${opportunityImage.name}`,
+        Body: opportunityImage,
+      };
+  
+      try {
+        const data = await s3.upload(params).promise();
+        newEvent.pictureUrl = data.Location;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+  
     try {
       console.log('Sending data:', newEvent);
       let response;
@@ -163,6 +191,7 @@ const CalendarApp = () => {
     setEventRelatedCause(event.relatedCause);
     setSpotsAvailable(event.spotsAvailable);
     setEditingEvent(event);
+    setOpportunityImage(null);
     setShowEventPopup(true);
   };
 
@@ -194,6 +223,10 @@ const CalendarApp = () => {
     setEventTime((prevTime) => ({ ...prevTime, [name]: value.padStart(2, '0') }));
   };
 
+  const handleImageChange = (e) => {
+    setOpportunityImage(e.target.files[0]);
+  };
+
   const resetForm = () => {
     setEventTime({ hours: '00', minutes: '00' });
     setEventText('');
@@ -202,6 +235,7 @@ const CalendarApp = () => {
     setEventRelatedCause('');
     setSpotsAvailable(10);
     setEditingEvent(null);
+    setOpportunityImage(null);
   };
 
   return (
@@ -278,6 +312,9 @@ const CalendarApp = () => {
                     <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
                       <CloseSharpIcon />
                     </button>
+                    {/* {opportunity.pictureUrl && (
+                      <img src={opportunity.pictureUrl} alt={opportunity.title} className="opportunity-image" />
+                    )} */}
                     <div className="event-date-wrapper">
                       <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
                       <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
@@ -337,8 +374,8 @@ const CalendarApp = () => {
               onChange={(e) => setEventRelatedCause(e.target.value)}
             >
               <option value="">Select Related Cause</option>
-              {causes.map((cause, index) => (
-                <option key={index} value={cause}>
+              {causes.map((cause) => (
+                <option key={cause} value={cause}>
                   {cause}
                 </option>
               ))}
@@ -358,6 +395,7 @@ const CalendarApp = () => {
                 }
               }}
             ></textarea>
+            <input type="file" onChange={handleImageChange} />
             <button className="event-popup-btn" onClick={handleEventSubmit}>
               {editingEvent ? 'Update Opportunity' : 'Add Opportunity'}
             </button>
@@ -382,6 +420,7 @@ const CalendarApp = () => {
 };
 
 export default CalendarApp;
+
 
 
 
