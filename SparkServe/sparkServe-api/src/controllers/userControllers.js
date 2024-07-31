@@ -6,9 +6,9 @@ const jwt = require("jsonwebtoken");
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.getAllUsers();
-    res.status(200).json(users);
+    res.status(200).json(users); // library to output success message
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message }); 
   }
 };
 

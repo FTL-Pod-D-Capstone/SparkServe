@@ -19,7 +19,6 @@
     "@mui/material": "^5.16.4",
     "@mui/x-date-pickers": "^6.20.2",
     "@react-google-maps/api": "^2.19.3",
-    "aws-sdk": "^2.1664.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
