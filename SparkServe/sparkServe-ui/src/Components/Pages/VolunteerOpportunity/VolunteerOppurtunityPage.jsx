@@ -22,6 +22,10 @@ const VolunOppPage = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
     const handleGoBack = () => {
         navigate(-1);
     };
@@ -153,8 +157,8 @@ const VolunOppPage = () => {
                                 </IconButton>
                             )}
                         </Grid>
-                            <Grid item xs={12} md={4}>
-                                <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1 }}>
+                            <Grid item xs={12} md={4} sx={{ alignSelf: 'flex-start' }}>
+                                <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1, mt: { xs: 8, md: 15 } }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                         <Avatar
                                             src={organization?.pictureUrl}

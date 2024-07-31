@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import logo2 from '../../assets/logo2.png';
-import { alpha } from '@mui/material';
+import MovingComponent from 'react-moving-text';
 
 const logoStyle = {
   width: '140px',
@@ -69,9 +69,26 @@ function WelcomeCard() {
             gutterBottom
             sx={{
               color: (theme) => theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'nowrap',
             }}
           >
-            Welcome to Our Platform
+            Welcome
+            <MovingComponent
+              type="effect3D"
+              duration="700ms"
+              delay="0s"
+              direction="normal"
+              timing="ease"
+              iteration="infinite"
+              fillMode="none"
+              style={{ margin: '0 4px' }}
+            >
+              Users
+            </MovingComponent>
+            to Our Platform
           </Typography>
           <Typography
             variant="body1"
@@ -107,4 +124,3 @@ function WelcomeCard() {
 }
 
 export default WelcomeCard;
-
