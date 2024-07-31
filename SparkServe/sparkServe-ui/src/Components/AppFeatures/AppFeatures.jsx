@@ -61,9 +61,17 @@ export default function Features() {
         <Grid container spacing={6}>
           <Grid item xs={12} md={6}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
-              <Typography component="h2" variant="h4" color="text.primary" sx={{ flexGrow: 1 }}>
+              <Typography component="h2" variant="h4" color="text.primary">
                 Product features
               </Typography>
+              <Box sx={{ ml: 1 }}>
+                <lord-icon
+                  src="https://cdn.lordicon.com/yedgackm.json"
+                  trigger="hover"
+                  colors="primary:#ffffff,secondary:#4bb3fd,tertiary:#3a3347"
+                  style={{ width: '45px', height: '50px' }}
+                ></lord-icon>
+              </Box>
             </Box>
             <Typography
               variant="body1"
@@ -235,3 +243,4 @@ export default function Features() {
     </Container>
   );
 }
+

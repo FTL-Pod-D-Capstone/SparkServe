@@ -1,48 +1,9 @@
-// import React from 'react'
-// import "../Footer/Footer.css"
-// import { Box, Typography, Container} from '@mui/material';
-// import { Link } from 'react-router-dom';
-
-// const Footer = () => {
-//     return (     
-//     <Box component="Footer"
-//             sx={{
-//                 py: 3,
-//                 px: 2,
-//                 mt: 'auto',
-//                 backgroundColor: 'primary.main',
-//                 color: 'white',
-//                 position: 'fixed',
-//                 bottom: 0,
-//                 left: 0,
-//                 right: 0,
-//             }}>
-//                 <Container maxWidth="sm">
-//             <Typography variant="body1">
-//                 <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-//                 Back to Welcome
-//                 </Link>
-//             </Typography>
-//             <Typography variant="body2" color="text.secondary">
-//                 © {new Date().getFullYear()} Your Company Name. All rights reserved.
-//             </Typography>
-//         </Container>
-
-//     </Box>
-
-//     );
-// }
-
-// export default Footer
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 function Copyright() {
   return (
@@ -86,14 +47,14 @@ export default function Footer() {
             color: 'text.secondary',
           }}
         >
-          <IconButton
-            color="inherit"
-            href="https://www.linkedin.com/company/salesforce"
-            aria-label="LinkedIn"
-            sx={{ alignSelf: 'center' }}
-          >
-            <LinkedInIcon />
-          </IconButton>
+          <Link href="https://www.linkedin.com/company/salesforce" aria-label="LinkedIn">
+            <lord-icon
+              src="https://cdn.lordicon.com/mgampcwp.json"
+              trigger="hover"
+              colors="primary:#ffffff,secondary:#4bb3fd,tertiary:#4030e8"
+              style={{ width: '50px', height: '50px' }}
+            ></lord-icon>
+          </Link>
         </Stack>
       </Box>
     </Container>
