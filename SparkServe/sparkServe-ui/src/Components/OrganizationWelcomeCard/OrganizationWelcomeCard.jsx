@@ -11,6 +11,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn';
 import OrganizationSignUp from '../../Components/OrganizationSignUp/OrganizationSignUp'; 
 import logo from '../../assets/logo.png';
+import MovingComponent from 'react-moving-text';
 
 const logoStyle = {
   width: '140px',
@@ -83,8 +84,31 @@ function OrganizationWelcomeCard() {
       <Card sx={{ maxHeight: 1000, maxWidth: 700, height: '100%', width: '700px', bgcolor: 'white', boxShadow: 3, zIndex: 99 }}>
         <CardContent sx={cardStyle}>
           <img src={logo} style={logoStyle} alt="Logo" />
-          <Typography variant="h5" component="div" gutterBottom>
-            Welcome to Our Platform
+          <Typography
+            variant="h5"
+            component="div"
+            gutterBottom
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'nowrap',
+            }}
+          >
+            Welcome
+            <MovingComponent
+              type="effect3D"
+              duration="700ms"
+              delay="0s"
+              direction="normal"
+              timing="ease"
+              iteration="infinite"
+              fillMode="none"
+              style={{ margin: '0 4px', color: '#ff66c4' }}
+            >
+              Organizations
+            </MovingComponent>
+            to Our Platform
           </Typography>
           <Typography variant="body1" color="text.secondary">
             Connecting your{' '}
