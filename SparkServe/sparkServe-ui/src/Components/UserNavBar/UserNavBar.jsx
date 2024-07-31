@@ -43,7 +43,7 @@ const navButtonStyle = {
   },
 };
 
-function UserNavBar() {
+function UserNavBar({profilePicture}) {
   const [open, setOpen] = useState(false);
   const [signInModalOpen, setSignInModalOpen] = useState(false);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -93,7 +93,7 @@ function UserNavBar() {
     } else {
       return (
         <>
-          <UserAccountPopover profileType="User Profile" />
+          <UserAccountPopover profileType="User Profile" profilePicture={profilePicture} />        
         </>
       );
     }

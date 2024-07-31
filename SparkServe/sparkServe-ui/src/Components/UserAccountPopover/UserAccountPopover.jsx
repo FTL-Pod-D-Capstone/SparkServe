@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
+import { Menu, MenuItem, IconButton, Typography, Avatar } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
-function UserAccountPopover({ profileType }) {
+function UserAccountPopover({ profileType, profilePicture }) {
   const [userId, setUserId] = React.useState("");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -36,9 +36,17 @@ function UserAccountPopover({ profileType }) {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenuOpen}
-        sx={{ color: "black" }} // Change the icon color to black
+        sx={{ color: "black" }}
       >
-        <AccountCircle sx={{ fontSize: 30 }}/>
+        {profilePicture ? (
+          <Avatar
+            src={profilePicture}
+            alt="User Avatar"
+            sx={{ width: 30, height: 30 }}
+          />
+        ) : (
+          <AccountCircle sx={{ fontSize: 30 }} />
+        )}
       </IconButton>
       <Menu
         id="menu-appbar"
@@ -55,7 +63,6 @@ function UserAccountPopover({ profileType }) {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         sx={{
-          // Custom styles for the menu
           "& .MuiPaper-root": {
             bgcolor: "black",
             color: "white",

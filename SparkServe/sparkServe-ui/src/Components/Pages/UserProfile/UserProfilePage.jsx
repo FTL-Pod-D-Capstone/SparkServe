@@ -16,6 +16,8 @@ const UserProfilePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [photo, setPhoto] = useState('');
+    const [profilePicture, setProfilePicture] = useState('');
+
 
 
     const handleGoBack = () => {
@@ -37,6 +39,7 @@ const UserProfilePage = () => {
                 const response = await axios.get(`https://project-1-uljs.onrender.com/users/${id}`);
                 // console.log('API response:', response.data);
                 setUser(response.data);
+                setProfilePicture(response.data.profilePicture || '');
                 setIsLoading(false);
             } catch (err) {
                 console.error(`Error getting User:, err`);
@@ -54,6 +57,7 @@ const UserProfilePage = () => {
 
     const handleFileUploaded = async (url) => {
         setPhoto(url);
+        setProfilePicture(url);
         try {
             const response = await axios.put(`https://project-1-uljs.onrender.com/users/${id}`, {
                 profilePicture: url,
@@ -65,7 +69,7 @@ const UserProfilePage = () => {
     };
     return (
         <>
-            <UserNavBar/>
+            <UserNavBar profilePicture={profilePicture} />
 
 
             <Box sx={{ flexGrow: 1, padding: 3 }}>

@@ -171,7 +171,7 @@ const VolunOppPage = () => {
                                         Contact: {organization?.contactEmail}
                                     </Typography>
                                     <Typography variant="body2">
-                                        Website: <Link href={organization?.website} target="_blank" rel="noopener noreferrer">{organization?.website}</Link>
+                                        Website: <a href={organization?.website} target="_blank" rel="noopener noreferrer">{organization?.website}</a>
                                     </Typography>
                                 </Box>
                             </Grid>
