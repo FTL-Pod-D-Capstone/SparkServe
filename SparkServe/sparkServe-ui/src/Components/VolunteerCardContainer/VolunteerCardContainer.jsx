@@ -119,6 +119,7 @@ const VolOppContainer = () => {
     const numOpportunities = opportunitiesByDate[dateString] || 0;
 
     return (
+        <>
 
         <Box sx={{ width: '100%', mt: 4 }}>
             <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
@@ -244,7 +245,7 @@ const VolOppContainer = () => {
       >
         <PickersDay {...pickersDayProps} />
       </Badge>
-
+      </>
     );
   };
 
