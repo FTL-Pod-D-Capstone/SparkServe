@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Footer from '../../Footer/Footer';
 import UserNavBar from '../../UserNavBar/UserNavBar';
-import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert } from '@mui/material';
+import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert, Container } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -124,94 +124,109 @@ const UserProfilePage = () => {
     return (
         <>
             <UserNavBar profilePicture={profilePicture} />
-            <Box sx={{ flexGrow: 1, padding: 3, mt: 8 }}>
-                <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
-                    <ArrowBack />
-                </IconButton>
+            <Box
+                sx={{
+                    backgroundImage: 'linear-gradient(rgb(180, 200, 255), rgb(255, 255, 255))',
+                    backgroundSize: '100% 50%',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: 'white',
+                    minHeight: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mt: 1,
+                    width: '100%',
+                    height: "100px" 
+                }}
+            >
+                <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4, mt: 8 }}>
+                    <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
+                        <ArrowBack />
+                    </IconButton>
 
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={4}>
-                        <StyledCard>
-                            <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <ProfileImage>
-                                    <StyledAvatar
-                                        alt={user.name || 'User'}
-                                        src={profilePicture || "/path-to-default-image.jpg"}
-                                    />
-                                </ProfileImage>
-                                <UserUpload onUploaded={handleFileUploaded} />
-                                <Typography variant="h5" component="div">
-                                    {user.username || 'Unknown User'}
-                                </Typography>
-                            </CardContent>
-                        </StyledCard>
-                    </Grid>
-
-                    <Grid item xs={12} md={8}>
-                        <StyledCard>
-                            <CardContent sx={{ flexGrow: 1 }}>
-                                <Box display="flex" justifyContent="space-between" alignItems="center">
-                                    <Typography variant="h6" gutterBottom>
-                                        Profile Information
+                    <Grid container spacing={3} direction="column" alignItems="center">
+                        <Grid item xs={12} md={6}>
+                            <StyledCard>
+                                <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <ProfileImage>
+                                        <StyledAvatar
+                                            alt={user.name || 'User'}
+                                            src={profilePicture || "/path-to-default-image.jpg"}
+                                        />
+                                    </ProfileImage>
+                                    <UserUpload onUploaded={handleFileUploaded} />
+                                    <Typography variant="h5" component="div">
+                                        {user.username || 'Unknown User'}
                                     </Typography>
-                                    <Button 
-                                        startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
-                                        onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                                    >
-                                        {isEditing ? 'Save' : 'Edit'}
-                                    </Button>
-                                </Box>
-                                {isEditing ? (
-                                    <>
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="bio"
-                                            label="Bio"
-                                            value={editedUser.bio || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="email"
-                                            label="Email"
-                                            value={editedUser.email || ''}
-                                            onChange={handleInputChange}
-                                            error={snackbar.message === 'Email already in use'}
-                                            helperText={snackbar.message === 'Email already in use' ? 'Email already in use' : ''}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="phoneNumber"
-                                            label="Phone Number"
-                                            value={editedUser.phoneNumber || ''}
-                                            onChange={handleInputChange}
-                                            error={snackbar.message === 'Phone number already in use'}
-                                            helperText={snackbar.message === 'Phone number already in use' ? 'Phone number already in use' : ''}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="address"
-                                            label="Address"
-                                            value={editedUser.address || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <Typography variant="body1">Bio: {user.bio || 'No bio available'}</Typography>
-                                        <Typography variant="body1">Email: {user.email || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Phone: {user.phoneNumber || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Address: {user.address || 'Not provided'}</Typography>
-                                    </>
-                                )}
-                            </CardContent>
-                        </StyledCard>
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
+
+                        <Grid item xs={12} md={8}>
+                            <StyledCard>
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Box display="flex" justifyContent="space-between" alignItems="center" height= "100px" width = "600px">
+                                        <Typography variant="h6" gutterBottom>
+                                            Profile Information
+                                        </Typography>
+                                        <Button 
+                                            startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
+                                            onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+                                        >
+                                            {isEditing ? 'Save' : 'Edit'}
+                                        </Button>
+                                    </Box>
+                                    {isEditing ? (
+                                        <>
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="bio"
+                                                label="Bio"
+                                                value={editedUser.bio || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="email"
+                                                label="Email"
+                                                value={editedUser.email || ''}
+                                                onChange={handleInputChange}
+                                                error={snackbar.message === 'Email already in use'}
+                                                helperText={snackbar.message === 'Email already in use' ? 'Email already in use' : ''}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="phoneNumber"
+                                                label="Phone Number"
+                                                value={editedUser.phoneNumber || ''}
+                                                onChange={handleInputChange}
+                                                error={snackbar.message === 'Phone number already in use'}
+                                                helperText={snackbar.message === 'Phone number already in use' ? 'Phone number already in use' : ''}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="address"
+                                                label="Address"
+                                                value={editedUser.address || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Typography variant="body1">Bio: {user.bio || 'No bio available'}</Typography>
+                                            <Typography variant="body1">Email: {user.email || 'Not provided'}</Typography>
+                                            <Typography variant="body1">Phone: {user.phoneNumber || 'Not provided'}</Typography>
+                                            <Typography variant="body1">Address: {user.address || 'Not provided'}</Typography>
+                                        </>
+                                    )}
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </Container>
             </Box>
             <Footer/>
             <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>

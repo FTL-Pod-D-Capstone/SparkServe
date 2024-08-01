@@ -127,17 +127,29 @@ const VolunOppPage = () => {
                 ) : (
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={8}>
-                            <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
-                                <ArrowBack />
-                            </IconButton>
-                            <Typography variant="h4" gutterBottom>{opportunity.title}</Typography>
-                            <CardMedia
-                                component="img"
-                                height="300"
-                                image={opportunity.pictureUrl || 'default-image-url'}
-                                alt={opportunity.title}
-                                sx={{ mb: 2, borderRadius: '8px' }}
-                            />
+    <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
+        <ArrowBack />
+    </IconButton>
+    <Typography variant="h4" gutterBottom>{opportunity.title}</Typography>
+    {opportunity.dateTime && (
+      <Typography variant="h6" gutterBottom>
+        {new Date(opportunity.dateTime).toLocaleString([], {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
+      </Typography>
+    )}
+    <CardMedia
+        component="img"
+        height="300"
+        image={opportunity.pictureUrl || 'default-image-url'}
+        alt={opportunity.title}
+        sx={{ mb: 2, borderRadius: '8px' }}
+    />
+                        
                             <Typography variant="body1" sx={{ mt: 2 }}>
                                 Spots Available: {opportunity.spotsAvailable} | Related Cause: {opportunity.relatedCause}
                             </Typography>

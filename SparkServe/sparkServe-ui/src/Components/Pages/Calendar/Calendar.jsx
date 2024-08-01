@@ -126,8 +126,19 @@ const CalendarApp = () => {
     };
   
     if (eventTime.hours && eventTime.minutes) {
-      newEvent.dateTime = `${selectedDate.toISOString().split('T')[0]}T${eventTime.hours.padStart(2, '0')}:${eventTime.minutes.padStart(2, '0')}:00Z`;
+      // Create a new Date object with the selected date and time
+      const eventDateTime = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        parseInt(eventTime.hours),
+        parseInt(eventTime.minutes)
+      );
+
+      // Format the date as an ISO string and remove the milliseconds
+      newEvent.dateTime = eventDateTime.toISOString().split('.')[0] + 'Z';
     }
+  
     if (eventLocation) newEvent.address = eventLocation;
     if (eventRelatedCause) newEvent.relatedCause = eventRelatedCause;
     if (spotsAvailable) newEvent.spotsAvailable = parseInt(spotsAvailable);
@@ -158,14 +169,12 @@ const CalendarApp = () => {
     }
   
     try {
-      // console.log('Sending data:', newEvent);
       let response;
       if (editingEvent) {
         response = await axios.put(`https://project-1-uljs.onrender.com/opps/${editingEvent.opportunityId}`, newEvent);
       } else {
         response = await axios.post('https://project-1-uljs.onrender.com/opps', newEvent);
       }
-      // console.log('Response:', response.data);
       const updatedOpportunities = editingEvent 
         ? opportunities.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
         : [...opportunities, response.data];
@@ -179,10 +188,11 @@ const CalendarApp = () => {
   };
 
   const handleEditEvent = (event) => {
-    setSelectedDate(new Date(event.dateTime));
+    const eventDate = new Date(event.dateTime);
+    setSelectedDate(eventDate);
     setEventTime({
-      hours: event.dateTime.split('T')[1].substring(0, 2),
-      minutes: event.dateTime.split('T')[1].substring(3, 5),
+      hours: eventDate.getUTCHours().toString().padStart(2, '0'),
+      minutes: eventDate.getUTCMinutes().toString().padStart(2, '0'),
     });
     setEventText(event.description);
     setEventName(event.title);
@@ -311,9 +321,6 @@ const CalendarApp = () => {
                     <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
                       <CloseSharpIcon />
                     </button>
-                    {/* {opportunity.pictureUrl && (
-                      <img src={opportunity.pictureUrl} alt={opportunity.title} className="opportunity-image" />
-                    )} */}
                     <div className="event-date-wrapper">
                       <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
                       <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
