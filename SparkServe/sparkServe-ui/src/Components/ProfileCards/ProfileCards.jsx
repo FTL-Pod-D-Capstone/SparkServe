@@ -32,7 +32,6 @@ const profileData = [
     description: 'Florida International University 26.',
     linkedin: 'https://www.linkedin.com/in/villanuevam305/',
     github: 'https://github.com/Morgan-AV',
-    
   },
 ];
 
@@ -83,7 +82,7 @@ const ProfileCards = () => {
                   alt={profile.name}
                   sx={{ 
                     objectFit: 'cover',
-                    objectPosition: profile.objectPosition || 'center' // Use objectPosition if specified, otherwise default to 'center'
+                    objectPosition: profile.objectPosition || 'center'
                   }}
                 />
                 <CardContent>
@@ -98,6 +97,8 @@ const ProfileCards = () => {
                       color="primary"
                       href={profile.linkedin}
                       aria-label="LinkedIn"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       sx={{ alignSelf: 'center' }}
                     >
                       <LinkedInIcon />
@@ -106,6 +107,8 @@ const ProfileCards = () => {
                       color="inherit"
                       href={profile.github}
                       aria-label="GitHub"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       sx={{ alignSelf: 'center', color: 'black' }}
                     >
                       <GitHubIcon />

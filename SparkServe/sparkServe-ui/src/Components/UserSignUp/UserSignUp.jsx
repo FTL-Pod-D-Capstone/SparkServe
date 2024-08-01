@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import UserSignIn from '../../Components/UserSignIn/UserSignIn'; 
+import UserSignIn from '../../Components/UserSignIn/UserSignIn';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -30,6 +31,7 @@ const defaultTheme = createTheme();
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function UserSignUp() {
+  const navigate = useNavigate();
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const [error, setError] = React.useState('');
   const [formErrors, setFormErrors] = React.useState({});
@@ -39,7 +41,8 @@ export default function UserSignUp() {
     lastName: '',
     email: '',
     phoneNumber: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
 
   const handleOpenSignIn = () => {
@@ -50,6 +53,10 @@ export default function UserSignUp() {
     setOpenSignIn(false);
   };
 
+  const handleBackToWelcome = () => {
+    navigate('/');
+  };
+
   const validateForm = (data) => {
     const errors = {};
     if (!data.username) errors.username = 'Username is required';
@@ -58,6 +65,8 @@ export default function UserSignUp() {
     if (!data.lastName) errors.lastName = 'Last name is required';
     if (!data.phoneNumber) errors.phoneNumber = 'Phone number is required';
     if (!data.password) errors.password = 'Password is required';
+    if (!data.confirmPassword) errors.confirmPassword = 'Confirm password is required';
+    if (data.password !== data.confirmPassword) errors.confirmPassword = 'Passwords do not match';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -77,7 +86,8 @@ export default function UserSignUp() {
       lastName: '',
       email: '',
       phoneNumber: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     });
     setFormErrors({});
   };
@@ -93,7 +103,6 @@ export default function UserSignUp() {
       const response = await axios.post(`${baseUrl}/users/register`, formData);
       
       if (response.data && response.status === 201) {
-        // console.log('Registration successful:', response.data);
         setError('');
         clearForm();
         handleOpenSignIn();
@@ -108,6 +117,7 @@ export default function UserSignUp() {
   };
 
   return (
+    <>
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -119,6 +129,13 @@ export default function UserSignUp() {
             alignItems: 'center',
           }}
         >
+          <Button
+            variant="outlined"
+            onClick={handleBackToWelcome}
+            sx={{ alignSelf: 'flex-start', mb: 2 }}
+          >
+            Back
+          </Button>
           <Avatar sx={{ m: 1, bgcolor: '#4856f6' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -213,6 +230,21 @@ export default function UserSignUp() {
                   helperText={formErrors.password}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  error={Boolean(formErrors.confirmPassword)}
+                  helperText={formErrors.confirmPassword}
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -240,5 +272,6 @@ export default function UserSignUp() {
       </Container>
       <UserSignIn open={openSignIn} handleClose={handleCloseSignIn} />
     </ThemeProvider>
+    </>
   );
 }

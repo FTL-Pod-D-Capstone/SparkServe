@@ -36,6 +36,7 @@
     "react-lottie": "^1.2.4",
     "react-moving-text": "^0.0.7",
     "react-router-dom": "^6.25.0",
+    "styled-components": "^6.1.12",
     "three": "^0.166.1"
   },
   "devDependencies": {

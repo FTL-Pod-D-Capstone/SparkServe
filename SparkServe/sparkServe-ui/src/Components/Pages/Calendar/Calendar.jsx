@@ -331,9 +331,9 @@ const CalendarApp = () => {
                     </div>
                     <div className="upcoming-event-name">{opportunity.title}</div>
                     <div className="upcoming-event-location">{opportunity.address}</div>
-                    <div className="upcoming-event-text">{opportunity.description}</div>
+                    {/* <div className="upcoming-event-text">{opportunity.description}</div>
                     <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
-                    <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div>
+                    <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div> */}
                     <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
                   </div>
                 ))}
