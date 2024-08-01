@@ -43,6 +43,7 @@ const VolOppContainer = () => {
       try {
         const response = await axios.get(`${baseUrl}/opps`);
         const opportunitiesData = response.data;
+        console.log('Fetched opportunities:', opportunitiesData);
 
         setOpportunities(opportunitiesData);
         setFilteredOpportunities(opportunitiesData);
@@ -76,9 +77,15 @@ const VolOppContainer = () => {
           ),
         ];
 
+        // Sort age ranges
+        const ageRangeOrder = ["All", "12+", "16+", "18+", "21+", "All ages"];
+        const sortedAgeRanges = uniqueAgeRanges
+          .filter(range => ageRangeOrder.includes(range))
+          .sort((a, b) => ageRangeOrder.indexOf(a) - ageRangeOrder.indexOf(b));
+
         setOrganizations(uniqueOrganizations);
         setCauses(uniqueCauses);
-        setAgeRanges(uniqueAgeRanges);
+        setAgeRanges(["All", ...sortedAgeRanges]);
 
         setIsLoading(false);
       } catch (err) {
@@ -113,130 +120,11 @@ const VolOppContainer = () => {
     opportunities,
   ]);
 
-  // Custom rendering function for calendar days
   const renderDay = (date, selectedDates, pickersDayProps) => {
     const dateString = date.toDateString();
     const numOpportunities = opportunitiesByDate[dateString] || 0;
 
     return (
-        <>
-
-        <Box sx={{ width: '100%', mt: 4 }}>
-            <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                <TextField
-                    label="Search opportunities"
-                    variant="outlined"
-                    value={nameFilter}
-                    onChange={(e) => setNameFilter(e.target.value)}
-                    sx={{ 
-                        flexGrow: 1, 
-                        minWidth: '200px',
-                        '& .MuiOutlinedInput-root': {
-                            backgroundColor: 'white',
-                        },
-                    }}
-                />
-                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
-                    <InputLabel>Organization</InputLabel>
-                    <Select
-                        value={organizationFilter}
-                        onChange={(e) => setOrganizationFilter(e.target.value)}
-                        label="Organization"
-                        sx={{ backgroundColor: 'white' }}
-                    >
-                        <MenuItem value=""><em>All</em></MenuItem>
-                        {organizations.map((org) => (
-                            <MenuItem key={org} value={org}>{org}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
-                    <InputLabel>Cause</InputLabel>
-                    <Select
-                        value={causeFilter}
-                        onChange={(e) => setCauseFilter(e.target.value)}
-                        label="Cause"
-                        sx={{ backgroundColor: 'white' }}
-                    >
-                        <MenuItem value=""><em>All</em></MenuItem>
-                        {causes.map((cause) => (
-                            <MenuItem key={cause} value={cause}>{cause}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Date"
-                        value={dateFilter}
-                        onChange={(newValue) => setDateFilter(newValue)}
-                        renderInput={(params) => <TextField {...params} sx={{ backgroundColor: 'white' }} />}
-                        renderDay={renderDay}
-                    />
-                </LocalizationProvider>
-                <FormControl variant="outlined" sx={{ minWidth: '150px' }}>
-                    <InputLabel>Age Range</InputLabel>
-                    <Select
-                        value={ageRangeFilter}
-                        onChange={(e) => setAgeRangeFilter(e.target.value)}
-                        label="Age Range"
-                        sx={{ backgroundColor: 'white' }}
-                    >
-                        <MenuItem value=""><em>All</em></MenuItem>
-                        {ageRanges.map((range) => (
-                            <MenuItem key={range} value={range}>{range}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-
-            <Grid container spacing={3}>
-                {filteredOpportunities.map((opportunity) => (
-                    <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
-                        <Card 
-                            component={Link} 
-                            to={`/opportunity/${opportunity.opportunityId}`} 
-                            sx={{ 
-                                textDecoration: 'none', 
-                                height: '100%', 
-                                display: 'flex', 
-                                flexDirection: 'column',
-                                border: 'none',
-                                boxShadow: 'none',
-                                transition: 'transform 0.2s',
-                                '&:hover': {
-                                    transform: 'scale(1.03)',
-                                },
-                            }}
-                        >
-                            <CardMedia
-                                component="img"
-                                height="200"
-                                image={opportunity.pictureUrl || "https://via.placeholder.com/300x200"}
-                                alt={opportunity.title}
-                                sx={{ borderRadius: '8px', objectFit: 'cover' }}
-                            />
-                            <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
-                                <Typography variant="subtitle1" component="div" noWrap fontWeight="bold">
-                                    {opportunity.title}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" noWrap>
-                                    {opportunity.organization?.name}
-                                </Typography>
-                                <Box sx={{ mt: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {opportunity.relatedCause}
-                                    </Typography>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {opportunity.spotsAvailable} spots
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-        </Box>
-
       <Badge
         key={dateString}
         overlap="circular"
@@ -245,7 +133,6 @@ const VolOppContainer = () => {
       >
         <PickersDay {...pickersDayProps} />
       </Badge>
-      </>
     );
   };
 
@@ -325,11 +212,8 @@ const VolOppContainer = () => {
             label="Age Range"
             sx={{ backgroundColor: "white" }}
           >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
             {ageRanges.map((range) => (
-              <MenuItem key={range} value={range}>
+              <MenuItem key={range} value={range === "All" ? "" : range}>
                 {range}
               </MenuItem>
             ))}
@@ -338,65 +222,79 @@ const VolOppContainer = () => {
       </Box>
 
       <Grid container spacing={3}>
-        {filteredOpportunities.map((opportunity) => (
-          <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
-            <Card
-              component={Link}
-              to={`/opportunity/${opportunity.opportunityId}`}
-              sx={{
-                textDecoration: "none",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                border: "none",
-                boxShadow: "none",
-                transition: "transform 0.2s",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                },
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="200"
-                image={
-                  opportunity.pictureUrl ||
-                  "https://via.placeholder.com/300x200"
-                }
-                alt={opportunity.title}
-                sx={{ borderRadius: "8px" }}
-              />
-              <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  noWrap
-                  fontWeight="bold"
-                >
-                  {opportunity.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {opportunity.organization?.name}
-                </Typography>
-                <Box
-                  sx={{
-                    mt: 1,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="caption" color="text.secondary">
-                    {opportunity.relatedCause}
+        {filteredOpportunities.map((opportunity) => {
+          console.log('Opportunity in map:', opportunity);
+          return (
+            <Grid item xs={12} sm={6} md={4} key={opportunity.opportunityId}>
+              <Card
+                component={Link}
+                to={`/opportunity/${opportunity.opportunityId}`}
+                sx={{
+                  textDecoration: "none",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  border: "none",
+                  boxShadow: "none",
+                  transition: "transform 0.2s",
+                  "&:hover": {
+                    transform: "scale(1.03)",
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={
+                    opportunity.pictureUrl ||
+                    "https://via.placeholder.com/300x200"
+                  }
+                  alt={opportunity.title}
+                  sx={{ borderRadius: "8px" }}
+                />
+                <CardContent sx={{ flexGrow: 1, p: 1, pt: 2 }}>
+                  <Typography
+                    variant="subtitle1"
+                    component="div"
+                    noWrap
+                    fontWeight="bold"
+                  >
+                    {opportunity.title}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {opportunity.spotsAvailable} spots
+                  <Typography variant="body2" color="text.secondary" noWrap>
+                    {opportunity.organization?.name}
                   </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  {opportunity.dateTime && (
+                    <Typography variant="body2" color="text.secondary">
+                      {new Date(opportunity.dateTime).toLocaleString([], {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </Typography>
+                  )}
+                  <Box
+                    sx={{
+                      mt: 1,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {opportunity.relatedCause}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {opportunity.spotsAvailable} spots
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
     </Box>
   );
