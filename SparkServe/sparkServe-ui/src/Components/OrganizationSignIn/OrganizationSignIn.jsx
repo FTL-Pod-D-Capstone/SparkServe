@@ -53,9 +53,9 @@ const OrganizationSignIn = ({ open, handleClose }) => {
     };
   
     try {
-      console.log('Sending login request with credentials:', credentials);
+      // console.log('Sending login request with credentials:', credentials);
       const response = await axios.post(`${baseUrl}/orgs/login`, credentials);
-      console.log('Full login response:', response);
+      // console.log('Full login response:', response);
       
       if (response.status === 200 && response.data.token) {
         localStorage.setItem('isAuthenticated', 'true');
@@ -64,13 +64,13 @@ const OrganizationSignIn = ({ open, handleClose }) => {
         
         if (response.data.organizationId) {
           localStorage.setItem('organizationId', response.data.organizationId.toString());
-          console.log('Stored organizationId:', response.data.organizationId.toString());
+          // console.log('Stored organizationId:', response.data.organizationId.toString());
         } else {
           console.warn('No organizationId in response, attempting to extract from token');
           const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
           if (decodedToken.id) {
             localStorage.setItem('organizationId', decodedToken.id.toString());
-            console.log('Extracted and stored organizationId from token:', decodedToken.id);
+            // console.log('Extracted and stored organizationId from token:', decodedToken.id);
           } else {
             console.error('Unable to extract organizationId from token');
           }
