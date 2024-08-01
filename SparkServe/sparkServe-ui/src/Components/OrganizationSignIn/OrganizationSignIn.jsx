@@ -16,6 +16,9 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -51,7 +54,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
   
     try {
       console.log('Sending login request with credentials:', credentials);
-      const response = await axios.post('https://project-1-uljs.onrender.com/orgs/login', credentials);
+      const response = await axios.post(`${baseUrl}/orgs/login`, credentials);
       console.log('Full login response:', response);
       
       if (response.status === 200 && response.data.token) {

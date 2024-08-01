@@ -5,6 +5,9 @@ import logo from "../../assets/logo2.png";
 import sparkieAnimation from "../../assets/Sparkie.json";
 import axios from "axios";
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 // Define quick reply options
 const QUICK_REPLIES = [
   "Can you tell me about volunteer opportunities.",
@@ -62,7 +65,7 @@ const Chatbot = () => {
   const fetchChatHistory = async (userId) => {
     try {
       const response = await axios.get(
-        `https://project-1-uljs.onrender.com/api/chat/history/${userId}`
+        `${baseUrl}/api/chat/history/${userId}`
       );
       // Transform the data to match the format of current messages
       const formattedHistory = response.data.flatMap((interaction) => [
@@ -83,7 +86,7 @@ const Chatbot = () => {
         const userId = localStorage.getItem('userId') || 1;
 
         try {
-            const response = await axios.post(`https://project-1-uljs.onrender.com/api/chat`, {
+            const response = await axios.post(`${baseUrl}/api/chat`, {
                 userId,
                 prompt: textToSend,
             });

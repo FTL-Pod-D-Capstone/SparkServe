@@ -11,6 +11,9 @@ import axios from 'axios';
 import { styled } from '@mui/system';
 import OrganizationUpload from './OrganizationUpload';
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
   display: 'flex',
@@ -59,7 +62,7 @@ const OrganizationProfilePage = () => {
 
             setIsLoading(true);
             try {
-                const response = await axios.get(`https://project-1-uljs.onrender.com/orgs/${id}`);
+                const response = await axios.get(`${baseUrl}/orgs/${id}`);
                 setOrganization(response.data);
                 setEditedOrganization(response.data);
                 setPictureUrl(response.data.pictureUrl || '');
@@ -98,7 +101,7 @@ const OrganizationProfilePage = () => {
                 updatedFields.phoneNumber = editedOrganization.phoneNumber;
             }
 
-            const response = await axios.put(`https://project-1-uljs.onrender.com/orgs/${id}`, updatedFields);
+            const response = await axios.put(`${baseUrl}/orgs/${id}`, updatedFields);
             setOrganization(response.data);
             setIsEditing(false);
             setSnackbar({ open: true, message: 'Organization profile updated successfully', severity: 'success' });
@@ -115,7 +118,7 @@ const OrganizationProfilePage = () => {
     const handleFileUploaded = async (url) => {
         setPictureUrl(url);
         try {
-            const response = await axios.put(`https://project-1-uljs.onrender.com/orgs/${id}`, {
+            const response = await axios.put(`${baseUrl}/orgs/${id}`, {
                 pictureUrl: url,
             });
             setOrganization(response.data);

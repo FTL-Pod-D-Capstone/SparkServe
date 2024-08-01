@@ -45,6 +45,9 @@ const UserProfilePage = () => {
     const [editedUser, setEditedUser] = useState(null);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
+    const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
     const handleGoBack = () => {
         navigate(-1);
     };
@@ -59,7 +62,7 @@ const UserProfilePage = () => {
 
             setIsLoading(true);
             try {
-                const response = await axios.get(`https://project-1-uljs.onrender.com/users/${id}`);
+                const response = await axios.get(`${baseUrl}/users/${id}`);
                 setUser(response.data);
                 setEditedUser(response.data);
                 setProfilePicture(response.data.profilePicture || '');
@@ -81,7 +84,7 @@ const UserProfilePage = () => {
 
     const handleSave = async () => {
         try {
-            const response = await axios.put(`https://project-1-uljs.onrender.com/users/${id}`, editedUser);
+            const response = await axios.put(`${baseUrl}/users/${id}`, editedUser);
             setUser(response.data);
             setIsEditing(false);
             setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
@@ -104,7 +107,7 @@ const UserProfilePage = () => {
     const handleFileUploaded = async (url) => {
         setProfilePicture(url);
         try {
-            const response = await axios.put(`https://project-1-uljs.onrender.com/users/${id}`, {
+            const response = await axios.put(`${baseUrl}/users/${id}`, {
                 ...editedUser,
                 profilePicture: url,
             });
