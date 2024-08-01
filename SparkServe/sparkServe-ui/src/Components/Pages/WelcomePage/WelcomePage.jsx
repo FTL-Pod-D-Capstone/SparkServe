@@ -4,11 +4,12 @@ import UserNavBar from '../../UserNavBar/UserNavBar';
 import WelcomeCard from '../../WelcomeCard/WelcomeCard';
 import AppFeatures from '../../AppFeatures/AppFeatures';
 import ProfileCards from '../../ProfileCards/ProfileCards';
+import '../WelcomePage/WelcomePage.css'
 
 
 const WelcomePage = () => {
   return (
-    <div>
+    <div className='welcome'>
       <UserNavBar />
       <User3DBackground/>
       <WelcomeCard />
