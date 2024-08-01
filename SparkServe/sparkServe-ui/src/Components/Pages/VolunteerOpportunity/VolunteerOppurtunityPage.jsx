@@ -24,7 +24,7 @@ const VolunOppPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-      }, []);
+    }, []);
 
     const handleGoBack = () => {
         navigate(-1);
