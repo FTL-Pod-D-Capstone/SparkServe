@@ -9,7 +9,13 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
       {'Copyright © '}
-      <Link href="https://mui.com/">SparkServe&nbsp;</Link>
+      <Link 
+        href="https://mui.com/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        SparkServe&nbsp;
+      </Link>
       {new Date().getFullYear()}
     </Typography>
   );
@@ -47,7 +53,12 @@ export default function Footer() {
             color: 'text.secondary',
           }}
         >
-          <Link href="https://www.linkedin.com/company/salesforce" aria-label="LinkedIn">
+          <Link 
+            href="https://www.linkedin.com/company/salesforce" 
+            aria-label="LinkedIn"
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <lord-icon
               src="https://cdn.lordicon.com/mgampcwp.json"
               trigger="hover"

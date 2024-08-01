@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn'; // Adjust the import path accordingly
+import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn';
 
 function Copyright(props) {
   return (
@@ -27,11 +27,18 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#ff66c4',
+    },
+  },
+});
 
 export default function OrganizationSignUp() {
   const navigate = useNavigate();
   const [openSignIn, setOpenSignIn] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState('');
 
   const handleOpenSignIn = () => {
     setOpenSignIn(true);
@@ -41,14 +48,29 @@ export default function OrganizationSignUp() {
     setOpenSignIn(false);
   };
 
+  const handleBackToWelcome = () => {
+    navigate('/OrganizationWelcomePage'); 
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    
+    const password = data.get('password');
+    const confirmPassword = data.get('confirmPassword');
+
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords don't match");
+      return;
+    }
+
+    setPasswordError('');
+
     const organization = {
       name: data.get('Name'),
       email: data.get('email'),
       phoneNumber: data.get('phone'),
-      password: data.get('password'),
+      password: password,
       description: data.get('description') || '',
       address: data.get('address') || '',
       website: data.get('website') || '',
@@ -60,8 +82,7 @@ export default function OrganizationSignUp() {
 
     try {
       const response = await axios.post('https://project-1-uljs.onrender.com/orgs/register', organization);
-      // console.log(response.data);
-      handleOpenSignIn(); // Show the sign-in modal with a message to log in
+      handleOpenSignIn();
     } catch (error) {
       console.error('Error registering organization:', error.response?.data || error.message);
     }
@@ -79,6 +100,22 @@ export default function OrganizationSignUp() {
             alignItems: 'center',
           }}
         >
+          <Button
+            variant="outlined"
+            onClick={handleBackToWelcome}
+            sx={{ 
+              alignSelf: 'flex-start', 
+              mb: 2,
+              color: '#ff66c4',
+              borderColor: '#ff66c4',
+              '&:hover': {
+                borderColor: '#ff66c4',
+                backgroundColor: 'rgba(255, 102, 196, 0.04)',
+              },
+            }}
+          >
+            Back
+          </Button>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -128,75 +165,30 @@ export default function OrganizationSignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="description"
-                  label="Description"
-                  id="description"
-                  autoComplete="description"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
+                  required
                   fullWidth
-                  name="address"
-                  label="Address"
-                  id="address"
-                  autoComplete="address"
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="website"
-                  label="Website"
-                  id="website"
-                  autoComplete="website"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="contactEmail"
-                  label="Contact Email"
-                  id="contactEmail"
-                  autoComplete="contactEmail"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="primaryCause"
-                  label="Primary Cause"
-                  id="primaryCause"
-                  autoComplete="primaryCause"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="pictureUrl"
-                  label="Picture URL"
-                  id="pictureUrl"
-                  autoComplete="pictureUrl"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="orgUrl"
-                  label="Organization URL"
-                  id="orgUrl"
-                  autoComplete="orgUrl"
-                />
-              </Grid> */}
+              {passwordError && (
+                <Grid item xs={12}>
+                  <Typography color="error">{passwordError}</Typography>
+                </Grid>
+              )}
             </Grid>
+            
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, bgcolor: 'secondary.main', color: 'white'}}
+              
             >
               Organization Sign Up
             </Button>

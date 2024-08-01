@@ -56,7 +56,7 @@
   
   .navigate-date h2 {
     font-size: 2rem;
-    color: #bbb;
+    color: #686868;
   }
   
   .weekdays {
@@ -130,59 +130,128 @@
   }
   
   .upcoming-event {
-    background-color: pink;
-    padding: 1rem;
+    background: linear-gradient(135deg, #ff66c4, #8c52ff);
+    color: #ffffff;
+    padding: 1.5rem;
     border-radius: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  /* ... (rest of the CSS remains the same) */
-  
-  /* @media (max-width: 850px) {
-    .content {
-      flex-direction: column;
-      height: auto;
-    }
-  
-    .calendar,
-    .upcoming-events-container {
-      width: 100%;
-      margin-bottom: 2rem;
-    }
-  
-    .upcoming-events-container {
-      height: 50vh; /* Set a fixed height on smaller screens */
-    /* } */
-  
   .event-date-wrapper {
+    margin-bottom: 0.75rem;
+  }
+  
+  .upcoming-event-date {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.25rem;
+  }
+  
+  .upcoming-event-time {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    opacity: 0.9;
+  }
+  
+  .upcoming-event-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0.75rem 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .upcoming-event-location {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+  }
+  
+  .upcoming-event-text {
+    font-size: 1rem;
+    color: #ffffff;
+    line-height: 1.4;
     margin-bottom: 0.5rem;
   }
   
-  .upcoming-event-date,
-  .upcoming-event-time,
-  .upcoming-event-name,
-  .upcoming-event-location,
-  .upcoming-event-text {
-    font-size: 1.2rem;
-    color: #555;
-  }
-
   .upcoming-event-cause {
-    font-size: 1rem; 
-    color: #555;
-    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
   }
-  
   
   .delete-event {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: none;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(255, 255, 255, 0.2);
     border: none;
     cursor: pointer;
-    color: #333;
+    color: #ffffff;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .delete-event:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .upcoming-event button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.75rem;
+  }
+  
+  .upcoming-event button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+
+  .upcoming-events-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .upcoming-events-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .upcoming-events-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  .upcoming-events-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+  }
+  
+  .upcoming-events-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
   }
   
   .events {

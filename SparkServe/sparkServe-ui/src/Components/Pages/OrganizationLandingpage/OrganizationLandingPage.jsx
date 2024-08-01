@@ -38,8 +38,8 @@ const OrgLandingPage = () => {
       <OrganizationNavBar />
       <Box
         sx={{
-          backgroundImage: 'linear-gradient(rgb(255, 102, 196), rgb(255, 255, 255))',
-          backgroundSize: '100% 50%',
+          backgroundImage: 'linear-gradient(#ffc8dd, #ffffff)',
+          backgroundSize: '100% 100%',
           backgroundRepeat: 'no-repeat',
           backgroundColor: 'white',
           minHeight: '100vh',
@@ -51,7 +51,7 @@ const OrgLandingPage = () => {
       >
         <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4, mt: 8 }}>
           {loading ? (
-            <CircularProgress sx={{ color: '#ffffff' }} />
+            <CircularProgress sx={{ color: '#ffc8dd' }} />
           ) : (
             <UpcomingEvents events={events} />
           )}

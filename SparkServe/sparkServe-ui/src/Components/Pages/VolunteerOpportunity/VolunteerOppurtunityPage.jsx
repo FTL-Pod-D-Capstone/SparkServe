@@ -6,7 +6,7 @@ import { Container, Typography, Box, CardMedia, Button, CircularProgress, Grid, 
 import { IconButton } from '@mui/material';
 import { ArrowBack, Bookmark, BookmarkBorder } from '@mui/icons-material';
 import axios from 'axios';
-import UserSignIn from '../../UserSignIn/UserSignIn'; // Import the UserSignIn component
+import UserSignIn from '../../UserSignIn/UserSignIn'; 
 
 const VolunOppPage = () => {
     const { opportunityId } = useParams();
@@ -170,7 +170,7 @@ const VolunOppPage = () => {
                             )}
                         </Grid>
                             <Grid item xs={12} md={4} sx={{ alignSelf: 'flex-start' }}>
-                                <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1, mt: { xs: 8, md: 15 } }}>
+                                <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1, mt: { xs: 8, md: 19 } }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                         <Avatar
                                             src={organization?.pictureUrl}
