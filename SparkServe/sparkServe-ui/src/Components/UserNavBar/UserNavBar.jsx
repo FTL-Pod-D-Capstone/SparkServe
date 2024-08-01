@@ -14,6 +14,9 @@ import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
 import axios from "axios";
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 const logoStyle = {
   width: "140px",
   height: "auto",
@@ -59,7 +62,7 @@ function UserNavBar() {
 
 
       try {
-          const response = await axios.get(`https://project-1-uljs.onrender.com/users/${id}`);
+          const response = await axios.get(`${baseUrl}/users/${id}`);
 
           setProfilePicture(response.data.profilePicture || '');
       } catch (err) {

@@ -10,7 +10,7 @@ const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 const isUserAuthenticated = () => {
-  return localStorage.getItem('isUserAuthenticated') === 'true';
+    return localStorage.getItem('isUserAuthenticated') === 'true';
 };
 
 const UserBookmarksPage = () => {
