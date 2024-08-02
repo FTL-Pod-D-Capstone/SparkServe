@@ -327,7 +327,7 @@ const CalendarApp = () => {
                       <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                     </div>
                     <div className="upcoming-event-name">{opportunity.title}</div>
-                    <div className="upcoming-event-location">{opportunity.address}</div>
+                    {/* <div className="upcoming-event-location">{opportunity.address}</div> */}
                     {/* <div className="upcoming-event-text">{opportunity.description}</div>
                     <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
                     <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div> */}
