@@ -1,0 +1,34 @@
+.custom-date-range-picker .rdrDefinedRangesWrapper {
+    display: none;
+  }
+
+.rdrDateDisplayWrapper {
+    display: none;
+}
+.custom-date-range-picker .rdrDateRangePickerWrapper {
+    color: inherit;
+  }
+  
+  .custom-date-range-picker .rdrDateDisplayItem {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  
+  .custom-date-range-picker .rdrDateDisplayItem input {
+    color: inherit;
+  }
+  
+  .custom-date-range-picker .rdrDateDisplayItemActive {
+    border-color: var(--rdr-color-primary);
+  }
+  
+  .custom-date-range-picker .rdrDayPassive {
+    opacity: 0.3;
+  }
+  
+  .custom-date-range-picker .rdrDayToday:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span:after,
+  .custom-date-range-picker .rdrDayToday:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span:after,
+  .custom-date-range-picker .rdrDayToday:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span:after,
+  .custom-date-range-picker .rdrDayToday:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span:after {
+    background-color: #fff;
+  }
