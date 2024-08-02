@@ -5,7 +5,9 @@ import "./Map.css";
 import Button from '@mui/material/Button';
 
 const LIBRARIES = ["places"];
-const API_URL = 'https://project-1-uljs.onrender.com/opps/locations';
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+const API_URL = `${baseUrl}/opps/locations`;
 
 const ReactGoogleMapComponent = () => {
   const { isLoaded, loadError } = useLoadScript({

@@ -5,6 +5,9 @@ import UpcomingEvents from '../../UpcomingEvents/UpcomingEvents';
 import Footer from '../../Footer/Footer';
 import { Box, Container, CircularProgress } from '@mui/material';
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 const OrgLandingPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +21,7 @@ const OrgLandingPage = () => {
         return;
       }
       try {
-        const response = await axios.get(`https://project-1-uljs.onrender.com/opps?organizationId=${organizationId}`);
+        const response = await axios.get(`${baseUrl}/opps?organizationId=${organizationId}`);
         const filteredEvents = response.data.filter(event => event.organizationId === parseInt(organizationId));
         setEvents(filteredEvents);
         // Update localStorage to ensure consistency with the Calendar component

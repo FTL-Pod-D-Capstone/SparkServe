@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import AWS from 'aws-sdk';
 import CircularProgress from '@mui/material/CircularProgress';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -10,8 +9,12 @@ import IconButton from '@mui/material/IconButton';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import Footer from '../../Footer/Footer';
 import './Calendar.css';
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
 
 const CalendarApp = () => {
+
+
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthsOfYear = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -62,7 +65,7 @@ const CalendarApp = () => {
         return;
       }
       try {
-        const response = await axios.get(`https://project-1-uljs.onrender.com/opps?organizationId=${organizationId}`);
+        const response = await axios.get(`${baseUrl}/opps?organizationId=${organizationId}`);
         setOpportunities(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
       } catch (error) {
@@ -148,13 +151,13 @@ const CalendarApp = () => {
       const S3_BUCKET = "sparkserve";
       const REGION = "us-east-2";
   
-      AWS.config.update({
+      window.AWS.config.update({
         accessKeyId: import.meta.env.VITE_ACCESS_KEY,
         secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
         region: REGION,
       });
   
-      const s3 = new AWS.S3();
+      const s3 = new window.AWS.S3();
       const params = {
         Bucket: S3_BUCKET,
         Key: `opportunities/${Date.now()}-${opportunityImage.name}`,
@@ -172,9 +175,9 @@ const CalendarApp = () => {
     try {
       let response;
       if (editingEvent) {
-        response = await axios.put(`https://project-1-uljs.onrender.com/opps/${editingEvent.opportunityId}`, newEvent);
+        response = await axios.put(`${baseUrl}/opps/${editingEvent.opportunityId}`, newEvent);
       } else {
-        response = await axios.post('https://project-1-uljs.onrender.com/opps', newEvent);
+        response = await axios.post(`${baseUrl}/opps`, newEvent);
       }
       const updatedOpportunities = editingEvent 
         ? opportunities.map(opp => opp.opportunityId === editingEvent.opportunityId ? response.data : opp)
@@ -212,7 +215,7 @@ const CalendarApp = () => {
 
   const confirmDeleteEvent = async () => {
     try {
-      await axios.delete(`https://project-1-uljs.onrender.com/opps/${eventIdToDelete}`);
+      await axios.delete(`${baseUrl}/opps/${eventIdToDelete}`);
       const updatedOpportunities = opportunities.filter(opp => opp.opportunityId !== eventIdToDelete);
       setOpportunities(updatedOpportunities);
       localStorage.setItem('events', JSON.stringify(updatedOpportunities));

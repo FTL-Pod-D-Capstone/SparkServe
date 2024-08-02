@@ -14,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import OrganizationSignIn from '../../Components/OrganizationSignIn/OrganizationSignIn';
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -81,8 +84,11 @@ export default function OrganizationSignUp() {
     };
 
     try {
-      const response = await axios.post('https://project-1-uljs.onrender.com/orgs/register', organization);
-      handleOpenSignIn();
+
+      const response = await axios.post(`${baseUrl}/orgs/register`, organization);
+      // console.log(response.data);
+      handleOpenSignIn(); // Show the sign-in modal with a message to log in
+
     } catch (error) {
       console.error('Error registering organization:', error.response?.data || error.message);
     }
