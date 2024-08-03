@@ -6,8 +6,7 @@
 #map-container {
   display: flex;
   flex-direction: column;
-  padding-top: 91px;
-  width: 1970px;
+  padding-top: 51px;
 }
 
 .google-map {
@@ -40,5 +39,5 @@
   top: 80px; /* Adjusted to lower the search bar */
   left: 53%;
   transform: translateX(-50%); 
-  z-index: 1
+  z-index: 1;
 }
