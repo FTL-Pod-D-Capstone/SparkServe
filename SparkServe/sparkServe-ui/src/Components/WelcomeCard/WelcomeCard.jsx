@@ -46,6 +46,7 @@ function WelcomeCard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexWrap: 'row',
         minHeight: 'calc(100vh - 400px)',
         paddingTop: '10px',
       }}
@@ -72,7 +73,7 @@ function WelcomeCard() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              flexWrap: 'nowrap',
+              flexWrap: 'wrap',
             }}
           >
             Welcome

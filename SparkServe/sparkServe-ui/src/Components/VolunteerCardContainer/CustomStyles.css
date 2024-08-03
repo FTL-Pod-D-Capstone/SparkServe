@@ -1,0 +1,111 @@
+/* CustomStyles.css */
+
+/* Hide the date display wrapper and defined ranges wrapper */
+.rdrDateDisplayWrapper,
+.rdrDefinedRangesWrapper {
+  display: none !important;
+}
+
+/* Style the date range picker wrapper */
+.rdrDateRangePickerWrapper {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+/* Style the month */
+.rdrMonth {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* Style the calendar */
+.rdrCalendarWrapper {
+  font-size: 16px;
+  width: 100%;
+  max-width: 320px;
+  background: transparent;
+}
+
+/* Style the days */
+.rdrDay {
+  height: 3em;
+  line-height: 3em;
+}
+
+.rdrDayNumber span {
+  color: #1e2a35;
+  font-weight: bold;
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+  background: #4856f6;
+}
+
+/* Style the selected range */
+.rdrStartEdge,
+.rdrEndEdge,
+.rdrInRange {
+  background: #4856f6 !important;
+  color: white !important;
+}
+
+.rdrDayStartPreview,
+.rdrDayEndPreview,
+.rdrDayInPreview {
+  border-color: #4856f6 !important;
+  color: #4856f6 !important;
+}
+
+/* Style the month and year pickers */
+.rdrMonthAndYearPickers {
+  font-weight: bold;
+}
+
+.rdrMonthAndYearPickers select {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em;
+  font-size: 1em;
+}
+
+/* Style the next/prev buttons */
+.rdrNextPrevButton {
+  background: #f0f0f0;
+  border-radius: 50%;
+}
+
+.rdrNextPrevButton:hover {
+  background: #e0e0e0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .rdrCalendarWrapper {
+    font-size: 14px;
+  }
+
+  .rdrDay {
+    height: 2.5em;
+    line-height: 2.5em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .rdrCalendarWrapper {
+    font-size: 12px;
+  }
+
+  .rdrDay {
+    height: 2em;
+    line-height: 2em;
+  }
+
+  .rdrDayNumber {
+    font-size: 0.9em;
+  }
+
+  .rdrMonthAndYearPickers {
+    font-size: 1em;
+  }
+}

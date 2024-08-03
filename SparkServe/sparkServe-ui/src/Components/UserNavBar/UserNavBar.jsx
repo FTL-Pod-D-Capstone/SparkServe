@@ -118,6 +118,11 @@ function UserNavBar() {
     }
   };
 
+  const responsiveNavButtonStyle = {
+    ...navButtonStyle,
+    display: { xs: "none", md: "inline-flex" },
+  };
+
   return (
     <>
       <AppBar
@@ -152,7 +157,7 @@ function UserNavBar() {
               size="large"
               component={Link}
               to="/"
-              sx={navButtonStyle}
+              sx={responsiveNavButtonStyle}
             >
               Home
             </Button>
@@ -162,7 +167,7 @@ function UserNavBar() {
               size="large"
               component={Link}
               to="/UserLandingPage"
-              sx={navButtonStyle}
+              sx={responsiveNavButtonStyle}
             >
               Opportunities
             </Button>
@@ -180,7 +185,7 @@ function UserNavBar() {
                   size="large"
                   component={Link}
                   to="/Map"
-                  sx={navButtonStyle}
+                  sx={responsiveNavButtonStyle}
                 >
                   Map
                 </Button>

@@ -6,7 +6,8 @@
 #map-container {
   display: flex;
   flex-direction: column;
-  padding-top: 51px;
+  padding-top: 91px;
+  width: 1970px;
 }
 
 .google-map {
