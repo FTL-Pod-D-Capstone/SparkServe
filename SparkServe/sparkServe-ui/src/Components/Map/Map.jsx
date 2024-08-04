@@ -1,13 +1,123 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, useLoadScript, Marker, Autocomplete, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
+import { Button, Paper, Typography, Box } from '@mui/material';
+import { styled, keyframes } from '@mui/system';
 import "./Map.css";
-import Button from '@mui/material/Button';
 
 const LIBRARIES = ["places"];
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const API_URL = `${baseUrl}/opps/locations`;
+
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(51, 102, 204, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0);
+  }
+`;
+
+const MapContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingTop: '51px',
+  position: 'relative',
+});
+
+const SearchInput = styled('input')({
+  boxSizing: 'border-box',
+  border: 'none',
+  width: '400px',
+  height: '50px',
+  padding: '0 20px',
+  borderRadius: '25px',
+  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+  fontSize: '16px',
+  outline: 'none',
+  transition: 'all 0.3s ease',
+  position: 'absolute',
+  top: '10px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  zIndex: 10,
+  backgroundColor: 'white',
+  '&:focus': {
+    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
+    width: '450px',
+    animation: `${pulse} 1.5s infinite`,
+  },
+  '&::placeholder': {
+    color: '#aaa',
+  },
+});
+
+const StyledInfoWindow = styled(Paper)({
+  padding: '15px',
+  maxWidth: '250px',
+  borderRadius: '10px',
+  boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)',
+});
+
+const mapStyles = [
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#a6cbe3" }]
+  },
+  {
+    featureType: "landscape",
+    elementType: "geometry",
+    stylers: [{ color: "#e8f0f7" }]
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#ffffff" }]
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [{ color: "#d1e6cc" }]
+  },
+  {
+    featureType: "transit",
+    elementType: "geometry",
+    stylers: [{ color: "#f2f2f2" }]
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#ffffff" }]
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#3366cc" }]
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#3366cc" }]
+  },
+  {
+    featureType: "road.arterial",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#e6f0ff" }]
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#c2d9ff" }]
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#b8e0c1" }]
+  }
+];
 
 const ReactGoogleMapComponent = () => {
   const { isLoaded, loadError } = useLoadScript({
@@ -102,7 +212,6 @@ const ReactGoogleMapComponent = () => {
 
   const handleSignUp = (marker) => {
     if (!isAuthenticated) {
-      // If you want to show a login modal, you'll need to implement this
       console.log('User needs to log in');
       return;
     }
@@ -110,7 +219,6 @@ const ReactGoogleMapComponent = () => {
     if (marker.opportunityUrl) {
       window.open(marker.opportunityUrl, '_blank', 'noopener,noreferrer');
     } else {
-      // If there's no direct URL, navigate to the opportunity page
       window.location.href = `/opportunity/${marker.opportunityId}`;
     }
   };
@@ -119,55 +227,75 @@ const ReactGoogleMapComponent = () => {
   if (!isLoaded) return <div>Loading Maps...</div>;
 
   return (
-    <div id="map-container">
-      <div id="search-container">
-        <Autocomplete onLoad={onAutocompleteLoad} onPlaceChanged={onPlaceChanged}>
-          <input
-            type="text"
-            placeholder="Search a location"
-            id="place-input"
+    <MapContainer>
+      <Autocomplete onLoad={onAutocompleteLoad} onPlaceChanged={onPlaceChanged}>
+        <SearchInput
+          type="text"
+          placeholder="Search a location"
+        />
+      </Autocomplete>
+
+      <GoogleMap
+        mapContainerClassName="google-map"
+        center={{ lat: 37.7749, lng: -122.4194 }}
+        zoom={12}
+        onLoad={(map) => {
+          mapRef.current = map;
+        }}
+        options={{
+          styles: mapStyles,
+          disableDefaultUI: true,
+          zoomControl: true,
+          fullscreenControl: true,
+          mapTypeControl: true,
+        }}
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={index}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            onClick={() => handleMarkerClick(marker)}
+            icon={{
+              url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+              scaledSize: new window.google.maps.Size(40, 40),
+            }}
           />
-        </Autocomplete>
-      </div>
+        ))}
 
-      <div id="google-map-container">
-        <GoogleMap
-          mapContainerClassName="google-map"
-          center={{ lat: 37.7749, lng: -122.4194 }}
-          zoom={12}
-          onLoad={(map) => {
-            mapRef.current = map;
-          }}
-        >
-          {markers.map((marker, index) => (
-            <Marker
-              key={index}
-              position={{ lat: marker.lat, lng: marker.lng }}
-              onClick={() => handleMarkerClick(marker)}
-            />
-          ))}
-
-          {selectedMarker && (
-            <InfoWindow
-              position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
-              onCloseClick={handleInfoWindowClose}
-            >
-              <div>
-                <h3>{selectedMarker.title}</h3>
-                <p>{selectedMarker.address}</p>
-                <Button 
-                  color="secondary" 
-                  variant="outlined"
-                  onClick={() => handleSignUp(selectedMarker)}
-                >
-                  Sign Up Here
-                </Button>
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      </div>
-    </div>
+        {selectedMarker && (
+          <InfoWindow
+            position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+            onCloseClick={handleInfoWindowClose}
+          >
+            <StyledInfoWindow>
+              <Typography variant="h6" gutterBottom sx={{ color: '#3366cc', fontWeight: 'bold' }}>
+                {selectedMarker.title}
+              </Typography>
+              <Typography variant="body2" paragraph sx={{ color: '#555' }}>
+                {selectedMarker.address}
+              </Typography>
+              <Button 
+                sx={{
+                  backgroundColor: '#3366cc',
+                  '&:hover': {
+                    backgroundColor: '#254e99'
+                  },
+                  borderRadius: '20px',
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                }}
+                variant="contained"
+                onClick={() => handleSignUp(selectedMarker)}
+                fullWidth
+              >
+                Sign Up Here
+              </Button>
+            </StyledInfoWindow>
+          </InfoWindow>
+        )}
+      </GoogleMap>
+    </MapContainer>
   );
 };
 
