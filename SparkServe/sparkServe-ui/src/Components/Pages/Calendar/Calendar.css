@@ -44,10 +44,11 @@
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.06);
   height: auto;
-  max-height: calc(100vh - 200px); /* Adjust this value as needed */
+  max-height: calc(100vh - 200px);
   overflow: hidden;
   position: relative;
 }
+
 .calendar::before {
   content: '';
   position: absolute;
@@ -98,7 +99,7 @@
 
 .weekdays span {
   width: calc(100% / 7);
-  font-size: 0.9rem; /* Slightly reduced font size */
+  font-size: 0.9rem;
   font-weight: bold;
   text-transform: uppercase;
   color: #78879e;
@@ -115,8 +116,9 @@
   height: auto;
   flex-grow: 1;
 }
+
 .days span {
-  font-size: 0.8rem; /* Further reduced font size */
+  font-size: 0.8rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,9 +127,9 @@
   border: 1px solid #eaeaea;
   transition: all 0.3s ease;
   position: relative;
-  aspect-ratio: auto; /* Remove fixed aspect ratio */
-  padding: 0.25rem; /* Reduced padding */
-  min-height: 30px; /* Reduced minimum height */
+  aspect-ratio: auto;
+  padding: 0.25rem;
+  min-height: 30px;
 }
 
 .days span:hover {
@@ -147,16 +149,14 @@
 
 .opportunity-dot {
   position: absolute;
-  bottom: 1px; /* Adjusted position */
+  bottom: 1px;
   left: 50%;
   transform: translateX(-50%);
-  width: 3px; /* Further reduced size */
-  height: 3px; /* Further reduced size */
+  width: 6px;
+  height: 6px;
   background-color: #8c52ff;
   border-radius: 50%;
 }
-
-
 
 .upcoming-events-container {
   width: 35%;
@@ -267,21 +267,23 @@
 }
 
 .event-popup {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  width: 40rem;
-  border-radius: 1rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  row-gap: 1rem;
+  align-items: stretch;
   padding: 2rem;
   z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .event-popup::before {
@@ -290,86 +292,110 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 10px;
+  height: 8px;
   background: linear-gradient(90deg, #ff66c4, #8c52ff);
-  border-radius: 10px 10px 0 0;
+  border-radius: 20px 20px 0 0;
+}
+
+.event-popup-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.event-popup input[type="text"],
+.event-popup input[type="number"],
+.event-popup select,
+.event-popup textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.event-popup input[type="text"]:focus,
+.event-popup input[type="number"]:focus,
+.event-popup select:focus,
+.event-popup textarea:focus {
+  border-color: #8c52ff;
+  box-shadow: 0 0 0 2px rgba(140, 82, 255, 0.2);
+  outline: none;
+}
+
+.event-popup textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
 .time-input {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .event-popup-time {
-  width: 5rem;
   background-color: #ff66c4;
   color: white;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  padding: 0.5rem;
+  border-radius: 8px;
+  padding: 8px 12px;
 }
 
 .time-inputs-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 5px;
   background-color: #f5f5f5;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  padding: 0.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
 }
 
 .time-inputs-container input {
-  width: 3rem;
-  height: 2.5rem;
+  width: 40px;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 16px;
   border: none;
   background-color: transparent;
   color: #333;
 }
 
-.time-inputs-container span {
-  font-size: 1.2rem;
-  color: #333;
+.event-popup input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-.event-popup textarea,
-.event-popup input[type="text"],
-.event-popup input[type="number"],
-.event-popup select {
-  width: 25rem;
-  padding: 1rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.event-popup textarea:focus,
-.event-popup input[type="text"]:focus,
-.event-popup input[type="number"]:focus,
-.event-popup select:focus {
-  border-color: #ff66c4;
-  outline: none;
+.event-popup input[type="file"]:hover {
+  border-color: #8c52ff;
 }
 
 .event-popup-btn {
-  width: 25rem;
-  height: 4rem;
+  width: 100%;
+  padding: 12px;
   background: linear-gradient(90deg, #ff66c4, #8c52ff);
   color: white;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.2rem;
+  font-size: 20px;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .event-popup-btn:hover {
@@ -379,18 +405,25 @@
 
 .close-event-popup {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: transparent;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.8);
   border: none;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 24px;
   color: #333;
-  transition: transform 0.2s ease;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
 .close-event-popup:hover {
-  transform: scale(1.2);
+  background-color: rgba(255, 102, 196, 0.2);
+  transform: rotate(90deg);
 }
 
 .confirm-modal {
