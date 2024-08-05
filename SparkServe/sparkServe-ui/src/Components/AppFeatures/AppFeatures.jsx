@@ -11,6 +11,7 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import MapIcon from '@mui/icons-material/Map';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import { motion } from 'framer-motion';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import volunteeringImage from '../../assets/Volunteering.png';
 import mapImage from '../../assets/map.png';
 import orgImage from '../../assets/Org.png';
@@ -41,6 +42,13 @@ const items = [
 
 export default function Features() {
   const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
 
   const handleItemClick = (index) => {
     setSelectedItemIndex(index);
@@ -49,7 +57,14 @@ export default function Features() {
   const selectedFeature = items[selectedItemIndex];
 
   return (
-    <Container id="features" sx={{ py: { xs: 8, sm: 16 } }}>
+    <Container 
+      id="features" 
+      sx={{ 
+        py: { xs: 4, sm: 8, md: 16 },
+        px: { xs: 2, sm: 3, md: 4 }
+      }}
+      maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -57,18 +72,18 @@ export default function Features() {
       >
         <Card
           sx={{
-            p: 4,
+            p: { xs: 2, sm: 3, md: 4 },
             backgroundColor: 'white',
             borderRadius: '20px',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-            mt: -15,
+            mt: { xs: -5, sm: -10, md: -15 },
             overflow: 'hidden',
           }}
         >
-          <Grid container spacing={6}>
+          <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
             <Grid item xs={12} md={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
-                <Typography component="h2" variant="h4" color="text.primary" fontWeight="bold">
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 2, sm: 3, md: 4 } }}>
+                <Typography component="h2" variant={isTablet ? "h4" : "h5"} color="text.primary" fontWeight="bold">
                   Product features
                 </Typography>
                 <Box sx={{ ml: 1 }}>
@@ -76,18 +91,18 @@ export default function Features() {
                     src="https://cdn.lordicon.com/yedgackm.json"
                     trigger="hover"
                     colors="primary:#ffffff,secondary:#4bb3fd,tertiary:#3a3347"
-                    style={{ width: '45px', height: '50px' }}
+                    style={{ width: isTablet ? '45px' : '35px', height: isTablet ? '50px' : '40px' }}
                   ></lord-icon>
                 </Box>
               </Box>
               <Typography
                 variant="body1"
                 color="text.secondary"
-                sx={{ mb: { xs: 2, sm: 4 }, fontSize: '1.1rem' }}
+                sx={{ mb: { xs: 2, sm: 3, md: 4 }, fontSize: isTablet ? '1.1rem' : '1rem' }}
               >
                 Here we provide a brief overview of the key features of SparkServe and how it benefits users with opportunities specifically made for them.
               </Typography>
-              <Grid container item gap={1} sx={{ display: { xs: 'auto', sm: 'none' } }}>
+              <Grid container item gap={1} sx={{ display: { xs: 'flex', sm: 'none' } }}>
                 {items.map(({ title }, index) => (
                   <Chip
                     key={index}
@@ -98,6 +113,7 @@ export default function Features() {
                       background: (theme) => selectedItemIndex === index ? 'primary.main' : '',
                       '& .MuiChip-label': {
                         color: selectedItemIndex === index ? '#fff' : '',
+                        fontSize: isMobileM ? '0.8rem' : '0.7rem',
                       },
                     }}
                   />
@@ -107,8 +123,8 @@ export default function Features() {
                 component={Card}
                 variant="outlined"
                 sx={{
-                  display: { xs: 'auto', sm: 'none' },
-                  mt: 4,
+                  display: { xs: 'block', sm: 'none' },
+                  mt: 2,
                   borderRadius: '15px',
                   overflow: 'hidden',
                 }}
@@ -119,7 +135,7 @@ export default function Features() {
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    minHeight: 280,
+                    minHeight: isMobileL ? 280 : 200,
                   }}
                 />
                 <Box sx={{ px: 2, pb: 2 }}>
@@ -151,7 +167,7 @@ export default function Features() {
                       component={Button}
                       onClick={() => handleItemClick(index)}
                       sx={{
-                        p: 3,
+                        p: { sm: 2, md: 3 },
                         height: 'fit-content',
                         width: '100%',
                         background: 'none',
@@ -168,7 +184,7 @@ export default function Features() {
                           textAlign: 'left',
                           flexDirection: { xs: 'column', md: 'row' },
                           alignItems: { md: 'center' },
-                          gap: 2.5,
+                          gap: { xs: 1, sm: 2, md: 2.5 },
                         }}
                       >
                         <Box
@@ -183,6 +199,7 @@ export default function Features() {
                             color="text.primary"
                             variant="body2"
                             fontWeight="bold"
+                            fontSize={isTablet ? '1rem' : '0.9rem'}
                           >
                             {title}
                           </Typography>
@@ -190,6 +207,7 @@ export default function Features() {
                             color="text.secondary"
                             variant="body2"
                             sx={{ my: 0.5 }}
+                            fontSize={isTablet ? '0.9rem' : '0.8rem'}
                           >
                             {description}
                           </Typography>
@@ -244,4 +262,3 @@ export default function Features() {
     </Container>
   );
 }
-

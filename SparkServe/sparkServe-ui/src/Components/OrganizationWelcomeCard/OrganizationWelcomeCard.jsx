@@ -12,35 +12,41 @@ import OrganizationSignIn from '../../Components/OrganizationSignIn/Organization
 import logo from '../../assets/logo.png';
 import MovingComponent from 'react-moving-text';
 import { motion } from 'framer-motion';
+import { useTheme, useMediaQuery } from '@mui/material';
 
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  marginBottom: '20px',
-};
-
-const cardStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: '300px',
-  padding: '20px',
-  textAlign: 'center',
-  backgroundColor: 'white',
-  borderRadius: '20px',
-};
-
-const buttonStyle = {
-  margin: '10px',
-  borderRadius: '25px',
-  padding: '10px 20px',
-  transition: 'all 0.3s ease',
-};
-
-function OrganizationWelcomeCard() {
+const OrganizationWelcomeCard = () => {
   const navigate = useNavigate();
   const [openSignIn, setOpenSignIn] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+  const logoStyle = {
+    width: isMobile ? '100px' : isTablet ? '120px' : '140px',
+    height: 'auto',
+    marginBottom: isMobile ? '10px' : '20px',
+  };
+
+  const cardStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: isMobile ? '250px' : '300px',
+    padding: isMobile ? '15px' : '20px',
+    textAlign: 'center',
+    backgroundColor: 'white',
+    borderRadius: '20px',
+  };
+
+  const buttonStyle = {
+    margin: isMobile ? '5px' : '10px',
+    borderRadius: '25px',
+    padding: isMobile ? '8px 16px' : '10px 20px',
+    transition: 'all 0.3s ease',
+    fontSize: isMobile ? '0.8rem' : '1rem',
+  };
 
   const handleExploreClick = () => {
     navigate('/OrganizationSignUpPage');
@@ -66,10 +72,10 @@ function OrganizationWelcomeCard() {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 'calc(100vh - 400px)',
-        paddingTop: '10px',
+        paddingTop: isMobile ? '5px' : '10px',
       }}
     >
-      <Box sx={{ alignSelf: 'flex-start', marginBottom: 2 }}>
+      <Box sx={{ alignSelf: 'flex-start', marginBottom: isMobile ? 1 : 2 }}>
         <IconButton color="primary" onClick={handleBackClick}>
           <ArrowBackIosIcon />
         </IconButton>
@@ -81,10 +87,10 @@ function OrganizationWelcomeCard() {
       >
         <Card
           sx={{
-            maxHeight: 1000,
-            maxWidth: 700,
+            maxHeight: isMobile ? 800 : 1000,
+            maxWidth: isMobile ? 300 : isTablet ? 500 : 700,
             height: '100%',
-            width: '700px',
+            width: '100%',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
             zIndex: 99,
             overflow: 'hidden',
@@ -100,7 +106,7 @@ function OrganizationWelcomeCard() {
               transition={{ type: 'spring', stiffness: 300 }}
             />
             <Typography
-              variant="h5"
+              variant={isMobile ? "h6" : "h5"}
               component="div"
               gutterBottom
               sx={{
@@ -110,6 +116,7 @@ function OrganizationWelcomeCard() {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
                 fontWeight: 'bold',
+                fontSize: isMobile ? '1.1rem' : isTablet ? '1.3rem' : '1.5rem',
               }}
             >
               Welcome
@@ -131,8 +138,8 @@ function OrganizationWelcomeCard() {
               variant="body1"
               sx={{
                 color: 'text.secondary',
-                fontSize: '1.1rem',
-                marginTop: '10px',
+                fontSize: isMobile ? '0.9rem' : isTablet ? '1rem' : '1.1rem',
+                marginTop: isMobile ? '5px' : '10px',
               }}
             >
               Connecting your{' '}
@@ -144,11 +151,21 @@ function OrganizationWelcomeCard() {
                 passion
               </Typography>.
             </Typography>
-            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ 
+              mt: isMobile ? 2 : 3, 
+              display: 'flex', 
+              justifyContent: 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant="contained"
-                  sx={{ ...buttonStyle, backgroundColor: '#8c52ff', '&:hover': { backgroundColor: '#7a46e0' } }}
+                  sx={{ 
+                    ...buttonStyle, 
+                    backgroundColor: '#8c52ff', 
+                    '&:hover': { backgroundColor: '#7a46e0' },
+                    width: isMobile ? '100%' : 'auto',
+                  }}
                   onClick={handleExploreClick}
                 >
                   Introduce me
@@ -157,7 +174,12 @@ function OrganizationWelcomeCard() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant="contained"
-                  sx={{ ...buttonStyle, backgroundColor: '#ff66c4', '&:hover': { backgroundColor: '#e05ab0' } }}
+                  sx={{ 
+                    ...buttonStyle, 
+                    backgroundColor: '#ff66c4', 
+                    '&:hover': { backgroundColor: '#e05ab0' },
+                    width: isMobile ? '100%' : 'auto',
+                  }}
                   onClick={handleWelcomeClick}
                 >
                   Welcome Back

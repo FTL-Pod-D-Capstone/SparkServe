@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Typography, Box, Grid, Paper, CircularProgress } from '@mui/material';
+import { Typography, Box, Grid, Paper, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import { styled, keyframes } from '@mui/system';
 import PushPinIcon from '@mui/icons-material/PushPin';
 
@@ -31,7 +31,10 @@ const NotebookPaper = styled(Box)(({ theme }) => ({
     height: '100%',
     width: '2px',
     background: 'linear-gradient(to bottom, transparent, #ff9999, transparent)',
-  }
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '30px 20px',
+  },
 }));
 
 const CalendarPoster = styled(Paper)(({ theme }) => ({
@@ -50,6 +53,9 @@ const CalendarPoster = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   animation: `${float} 6s ease-in-out infinite`,
+  [theme.breakpoints.down('sm')]: {
+    height: '400px',
+  },
 }));
 
 const CalendarTop = styled(Box)(({ theme }) => ({
@@ -67,22 +73,32 @@ const CalendarTop = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   height: '180px',
+  [theme.breakpoints.down('sm')]: {
+    height: '140px',
+    padding: '15px',
+  },
 }));
 
 const MonthYear = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
-  fontSize: '24px', // Reduced from 28px
+  fontSize: '24px',
   textTransform: 'uppercase',
   letterSpacing: '3px',
   textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
   marginBottom: '10px',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '18px',
+  },
 }));
 
 const DateNumber = styled(Typography)(({ theme }) => ({
-  fontSize: '72px', // Reduced from 84px
+  fontSize: '72px',
   fontWeight: 'bold',
   lineHeight: 1,
   textShadow: '4px 4px 6px rgba(0,0,0,0.3)',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '56px',
+  },
 }));
 
 const EventContent = styled(Box)(({ theme }) => ({
@@ -101,7 +117,10 @@ const EventContent = styled(Box)(({ theme }) => ({
     right: 0,
     height: '15px',
     background: 'linear-gradient(to bottom, rgba(0,0,0,0.05), transparent)',
-  }
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '20px',
+  },
 }));
 
 const EventTitle = styled(Typography)(({ theme }) => ({
@@ -115,6 +134,10 @@ const EventTitle = styled(Typography)(({ theme }) => ({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '20px',
+    marginBottom: '10px',
+  },
 }));
 
 const EventDetails = styled(Typography)(({ theme }) => ({
@@ -132,7 +155,14 @@ const EventDetails = styled(Typography)(({ theme }) => ({
     color: '#ff66c4',
     fontSize: '24px',
     filter: 'drop-shadow(2px 2px 2px rgba(0,0,0,0.2))',
-  }
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '14px',
+    marginBottom: '8px',
+    '& svg, & span': {
+      fontSize: '20px',
+    },
+  },
 }));
 
 const PinIcon = styled(PushPinIcon)(({ theme }) => ({
@@ -147,7 +177,11 @@ const PinIcon = styled(PushPinIcon)(({ theme }) => ({
   transition: 'transform 0.3s ease-in-out',
   '&:hover': {
     transform: 'translateX(-50%) rotateZ(10deg) scale(1.1)',
-  }
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '50px',
+    top: '-30px',
+  },
 }));
 
 const TitleContainer = styled(Box)({
@@ -160,6 +194,8 @@ const TitleContainer = styled(Box)({
 
 const UpcomingEvents = ({ events, loading }) => {
   const sortedEvents = events ? events.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)) : [];
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -180,20 +216,21 @@ const UpcomingEvents = ({ events, loading }) => {
           fontWeight: 'bold', 
           textShadow: '3px 3px 6px rgba(0,0,0,0.2)', 
           letterSpacing: '3px',
-          fontSize: '3.75rem',
-          marginRight: '20px' // Added space between title and icon
+          fontSize: isMobile ? '2.5rem' : '3.75rem',
+          marginRight: '20px',
+          textAlign: 'center',
         }}>
           Upcoming Events
         </Typography>
       </TitleContainer>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
-          <CircularProgress sx={{ color: '#ff66c4' }} size={80} thickness={6} />
+          <CircularProgress sx={{ color: '#ff66c4' }} size={isMobile ? 60 : 80} thickness={6} />
         </Box>
       ) : sortedEvents.length === 0 ? (
         <Typography variant="h4" sx={{ textAlign: 'center', color: '#666', fontStyle: 'italic', animation: `${float} 3s ease-in-out infinite` }}>No upcoming events</Typography>
       ) : (
-        <Grid container spacing={8}>
+        <Grid container spacing={isMobile ? 4 : 8}>
           {sortedEvents.map((event, index) => {
             const eventDate = new Date(event.dateTime);
             return (

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, useLoadScript, Marker, Autocomplete, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
-import { Button, Paper, Typography, Box } from '@mui/material';
+import { Button, Paper, Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 import { styled, keyframes } from '@mui/system';
 import "./Map.css";
 
 const LIBRARIES = ["places"];
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
-
 const API_URL = `${baseUrl}/opps/locations`;
 
 const pulse = keyframes`
@@ -22,17 +21,23 @@ const pulse = keyframes`
   }
 `;
 
-const MapContainer = styled('div')({
+const MapContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  paddingTop: '51px',
+  paddingTop: '120px',
   position: 'relative',
-});
+  height: 'calc(100vh - 120px)',
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: '100px',
+    height: 'calc(100vh - 100px)',
+  },
+}));
 
-const SearchInput = styled('input')({
+const SearchInput = styled('input')(({ theme }) => ({
   boxSizing: 'border-box',
   border: 'none',
-  width: '400px',
+  width: '80%',
+  maxWidth: '450px',
   height: '50px',
   padding: '0 20px',
   borderRadius: '25px',
@@ -41,27 +46,35 @@ const SearchInput = styled('input')({
   outline: 'none',
   transition: 'all 0.3s ease',
   position: 'absolute',
-  top: '10px',
+  top: '20px',
   left: '50%',
   transform: 'translateX(-50%)',
   zIndex: 10,
   backgroundColor: 'white',
   '&:focus': {
     boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
-    width: '450px',
     animation: `${pulse} 1.5s infinite`,
   },
   '&::placeholder': {
     color: '#aaa',
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    width: '90%',
+    fontSize: '14px',
+    height: '40px',
+  },
+}));
 
-const StyledInfoWindow = styled(Paper)({
+const StyledInfoWindow = styled(Paper)(({ theme }) => ({
   padding: '15px',
   maxWidth: '250px',
   borderRadius: '10px',
   boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)',
-});
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px',
+    maxWidth: '200px',
+  },
+}));
 
 const mapStyles = [
   {
@@ -130,6 +143,11 @@ const ReactGoogleMapComponent = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const mapRef = useRef(null);
   const autocompleteRef = useRef(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -257,7 +275,10 @@ const ReactGoogleMapComponent = () => {
             onClick={() => handleMarkerClick(marker)}
             icon={{
               url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-              scaledSize: new window.google.maps.Size(40, 40),
+              scaledSize: new window.google.maps.Size(
+                isMobile ? 30 : isTablet ? 35 : 40,
+                isMobile ? 30 : isTablet ? 35 : 40
+              ),
             }}
           />
         ))}
@@ -268,10 +289,18 @@ const ReactGoogleMapComponent = () => {
             onCloseClick={handleInfoWindowClose}
           >
             <StyledInfoWindow>
-              <Typography variant="h6" gutterBottom sx={{ color: '#3366cc', fontWeight: 'bold' }}>
+              <Typography 
+                variant={isMobile ? "subtitle1" : isTablet ? "h6" : "h5"} 
+                gutterBottom 
+                sx={{ color: '#3366cc', fontWeight: 'bold' }}
+              >
                 {selectedMarker.title}
               </Typography>
-              <Typography variant="body2" paragraph sx={{ color: '#555' }}>
+              <Typography 
+                variant={isMobile ? "body2" : "body1"} 
+                paragraph 
+                sx={{ color: '#555' }}
+              >
                 {selectedMarker.address}
               </Typography>
               <Button 
@@ -284,6 +313,8 @@ const ReactGoogleMapComponent = () => {
                   textTransform: 'none',
                   fontWeight: 'bold',
                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                  fontSize: isMobile ? '12px' : isTablet ? '13px' : '14px',
+                  padding: isMobile ? '6px 12px' : isTablet ? '7px 14px' : '8px 16px',
                 }}
                 variant="contained"
                 onClick={() => handleSignUp(selectedMarker)}
