@@ -9,13 +9,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import logo2 from "../../assets/logo2.png";
 import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
 import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
-
 
 const logoStyle = {
   width: "140px",
@@ -55,22 +55,26 @@ function UserNavBar() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
+
   useEffect(() => {
     const authStatus = localStorage.getItem("isUserAuthenticated");
     const id = localStorage.getItem('userId');
     const getUser = async () => {
-
-
       try {
-          const response = await axios.get(`${baseUrl}/users/${id}`);
-
-          setProfilePicture(response.data.profilePicture || '');
+        const response = await axios.get(`${baseUrl}/users/${id}`);
+        setProfilePicture(response.data.profilePicture || '');
       } catch (err) {
-          console.error(`Error getting User:`, err);
+        console.error(`Error getting User:`, err);
       }
-  };
+    };
     getUser();
-
     setIsUserAuthenticated(authStatus === "true");
   }, []);
 
@@ -111,9 +115,7 @@ function UserNavBar() {
       );
     } else {
       return (
-        <>
-          <UserAccountPopover profileType="User Profile" profilePicture={profilePicture} />        
-        </>
+        <UserAccountPopover profileType="User Profile" profilePicture={profilePicture} />
       );
     }
   };
@@ -134,55 +136,56 @@ function UserNavBar() {
           zIndex: 1100,
         }}
       >
-        <Container>
+        <Container maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}>
           <Toolbar
             variant="regular"
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              py: isTablet ? 1 : 0.5,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: isTablet ? 0 : 1 }}>
               <img
                 src={logo2}
-                style={logoStyle}
+                style={{...logoStyle, width: isTablet ? "140px" : "100px"}}
                 alt="Logo"
                 onClick={() => navigate("/")}
               />
             </Box>
-            <Button
-              color="primary"
-              variant="text"
-              size="large"
-              component={Link}
-              to="/"
-              sx={responsiveNavButtonStyle}
-            >
-              Home
-            </Button>
-            <Button
-              color="primary"
-              variant="text"
-              size="large"
-              component={Link}
-              to="/UserLandingPage"
-              sx={responsiveNavButtonStyle}
-            >
-              Opportunities
-            </Button>
-            <Box
-              sx={{
-                display: { xs: "none", md: "flex" },
-                gap: 2,
-                alignItems: "center",
-              }}
-            >
+            <Box sx={{ 
+              display: { xs: "none", md: "flex" }, 
+              flexGrow: 1, 
+              justifyContent: "center",
+              gap: isLaptop ? 4 : 2
+            }}>
+              <Button
+                color="primary"
+                variant="text"
+                size={isLaptop ? "large" : "medium"}
+                component={Link}
+                to="/"
+                sx={responsiveNavButtonStyle}
+              >
+                Home
+              </Button>
+              <Button
+                color="primary"
+                variant="text"
+                size={isLaptop ? "large" : "medium"}
+                component={Link}
+                to="/UserLandingPage"
+                sx={responsiveNavButtonStyle}
+              >
+                Opportunities
+              </Button>
               {isUserAuthenticated && (
                 <Button
                   color="primary"
                   variant="text"
-                  size="large"
+                  size={isLaptop ? "large" : "medium"}
                   component={Link}
                   to="/Map"
                   sx={responsiveNavButtonStyle}

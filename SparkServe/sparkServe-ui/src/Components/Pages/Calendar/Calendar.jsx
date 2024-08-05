@@ -56,7 +56,6 @@ const CalendarApp = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
@@ -108,7 +107,15 @@ const CalendarApp = () => {
       setSpotsAvailable(10);
       setEditingEvent(null);
       setOpportunityImage(null);
+      document.body.style.overflow = 'hidden';
+      document.querySelector('.overlay').style.display = 'block';
     }
+  };
+
+  const closeEventPopup = () => {
+    setShowEventPopup(false);
+    document.body.style.overflow = 'auto';
+    document.querySelector('.overlay').style.display = 'none';
   };
 
   const isSameDay = (date1, date2) => {
@@ -187,7 +194,7 @@ const CalendarApp = () => {
         : [...opportunities, response.data];
       setOpportunities(updatedOpportunities);
       localStorage.setItem('events', JSON.stringify(updatedOpportunities));
-      setShowEventPopup(false);
+      closeEventPopup();
       resetForm();
     } catch (error) {
       console.error('Error creating/updating opportunity:', error.response ? error.response.data : error.message);
@@ -209,6 +216,8 @@ const CalendarApp = () => {
     setEditingEvent(event);
     setOpportunityImage(null);
     setShowEventPopup(true);
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.overlay').style.display = 'block';
   };
 
   const handleDeleteEvent = (eventId) => {
@@ -341,79 +350,85 @@ const CalendarApp = () => {
             )}
           </div>
         </div>
+        <div className="overlay"></div>
         {showEventPopup && (
-          <div className="event-popup">
-            <div className="selected-date">
-              {`Selected Date: ${selectedDate.getDate()} ${monthsOfYear[selectedDate.getMonth()]}, ${selectedDate.getFullYear()}`}
-            </div>
-            <div className="time-input">
-              <div className="event-popup-time">Time</div>
-              <input
-                type="number"
-                name="hours"
-                min={0}
-                max={23}
-                className="hours"
-                value={eventTime.hours}
-                onChange={handleTimeChange}
-              />
-              <input
-                type="number"
-                name="minutes"
-                min={0}
-                max={59}
-                className="minutes"
-                value={eventTime.minutes}
-                onChange={handleTimeChange}
-              />
-            </div>
-            <input
-              type="text"
-              placeholder="Enter Event Name"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Enter Event Location"
-              value={eventLocation}
-              onChange={(e) => setEventLocation(e.target.value)}
-            />
-            <select
-              value={eventRelatedCause}
-              onChange={(e) => setEventRelatedCause(e.target.value)}
-            >
-              <option value="">Select Related Cause</option>
-              {causes.map((cause) => (
-                <option key={cause} value={cause}>
-                  {cause}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              placeholder="Enter Spots Available"
-              value={spotsAvailable}
-              onChange={(e) => setSpotsAvailable(parseInt(e.target.value))}
-            />
-            <textarea
-              placeholder="Enter Event Description (Maximum 60 Characters)"
-              value={eventText}
-              onChange={(e) => {
-                if (e.target.value.length <= 60) {
-                  setEventText(e.target.value);
-                }
-              }}
-            ></textarea>
-            <input type="file" onChange={handleImageChange} />
-            <button className="event-popup-btn" onClick={handleEventSubmit}>
-              {editingEvent ? 'Update Opportunity' : 'Add Opportunity'}
-            </button>
-            <button className="close-event-popup" onClick={() => setShowEventPopup(false)}>
-              <CloseSharpIcon />
-            </button>
-          </div>
-        )}
+  <div className="event-popup">
+    <>
+      <div className="selected-date">
+        {`Selected Date: ${selectedDate.getDate()} ${monthsOfYear[selectedDate.getMonth()]}, ${selectedDate.getFullYear()}`}
+      </div>
+      <div className="time-input">
+        <div className="event-popup-time">Time</div>
+        <div className="time-inputs-container">
+          <input
+            type="number"
+            name="hours"
+            min={0}
+            max={23}
+            className="hours"
+            value={eventTime.hours}
+            onChange={handleTimeChange}
+          />
+          <span>:</span>
+          <input
+            type="number"
+            name="minutes"
+            min={0}
+            max={59}
+            className="minutes"
+            value={eventTime.minutes}
+            onChange={handleTimeChange}
+          />
+        </div>
+      </div>
+      <input
+        type="text"
+        placeholder="Enter Event Name"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Enter Event Location"
+        value={eventLocation}
+        onChange={(e) => setEventLocation(e.target.value)}
+      />
+      <select
+        value={eventRelatedCause}
+        onChange={(e) => setEventRelatedCause(e.target.value)}
+      >
+        <option value="">Select Related Cause</option>
+        {causes.map((cause) => (
+          <option key={cause} value={cause}>
+            {cause}
+          </option>
+        ))}
+      </select>
+      <input
+        type="number"
+        placeholder="Enter Spots Available"
+        value={spotsAvailable}
+        onChange={(e) => setSpotsAvailable(parseInt(e.target.value))}
+      />
+      <textarea
+        placeholder="Enter Event Description (Maximum 60 Characters)"
+        value={eventText}
+        onChange={(e) => {
+          if (e.target.value.length <= 60) {
+            setEventText(e.target.value);
+          }
+        }}
+      ></textarea>
+      <input type="file" onChange={handleImageChange} />
+      <button className="event-popup-btn" onClick={handleEventSubmit}>
+        {editingEvent ? 'Update Opportunity' : 'Add Opportunity'}
+      </button>
+      <button className="close-event-popup" onClick={closeEventPopup}>
+        <CloseSharpIcon />
+      </button>
+    </>
+  </div>
+)}
         {showConfirmModal && (
           <div className="confirm-modal">
             <div className="confirm-message">Are you sure you want to delete this opportunity?</div>
