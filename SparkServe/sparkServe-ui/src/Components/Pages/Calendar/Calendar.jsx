@@ -11,10 +11,7 @@ import Footer from '../../Footer/Footer';
 import './Calendar.css';
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-
 const CalendarApp = () => {
-
-
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthsOfYear = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -130,7 +127,6 @@ const CalendarApp = () => {
     };
   
     if (eventTime.hours && eventTime.minutes) {
-      // Create a new Date object with the selected date and time
       const eventDateTime = new Date(
         selectedDate.getFullYear(),
         selectedDate.getMonth(),
@@ -139,7 +135,6 @@ const CalendarApp = () => {
         parseInt(eventTime.minutes)
       );
 
-      // Format the date as an ISO string and remove the milliseconds
       newEvent.dateTime = eventDateTime.toISOString().split('.')[0] + 'Z';
     }
   
@@ -304,7 +299,8 @@ const CalendarApp = () => {
                   {opportunities.filter(opp => 
                     new Date(opp.dateTime).getDate() === day + 1 &&
                     new Date(opp.dateTime).getMonth() === currentMonth &&
-                    new Date(opp.dateTime).getFullYear() === currentYear
+                    new Date(opp.dateTime).getFullYear() === currentYear &&
+                    opp.organizationId === parseInt(localStorage.getItem('organizationId'))
                   ).map(opp => (
                     <div key={opp.opportunityId} className="opportunity-dot"></div>
                   ))}
@@ -330,10 +326,6 @@ const CalendarApp = () => {
                       <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                     </div>
                     <div className="upcoming-event-name">{opportunity.title}</div>
-                    {/* <div className="upcoming-event-location">{opportunity.address}</div> */}
-                    {/* <div className="upcoming-event-text">{opportunity.description}</div>
-                    <div className="upcoming-event-cause">Related Cause: {opportunity.relatedCause}</div>
-                    <div className="upcoming-event-spots">Spots Available: {opportunity.spotsAvailable}</div> */}
                     <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
                   </div>
                 ))}
