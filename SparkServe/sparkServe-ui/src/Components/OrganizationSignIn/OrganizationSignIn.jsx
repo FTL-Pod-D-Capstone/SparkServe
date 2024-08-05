@@ -18,7 +18,6 @@ import CheckIcon from '@mui/icons-material/Check';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -35,7 +34,7 @@ function Copyright(props) {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#4856f6',
+      main: '#ff66c4',
     },
   },
 });
@@ -95,7 +94,6 @@ const OrganizationSignIn = ({ open, handleClose }) => {
     }
   };
       
-
   const handleSignUpRedirect = () => {
     handleClose();
     navigate('/OrganizationSignUpPage');
@@ -137,7 +135,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                   Incorrect email or password. Please try again.
                 </Alert>
               )}
-              <Avatar sx={{ m: 1, bgcolor: 'ff66c4' }}>
+              <Avatar sx={{ m: 1, bgcolor: '#ff66c4' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
@@ -168,13 +166,13 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 3, mb: 2, bgcolor: '#ff66c4', '&:hover': { bgcolor: '#ff33ab' } }}
                 >
                   Log In
                 </Button>
                 <Grid container>
                   <Grid item>
-                    <Link onClick={handleSignUpRedirect} variant="body2" style={{ cursor: 'pointer' }}>
+                    <Link onClick={handleSignUpRedirect} variant="body2" style={{ cursor: 'pointer', color: '#ff66c4' }}>
                       {"Don't have an Organization account? Sign Up"}
                     </Link>
                   </Grid>
@@ -190,5 +188,4 @@ const OrganizationSignIn = ({ open, handleClose }) => {
 };
 
 export default OrganizationSignIn;
-
 
