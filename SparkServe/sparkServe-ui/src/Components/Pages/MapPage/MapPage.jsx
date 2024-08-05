@@ -1,12 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import ReactGoogleMapComponent from '../../Map/Map';
+import { useLocation} from 'react-router-dom';
 import Footer from '../../Footer/Footer';
 import { Box, Container } from '@mui/material';
 
 const MapPage = () => {
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const handleBackClick = () => {
     navigate('/UserLandingPage');
