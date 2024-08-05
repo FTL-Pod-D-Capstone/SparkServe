@@ -107,10 +107,10 @@ const getOpportunitiesByDateRange = async (req, res) => {
 // Function to get all opportunity locations
 const getAllOpportunitiesLocations = async (req, res) => {
   try {
-    console.log('Fetching all opportunities locations');
-    console.log('Request details:', req.method, req.url, req.headers);
+    // console.log('Fetching all opportunities locations');
+    // console.log('Request details:', req.method, req.url, req.headers);
     const locations = await opportunityModel.getAllOpportunitiesLocations();
-    console.log('Locations fetched:', locations);
+    // console.log('Locations fetched:', locations);
     res.status(200).json(locations);
   } catch (error) {
     console.error('Error in getAllOpportunitiesLocations controller:', error);

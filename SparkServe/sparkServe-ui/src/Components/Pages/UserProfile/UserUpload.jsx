@@ -23,14 +23,14 @@ function Upload({ onUploaded }) {
     };
 
     try {
-        console.log('Uploading to S3...');
+        // console.log('Uploading to S3...');
         const data = await s3.upload(params).promise();
-        console.log('Upload successful, data:', data);
+        // console.log('Upload successful, data:', data);
         if (typeof onUploaded === 'function') {
-            console.log('Calling onUploaded with:', data.Location);
+            // console.log('Calling onUploaded with:', data.Location);
             onUploaded(data.Location);
             } else {
-            console.log('onUploaded is not a function');
+            // console.log('onUploaded is not a function');
             }
             alert("File uploaded successfully.");
         } catch (err) {
