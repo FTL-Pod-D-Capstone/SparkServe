@@ -53,7 +53,7 @@ const VolOppContainer = () => {
       try {
         const response = await axios.get(`${baseUrl}/opps`);
         const opportunitiesData = response.data;
-        console.log('Fetched opportunities:', opportunitiesData);
+        // console.log('Fetched opportunities:', opportunitiesData);
 
         setOpportunities(opportunitiesData);
         setFilteredOpportunities(opportunitiesData);

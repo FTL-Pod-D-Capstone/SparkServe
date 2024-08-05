@@ -18,7 +18,7 @@ const profileData = [
     description: 'City College of New York 26.',
     linkedin: 'https://www.linkedin.com/in/ahmedhamouda1/',
     github: 'https://github.com/Ahmedh27',
-    objectPosition: 'center 40%'
+    objectPosition: 'center 20%'
   },
   {
     image: larnelle,
