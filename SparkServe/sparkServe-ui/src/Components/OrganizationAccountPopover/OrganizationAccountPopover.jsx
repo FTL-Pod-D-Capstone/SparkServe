@@ -38,7 +38,7 @@ function OrganizationAccountPopover({ profileType }) {
         onClick={handleMenuOpen}
         sx={{ color: 'black' }} // Change the icon color to black
       >
-        <AccountCircle sx={{ fontSize: 30 }}/>
+        <AccountCircle sx={{ fontSize: 40 }}/>
       </IconButton>
       <Menu
         id="menu-appbar"

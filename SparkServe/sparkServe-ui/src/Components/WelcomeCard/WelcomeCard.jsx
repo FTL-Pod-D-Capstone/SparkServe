@@ -7,36 +7,45 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { motion } from 'framer-motion';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import logo2 from '../../assets/logo2.png';
 import MovingComponent from 'react-moving-text';
 
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  marginBottom: '20px',
-};
-
-const cardStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: '300px',
-  padding: '20px',
-  textAlign: 'center',
-  backgroundColor: 'white',
-  borderRadius: '20px',
-};
-
-const buttonStyle = {
-  margin: '10px',
-  borderRadius: '25px',
-  padding: '10px 20px',
-  transition: 'all 0.3s ease',
-};
-
-function WelcomeCard() {
+const WelcomeCard = () => {
   const navigate = useNavigate();
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
+
+  const logoStyle = {
+    width: isTablet ? '140px' : '100px',
+    height: 'auto',
+    marginBottom: '20px',
+  };
+
+  const cardStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: isTablet ? '300px' : '250px',
+    padding: isTablet ? '20px' : '15px',
+    textAlign: 'center',
+    backgroundColor: 'white',
+    borderRadius: '20px',
+  };
+
+  const buttonStyle = {
+    margin: isTablet ? '10px' : '5px',
+    borderRadius: '25px',
+    padding: isTablet ? '10px 20px' : '8px 16px',
+    transition: 'all 0.3s ease',
+    fontSize: isTablet ? '1rem' : '0.875rem',
+  };
 
   const handleExploreClick = () => {
     navigate('/UserLandingPage');
@@ -48,11 +57,12 @@ function WelcomeCard() {
 
   return (
     <Container
+      maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexWrap: 'row',
+        flexWrap: 'wrap',
         minHeight: 'calc(100vh - 400px)',
         paddingTop: '10px',
       }}
@@ -64,10 +74,10 @@ function WelcomeCard() {
       >
         <Card
           sx={{
-            maxHeight: 1000,
-            maxWidth: 700,
+            maxHeight: isTablet ? 1000 : 800,
+            maxWidth: isTablet ? 700 : '95%',
             height: '100%',
-            width: '700px',
+            width: isTablet ? '700px' : '100%',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
             zIndex: 99,
             overflow: 'hidden',
@@ -83,7 +93,7 @@ function WelcomeCard() {
               transition={{ type: 'spring', stiffness: 300 }}
             />
             <Typography
-              variant="h5"
+              variant={isTablet ? "h5" : "h6"}
               component="div"
               gutterBottom
               sx={{
@@ -114,13 +124,19 @@ function WelcomeCard() {
               variant="body1"
               sx={{
                 color: 'text.secondary',
-                fontSize: '1.1rem',
+                fontSize: isTablet ? '1.1rem' : '1rem',
                 marginTop: '10px',
               }}
             >
               Connecting your passion to purpose.
             </Typography>
-            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ 
+              mt: 3, 
+              display: 'flex', 
+              justifyContent: 'center',
+              flexDirection: isTablet ? 'row' : 'column',
+              alignItems: 'center',
+            }}>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant="contained"

@@ -9,8 +9,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Chip,
   Button,
   Popover,
+  IconButton,
+  Fade,
 } from "@mui/material";
 import { DateRangePicker } from "react-date-range";
 import { format } from "date-fns";
@@ -18,6 +21,9 @@ import { enUS } from 'date-fns/locale';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import ClearIcon from '@mui/icons-material/Clear';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import LinearGradientLoading from "./LinearGradientLoading";
@@ -32,6 +38,7 @@ const VolOppContainer = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [organizationFilter, setOrganizationFilter] = useState("");
   const [causeFilter, setCauseFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [dateRangeFilter, setDateRangeFilter] = useState([
     {
       startDate: null,
@@ -154,6 +161,20 @@ const VolOppContainer = () => {
     setDateAnchorEl(null);
   };
 
+  const handleClearFilters = () => {
+    setNameFilter("");
+    setOrganizationFilter("");
+    setCauseFilter("");
+    setDateRangeFilter([
+      {
+        startDate: null,
+        endDate: null,
+        key: "selection",
+      },
+    ]);
+    setAgeRangeFilter("");
+  };
+
   const dateRangeOpen = Boolean(dateAnchorEl);
   const dateRangeId = dateRangeOpen ? "date-range-popover" : undefined;
 
@@ -243,122 +264,259 @@ const VolOppContainer = () => {
     </Paper>
   );
 
+  
   if (isLoading) return <LinearGradientLoading />;
   if (error) return <div>{error}</div>;
 
   return (
-    <Box sx={{ width: "100%", mt: 4 }}>
-      <Box sx={{ mb: 4, display: "flex", flexWrap: "wrap", gap: 2 }}>
-        <TextField
-          label="Search opportunities"
-          variant="outlined"
-          value={nameFilter}
-          onChange={(e) => setNameFilter(e.target.value)}
-          sx={{
-            flexGrow: 1,
-            minWidth: "200px",
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: "white",
-            },
-          }}
-        />
-        <FormControl variant="outlined" sx={{ minWidth: "150px" }}>
-          <InputLabel>Organization</InputLabel>
-          <Select
-            value={organizationFilter}
-            onChange={(e) => setOrganizationFilter(e.target.value)}
-            label="Organization"
-            sx={{ backgroundColor: "white" }}
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            {organizations.map((org) => (
-              <MenuItem key={org} value={org}>
-                {org}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl variant="outlined" sx={{ minWidth: "150px" }}>
-          <InputLabel>Cause</InputLabel>
-          <Select
-            value={causeFilter}
-            onChange={(e) => setCauseFilter(e.target.value)}
-            label="Cause"
-            sx={{ backgroundColor: "white" }}
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            {causes.map((cause) => (
-              <MenuItem key={cause} value={cause}>
-                {cause}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button
-          variant="outlined"
-          onClick={handleDateClick}
-          startIcon={<CalendarTodayIcon />}
-          sx={{ backgroundColor: "white" }}
-        >
-          {dateRangeFilter[0].startDate && dateRangeFilter[0].endDate
-            ? `${format(dateRangeFilter[0].startDate, "MMM d, yyyy")} - ${format(dateRangeFilter[0].endDate, "MMM d, yyyy")}`
-            : "Select Date Range"}
-        </Button>
-        <Popover
-          id={dateRangeId}
-          open={dateRangeOpen}
-          anchorEl={dateAnchorEl}
-          onClose={handleDateClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-        >
-          <Paper sx={{ p: 2, width: 'auto' }}>
-            <DateRangePicker
-              onChange={handleDateRangeChange}
-              showSelectionPreview={true}
-              moveRangeOnFirstSelection={false}
-              months={1}
-              ranges={dateRangeFilter}
-              direction="horizontal"
-              minDate={new Date()}
-              locale={enUS}
+    <Box
+      sx={{
+        backgroundImage: 'linear-gradient(rgb(180, 200, 255), rgb(255, 255, 255))',
+        backgroundSize: '100% 50%',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'white',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        mt: 1,
+        width: '100%',
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          mb: 4,
+          borderRadius: '20px',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        }}
+      >
+        <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold', color: '#3f51b5', textAlign: 'center' }}>
+          Discover Volunteer Opportunities
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <TextField
+              label="Search opportunities"
+              variant="outlined"
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+              sx={{
+                flexGrow: 1,
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: '50px',
+                  '&:hover': {
+                    boxShadow: '0 0 10px rgba(63, 81, 181, 0.3)',
+                  },
+                },
+              }}
+              InputProps={{
+                startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
+              }}
             />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-              <Button onClick={handleClearDateRange} sx={{ mr: 1 }}>
-                Clear
-              </Button>
-              <Button onClick={handleDateClose} variant="contained">
-                Apply
+            <Button
+              variant="contained"
+              onClick={() => setShowFilters(!showFilters)}
+              startIcon={<FilterListIcon />}
+              sx={{
+                borderRadius: '50px',
+                backgroundColor: '#3f51b5',
+                '&:hover': {
+                  backgroundColor: '#283593',
+                },
+              }}
+            >
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </Button>
+          </Box>
+          <Fade in={showFilters}>
+            <Box sx={{ display: showFilters ? "flex" : "none", flexDirection: "column", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <FormControl variant="outlined" sx={{ minWidth: "200px", flex: 1 }}>
+                  <InputLabel>Organization</InputLabel>
+                  <Select
+                    value={organizationFilter}
+                    onChange={(e) => setOrganizationFilter(e.target.value)}
+                    label="Organization"
+                    sx={{
+                      backgroundColor: "white",
+                      borderRadius: '50px',
+                      '&:hover': {
+                        boxShadow: '0 0 10px rgba(63, 81, 181, 0.3)',
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>All</em>
+                    </MenuItem>
+                    {organizations.map((org) => (
+                      <MenuItem key={org} value={org}>
+                        {org}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl variant="outlined" sx={{ minWidth: "200px", flex: 1 }}>
+                  <InputLabel>Cause</InputLabel>
+                  <Select
+                    value={causeFilter}
+                    onChange={(e) => setCauseFilter(e.target.value)}
+                    label="Cause"
+                    sx={{
+                      backgroundColor: "white",
+                      borderRadius: '50px',
+                      '&:hover': {
+                        boxShadow: '0 0 10px rgba(63, 81, 181, 0.3)',
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>All</em>
+                    </MenuItem>
+                    {causes.map((cause) => (
+                      <MenuItem key={cause} value={cause}>
+                        {cause}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl variant="outlined" sx={{ minWidth: "200px", flex: 1 }}>
+                  <InputLabel>Age Range</InputLabel>
+                  <Select
+                    value={ageRangeFilter}
+                    onChange={(e) => setAgeRangeFilter(e.target.value)}
+                    label="Age Range"
+                    sx={{
+                      backgroundColor: "white",
+                      borderRadius: '50px',
+                      '&:hover': {
+                        boxShadow: '0 0 10px rgba(63, 81, 181, 0.3)',
+                      },
+                    }}
+                  >
+                    {ageRanges.map((range) => (
+                      <MenuItem key={range} value={range === "All" ? "" : range}>
+                        {range}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Button
+                variant="outlined"
+                onClick={handleDateClick}
+                startIcon={<CalendarTodayIcon />}
+                sx={{
+                  backgroundColor: "white",
+                  color: "#3f51b5",
+                  '&:hover': {
+                    backgroundColor: "#e8eaf6",
+                  },
+                  borderRadius: '50px',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                }}
+              >
+                {dateRangeFilter[0].startDate && dateRangeFilter[0].endDate
+                  ? `${format(dateRangeFilter[0].startDate, "MMM d, yyyy")} - ${format(dateRangeFilter[0].endDate, "MMM d, yyyy")}`
+                  : "Select Date Range"}
               </Button>
             </Box>
-          </Paper>
-        </Popover>
-        <FormControl variant="outlined" sx={{ minWidth: "150px" }}>
-          <InputLabel>Age Range</InputLabel>
-          <Select
-            value={ageRangeFilter}
-            onChange={(e) => setAgeRangeFilter(e.target.value)}
-            label="Age Range"
-            sx={{ backgroundColor: "white" }}
-          >
-            {ageRanges.map((range) => (
-              <MenuItem key={range} value={range === "All" ? "" : range}>
-                {range}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+          </Fade>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 1 }}>
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+              {nameFilter && (
+                <Chip
+                  label={`Search: ${nameFilter}`}
+                  onDelete={() => setNameFilter("")}
+                  color="primary"
+                  sx={{ borderRadius: '20px', backgroundColor: '#3f51b5' }}
+                />
+              )}
+              {organizationFilter && (
+                <Chip
+                  label={`Organization: ${organizationFilter}`}
+                  onDelete={() => setOrganizationFilter("")}
+                  color="primary"
+                  sx={{ borderRadius: '20px', backgroundColor: '#3f51b5' }}
+                />
+              )}
+              {causeFilter && (
+                <Chip
+                  label={`Cause: ${causeFilter}`}
+                  onDelete={() => setCauseFilter("")}
+                  color="primary"
+                  sx={{ borderRadius: '20px', backgroundColor: '#3f51b5' }}
+                />
+              )}
+              {ageRangeFilter && (
+                <Chip
+                  label={`Age: ${ageRangeFilter}`}
+                  onDelete={() => setAgeRangeFilter("")}
+                  color="primary"
+                  sx={{ borderRadius: '20px', backgroundColor: '#3f51b5' }}
+                />
+              )}
+              {dateRangeFilter[0].startDate && dateRangeFilter[0].endDate && (
+                <Chip
+                  label={`Date: ${format(dateRangeFilter[0].startDate, "MMM d, yyyy")} - ${format(dateRangeFilter[0].endDate, "MMM d, yyyy")}`}
+                  onDelete={handleClearDateRange}
+                  color="primary"
+                  sx={{ borderRadius: '20px', backgroundColor: '#3f51b5' }}
+                />
+              )}
+            </Box>
+            {(nameFilter || organizationFilter || causeFilter || ageRangeFilter || (dateRangeFilter[0].startDate && dateRangeFilter[0].endDate)) && (
+              <Button
+                variant="outlined"
+                onClick={handleClearFilters}
+                startIcon={<ClearIcon />}
+                sx={{ borderRadius: '50px', color: '#3f51b5', borderColor: '#3f51b5' }}
+              >
+                Clear All Filters
+              </Button>
+            )}
+          </Box>
+        </Box>
+      </Paper>
+
+      <Popover
+        id={dateRangeId}
+        open={dateRangeOpen}
+        anchorEl={dateAnchorEl}
+        onClose={handleDateClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <Paper sx={{ p: 2, width: 'auto' }}>
+          <DateRangePicker
+            onChange={handleDateRangeChange}
+            showSelectionPreview={true}
+            moveRangeOnFirstSelection={false}
+            months={1}
+            ranges={dateRangeFilter}
+            direction="horizontal"
+            minDate={new Date()}
+            locale={enUS}
+          />
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button onClick={handleClearDateRange} sx={{ mr: 1 }}>
+              Clear
+            </Button>
+            <Button onClick={handleDateClose} variant="contained" sx={{ backgroundColor: '#3f51b5' }}>
+              Apply
+            </Button>
+          </Box>
+        </Paper>
+      </Popover>
 
       <Grid container spacing={3}>
         {filteredOpportunities.map((opportunity) => (
