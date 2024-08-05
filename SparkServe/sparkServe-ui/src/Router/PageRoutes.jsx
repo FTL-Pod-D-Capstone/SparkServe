@@ -15,6 +15,7 @@ import VolunOppPage from '../Components/Pages/VolunteerOpportunity/VolunteerOppu
 import UserProfilePage from '../Components/Pages/UserProfile/UserProfilePage';
 import OrganizationProfilePage from '../Components/Pages/OrganizationProfile/OrganizationProfilePage';
 import BookmarksPage from '../Components/Pages/BookMarksPage/BookMarksPage';
+import ErrorPage from '../Components/Pages/ErrorPage/ErrorPage';
 
 const PageRoutes = () => {
   return (
@@ -33,6 +34,7 @@ const PageRoutes = () => {
       <Route path="/UserProfile/:id" element={<UserProfilePage />} />
       <Route path="/bookmarks" element={<BookmarksPage />} />      
       <Route path="/OrganizationProfile/:id" element={<OrganizationProfilePage />} />
+      <Route path="/Error" element={<ErrorPage />} />
 
       <Route path="/opportunity/:opportunityId" element={<VolunOppPage />} />
     </Routes>
