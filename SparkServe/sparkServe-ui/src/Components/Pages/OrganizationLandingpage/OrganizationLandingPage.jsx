@@ -3,6 +3,7 @@ import axios from 'axios';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
 import UpcomingEvents from '../../UpcomingEvents/UpcomingEvents';
 import Footer from '../../Footer/Footer';
+import { useLocation } from 'react-router-dom';
 import { Box, Container, CircularProgress } from '@mui/material';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
@@ -11,6 +12,13 @@ const baseUrl = import.meta.env.VITE_BACKEND_URL;
 const OrgLandingPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     const fetchEvents = async () => {
