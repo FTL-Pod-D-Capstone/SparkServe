@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
-@import url(https://fonts.googleapis.com/css?family=Bebas+Neue);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 .calendar-app {
   width: 100%;
@@ -22,7 +22,7 @@
 }
 
 .heading {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 4rem;
   color: #333;
   letter-spacing: 0.1rem;
@@ -493,8 +493,9 @@
   }
 
   .event-popup {
-    width: 95%;
+    width: 85%;
     max-height: 90vh;
+
   }
 
   .event-popup-title {
