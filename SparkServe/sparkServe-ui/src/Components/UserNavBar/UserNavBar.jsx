@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,13 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import CircularProgress from "@mui/material/CircularProgress";
 import logo2 from "../../assets/logo2.png";
 import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
-import axios from "axios";
-
-const baseUrl = import.meta.env.VITE_BACKEND_URL;
-
+import { CombinedAuthContext } from '../CombinedAuthContext/CombinedAuthContext';
 
 const logoStyle = {
   width: "140px",
@@ -48,31 +46,11 @@ const navButtonStyle = {
 };
 
 function UserNavBar() {
-  const [open, setOpen] = useState(false);
-  const [signInModalOpen, setSignInModalOpen] = useState(false);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const [profilePicture, setProfilePicture] = useState('');
+  const [open, setOpen] = React.useState(false);
+  const [signInModalOpen, setSignInModalOpen] = React.useState(false);
+  const { userAuth } = useContext(CombinedAuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const authStatus = localStorage.getItem("isUserAuthenticated");
-    const id = localStorage.getItem('userId');
-    const getUser = async () => {
-
-
-      try {
-          const response = await axios.get(`${baseUrl}/users/${id}`);
-
-          setProfilePicture(response.data.profilePicture || '');
-      } catch (err) {
-          console.error(`Error getting User:`, err);
-      }
-  };
-    getUser();
-
-    setIsUserAuthenticated(authStatus === "true");
-  }, []);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -87,7 +65,11 @@ function UserNavBar() {
   };
 
   const renderButtons = () => {
-    if (!isUserAuthenticated) {
+    if (userAuth.loading) {
+      return <CircularProgress size={24} />;
+    }
+  
+    if (!userAuth.isAuthenticated) {
       return (
         <>
           <Button
@@ -111,9 +93,10 @@ function UserNavBar() {
       );
     } else {
       return (
-        <>
-          <UserAccountPopover profileType="User Profile" profilePicture={profilePicture} />        
-        </>
+        <UserAccountPopover 
+          profileType="User Profile" 
+          profilePicture={userAuth.user.profilePicture} 
+        />
       );
     }
   };
@@ -122,6 +105,14 @@ function UserNavBar() {
     ...navButtonStyle,
     display: { xs: "none", md: "inline-flex" },
   };
+
+  if (userAuth.loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -178,7 +169,7 @@ function UserNavBar() {
                 alignItems: "center",
               }}
             >
-              {isUserAuthenticated && (
+              {userAuth.isAuthenticated && (
                 <Button
                   color="primary"
                   variant="text"
@@ -257,7 +248,7 @@ function UserNavBar() {
                           Opportunities
                         </Button>
                       </MenuItem>
-                      {isUserAuthenticated && (
+                      {userAuth.isAuthenticated && (
                         <MenuItem>
                           <Button
                             color="primary"
@@ -271,9 +262,12 @@ function UserNavBar() {
                           </Button>
                         </MenuItem>
                       )}
-                      {isUserAuthenticated && (
+                      {userAuth.isAuthenticated && (
                         <MenuItem>
-                          <UserAccountPopover profileType="User Profile" />
+                          <UserAccountPopover 
+                            profileType="User Profile" 
+                            profilePicture={userAuth.user?.profilePicture} 
+                          />
                         </MenuItem>
                       )}
                     </>
