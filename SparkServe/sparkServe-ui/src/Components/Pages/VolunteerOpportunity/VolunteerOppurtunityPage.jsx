@@ -87,6 +87,8 @@ const VolunOppPage = () => {
             setShowLoginModal(true);
         } else if (opportunity.opportunityUrl) {
             window.open(opportunity.opportunityUrl, '_blank', 'noopener,noreferrer');
+        }else{
+            navigate('/Error')
         }
     };
 
