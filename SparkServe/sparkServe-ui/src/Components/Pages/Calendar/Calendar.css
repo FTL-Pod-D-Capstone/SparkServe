@@ -1,3 +1,6 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
 .calendar-app {
   width: 100%;
   height: 100%;
@@ -19,7 +22,7 @@
 }
 
 .heading {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 4rem;
   color: #333;
   letter-spacing: 0.1rem;
@@ -79,7 +82,7 @@
 .navigate-date button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: #ff66c4;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -113,49 +116,44 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 1px;
   width: 100%;
-  height: auto;
-  flex-grow: 1;
 }
 
-.days span {
-  font-size: 0.8rem;
+.day-cell {
+  aspect-ratio: 1.5;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 0.8rem;
   color: #333;
   cursor: pointer;
   border: 1px solid #eaeaea;
   transition: all 0.3s ease;
   position: relative;
-  aspect-ratio: auto;
-  padding: 0.25rem;
-  min-height: 30px;
 }
 
-.days span:hover {
+.day-cell:hover {
   background-color: #f0f0f0;
 }
 
-.current-day {
+.day-cell.current-day {
   background-color: #ff66c4;
-  color: white !important;
+  color: white;
   font-weight: bold;
   box-shadow: 0 0 10px rgba(255, 102, 196, 0.5);
 }
 
-.empty-day {
+.day-cell.empty {
   background-color: #f9f9f9;
 }
 
 .opportunity-dot {
-  position: absolute;
-  bottom: 1px;
-  left: 50%;
-  transform: translateX(-50%);
   width: 6px;
   height: 6px;
   background-color: #8c52ff;
   border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
 }
 
 .upcoming-events-container {
@@ -228,42 +226,35 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.delete-event {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  cursor: pointer;
-  color: #ffffff;
-  padding: 0.25rem;
-  border-radius: 50%;
+.event-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+  justify-content: space-between;
+  margin-top: 1rem;
 }
 
-.delete-event:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.upcoming-event button {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: none;
+.event-actions button {
   padding: 0.5rem 1rem;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-top: 0.75rem;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease;
 }
 
-.upcoming-event button:hover {
+.event-actions button:first-child {
   background-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.event-actions button:last-child {
+  background-color: rgba(255, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.event-actions button:hover {
+  transform: translateY(-2px);
 }
 
 .event-popup {
@@ -280,11 +271,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  padding: 2rem;
+  padding: 2.5rem;
   z-index: 1000;
   overflow-y: auto;
-  max-height: 100vh;
-  
+  max-height: 90vh;
 }
 
 .event-popup::before {
@@ -295,32 +285,36 @@
   right: 0;
   height: 8px;
   background: linear-gradient(90deg, #ff66c4, #8c52ff);
-  border-radius: 20px 20px 20px 20px;
+  border-radius: 20px 20px 0 0;
 }
 
-.event-popup-title {
-  font-size: 24px;
+.event-popup h2 {
+  font-size: 1.8rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .event-popup input[type="text"],
 .event-popup input[type="number"],
+.event-popup input[type="date"],
+.event-popup input[type="time"],
 .event-popup select,
 .event-popup textarea {
-  width: 400px;
+  width: 100%;
   padding: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .event-popup input[type="text"]:focus,
 .event-popup input[type="number"]:focus,
+.event-popup input[type="date"]:focus,
+.event-popup input[type="time"]:focus,
 .event-popup select:focus,
 .event-popup textarea:focus {
   border-color: #8c52ff;
@@ -333,52 +327,13 @@
   min-height: 100px;
 }
 
-.time-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.event-popup-time {
-  background-color: #ff66c4;
-  color: white;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  padding: 12px 12px;
-  margin-bottom: 13px;
-}
-
- .time-inputs-container {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: #f5f5f5;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 3px;
-} 
-
-.time-inputs-container input {
-  width: 10px;
-  text-align: center;
-  font-size: 16px;
-  border: none;
-  background-color: transparent;
-  color: #333;
-}
-
 .event-popup input[type="file"] {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   border: 2px dashed #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
 }
 
@@ -391,13 +346,13 @@
   padding: 12px;
   background: linear-gradient(90deg, #ff66c4, #8c52ff);
   color: white;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
   border: none;
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 .event-popup-btn:hover {
@@ -407,12 +362,12 @@
 
 .close-event-popup {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 1rem;
+  right: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
   border: none;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #333;
   width: 30px;
   height: 30px;
@@ -426,6 +381,17 @@
 .close-event-popup:hover {
   background-color: rgba(255, 102, 196, 0.2);
   transform: rotate(90deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
 }
 
 .confirm-modal {
@@ -444,17 +410,6 @@
   font-size: 1.5rem;
   color: #333;
   margin-bottom: 1rem;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  display: none;
 }
 
 .confirm-buttons {
@@ -480,25 +435,87 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 500px) {
+@media screen and (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .calendar, .upcoming-events-container {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .upcoming-events-container {
+    margin-top: 2rem;
+  }
+
+  .event-popup {
+    width: 85%;
+    max-height: 90vh;
+  }
+
+  .event-popup-title {
+    font-size: 1.3rem;
+  }
+
+  .event-popup input[type="text"],
+  .event-popup input[type="number"],
+  .event-popup input[type="date"],
+  .event-popup input[type="time"],
+  .event-popup select,
+  .event-popup textarea {
+    font-size: 0.9rem;
+  }
+
+  .event-popup-btn {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
   .calendar-app {
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .content {
+    flex-direction: column;
   }
 
-  .heading {
-    font-size: 2.5rem;
+  .calendar, .upcoming-events-container {
+    width: 100%;
+    margin: 0;
   }
 
-  .navigate-date {
-    column-gap: 0.5rem;
+  .calendar {
+    margin-bottom: 1rem;
+  }
+
+  .days {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+  }
+
+  .day-cell {
+    aspect-ratio: 1;
+    font-size: 0.7rem;
+    padding: 0.1rem;
   }
 
   .navigate-date h2 {
     font-size: 1.2rem;
   }
 
-  .navigate-date button {
-    font-size: 1.2rem;
+  .upcoming-event {
+    padding: 0.75rem;
+  }
+
+  .upcoming-event-date, .upcoming-event-time {
+    font-size: 0.8rem;
+  }
+
+  .upcoming-event-name {
+    font-size: 1rem;
   }
 
   .weekdays span {
@@ -506,55 +523,176 @@
     padding: 0.25rem 0;
   }
 
-  .days span {
-    font-size: 0.6rem;
-    padding: 0.1rem;
+  .opportunity-dot {
+    width: 3px;
+    height: 3px;
   }
 
-  .opportunity-dot {
-    width: 4px;
-    height: 4px;
+  .event-popup {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    padding: 1rem;
+    padding-top: 60px; /* Increased top padding to avoid navbar overlap */
+  }
+
+  .event-popup h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .event-popup input[type="text"],
+  .event-popup input[type="number"],
+  .event-popup input[type="date"],
+  .event-popup input[type="time"],
+  .event-popup select,
+  .event-popup textarea {
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .event-popup-btn {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .close-event-popup {
+    top: 70px; /* Position below the navbar */
+    right: 10px;
+    font-size: 20px;
   }
 }
+  
+@media screen and (max-width: 375px) {
+  /* iPhone SE */
+  .calendar-app {
+    padding: 0.25rem;
+  }
 
-/* Specific device adjustments */
-@media (max-width: 360px) {
-  /* For Galaxy S8+ */
   .heading {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .navigate-date h2 {
     font-size: 1rem;
   }
-}
 
-@media (width: 540px) {
-  /* For Surface Duo */
-  .calendar {
-    width: 100%;
-  }
-
-  .days span {
-    font-size: 0.8rem;
-  }
-}
-
-@media (width: 280px) {
-  /* For Galaxy Fold */
-  .heading {
-    font-size: 1.8rem;
-  }
-
-  .navigate-date h2 {
-    font-size: 0.9rem;
+  .day-cell {
+    font-size: 0.6rem;
+    padding: 0.05rem;
   }
 
   .weekdays span {
     font-size: 0.6rem;
   }
 
-  .days span {
-    font-size: 0.5rem;
+  .event-popup {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    padding: 1rem;
+    padding-top: 60px; /* Increased top padding to avoid navbar overlap */
+  }
+
+  .event-popup h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .event-popup input[type="text"],
+  .event-popup input[type="number"],
+  .event-popup input[type="date"],
+  .event-popup input[type="time"],
+  .event-popup select,
+  .event-popup textarea {
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .event-popup-btn {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .close-event-popup {
+    top: 65px; /* Position below the navbar */
+    right: 10px;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  /* Galaxy S8+ */
+  .calendar-app {
+    padding: 0.2rem;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .navigate-date h2 {
+    font-size: 0.9rem;
+  }
+
+  .day-cell {
+    font-size: 0.55rem;
+    padding: 0.05rem;
+  }
+
+  .weekdays span {
+    font-size: 0.55rem;
+  }
+
+  .event-popup {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    padding: 1rem;
+    padding-top: 60px; /* Increased top padding to avoid navbar overlap */
+  }
+
+  .event-popup h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .event-popup input[type="text"],
+  .event-popup input[type="number"],
+  .event-popup input[type="date"],
+  .event-popup input[type="time"],
+  .event-popup select,
+  .event-popup textarea {
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .event-popup-btn {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .close-event-popup {
+    top: 65px; /* Position below the navbar */
+    right: 10px;
+    font-size: 18px;
   }
 }
