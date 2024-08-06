@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Footer from '../../Footer/Footer';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert, Container } from '@mui/material';
@@ -11,7 +11,6 @@ import axios from 'axios';
 import { styled } from '@mui/system';
 import UserUpload from './UserUpload';
 import { CombinedAuthContext } from '../../CombinedAuthContext/CombinedAuthContext';
-
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -39,7 +38,7 @@ const StyledAvatar = styled(Avatar)({
 const UserProfilePage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { userAuth, setUserAuth } = useContext(CombinedAuthContext);
+    const { userAuth, setUserAuth, updateUserProfilePicture } = useContext(CombinedAuthContext);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +46,6 @@ const UserProfilePage = () => {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
     const baseUrl = import.meta.env.VITE_BACKEND_URL;
-
 
     const handleGoBack = () => {
         navigate(-1);
@@ -90,7 +88,12 @@ const UserProfilePage = () => {
     const handleSave = async () => {
         try {
             const response = await axios.put(`${baseUrl}/users/${id}`, editedUser);
-            setUser(response.data);
+            setUserAuth(prev => ({
+                ...prev,
+                user: response.data,
+                loading: false,
+                isAuthenticated: true
+            }));
             setIsEditing(false);
             setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
         } catch (err) {
@@ -110,13 +113,18 @@ const UserProfilePage = () => {
     };
 
     const handleFileUploaded = async (url) => {
-        setProfilePicture(url);
+        updateUserProfilePicture(url);
         try {
             const response = await axios.put(`${baseUrl}/users/${id}`, {
                 ...editedUser,
                 profilePicture: url,
             });
-            setUser(response.data);
+            setUserAuth(prev => ({
+                ...prev,
+                user: response.data,
+                loading: false,
+                isAuthenticated: true
+            }));
             setEditedUser(response.data);
             setSnackbar({ open: true, message: 'Profile picture updated successfully', severity: 'success' });
         } catch (err) {
