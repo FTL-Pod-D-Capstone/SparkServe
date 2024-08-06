@@ -31,37 +31,57 @@ const chatHandler = async (req, res) => {
       {
         role: "system",
         content:
-          "Organization: Downtown Community Center - Opportunity: AI Ethics Workshop Description: Help facilitate discussions on AI ethics for tech professionals. Address: 321 Innovation St, San Jose, CA Date & Time: 2024-09-22 13:00:00 Cause: Computers and Technology Skills Required: AI knowledge, Public speaking Spots Available: 8 Age Range: 21+ - Opportunity: After-School Tutor Description: Provide tutoring for underprivileged students in various subjects. Address: 123 Main Street, Downtown City, TX Date & Time: 2024-09-04 15:00:00 Cause: Education & Literacy Skills Required: Academic proficiency, Patience Spots Available: 20 Age Range: 16+",
+          "Organization: City Arts Collective - Opportunity: Open Mic Night Host Description: Help organize and host our monthly community open mic night. Address: 654 Arts Ave, City Center, NY Date & Time: 2024-08-25 19:00:00 Cause: Arts and Culture Skills Required: Event planning, Hosting Spots Available: 10 Age Range: 18+ - Opportunity: Mural Painting Project Description: Help create a community mural in the city center. Address: 654 Arts Ave, City Center, NY Date & Time: 2024-09-13 17:00:00 Cause: Arts and Culture Skills Required: Artistic ability, Teamwork Spots Available: 25 Age Range: All ages - Opportunity: Senior Tech Support Description: Provide one-on-one tech support for seniors in our community. Address: 123 Main Street, Downtown City, TX Date & Time: 2024-09-08 15:00:00 Cause: Seniors Skills Required: Tech savvy, Patience Spots Available: 15 Age Range: 16+",
       },
       {
         role: "system",
         content:
-          "Organization: Innovate Tech Labs - Opportunity: Community Yoga Session Description: Lead or assist in a free yoga session for community members. Address: 456 Wellness Blvd, Los Angeles, CA Date & Time: 2024-08-10 18:00:00 Cause: Health & Medicine Skills Required: Yoga experience, Teaching Spots Available: 5 Age Range: 18+ - Opportunity: Hackathon Mentor Description: Mentor young developers during our annual 24-hour hackathon. Address: 321 Innovation St, San Jose, CA Date & Time: 2024-10-20 09:00:00 Cause: Computers and Technology Skills Required: Coding expertise, Mentoring Spots Available: 12 Age Range: 21+",
+          "Organization: Tech Giants - Opportunity: Database Cleanup Description: Assist in organizing and cleaning up our organization's database. Address: 123 Main St San Francisco, CA 94105 Date & Time: 2024-08-12 22:00:00 Cause: Computers and Technology Skills Required: Data entry, Attention to detail Spots Available: 5 Age Range: 18+",
       },
       {
         role: "system",
         content:
-          "Organization: Wellness Haven - Opportunity: Food Drive Volunteer Description: Help organize and distribute food at our community food drive. Address: 123 Charity Lane, Kind City, KS Date & Time: 2024-08-01 09:00:00 Cause: Hunger Skills Required: Organizational skills Spots Available: 20 Age Range: 16+ - Opportunity: STEM Fair Volunteer Description: Assist in organizing and running our annual STEM fair for high school students. Address: 123 University Lane, Tech City, CA Date & Time: 2024-10-05 08:00:00 Cause: Education & Literacy Skills Required: STEM knowledge, Event coordination Spots Available: 30 Age Range: 18+ - Opportunity: Nutrition Seminar Assistant Description: Help organize and run a nutrition seminar for community health. Address: 456 Wellness Blvd, Los Angeles, CA Date & Time: 2024-09-08 11:00:00 Cause: Health & Medicine Skills Required: Nutrition knowledge, Event planning Spots Available: 10 Age Range: 18+",
+          "Organization: Green Earth Foundation - Opportunity: Beach Cleanup Day Description: Join us in cleaning up local beaches and protecting marine life. Address: 91011 Geary Blvd, San Francisco, CA 94109 Date & Time: 2024-08-20 16:00:00 Cause: Environment Skills Required: Physical stamina, Environmental awareness Spots Available: 50 Age Range: All ages - Opportunity: Tree Planting Day Description: Help us plant trees in urban areas to increase green cover. Address: Golden Gate Park, San Francisco, CA Date & Time: 2024-10-10 15:00:00 Cause: Environment Skills Required: Physical fitness, Environmental knowledge Spots Available: 100 Age Range: 12+",
       },
       {
         role: "system",
         content:
-          "Organization: Future Tech University - Opportunity: Beach Cleanup Day Description: Join us in cleaning up local beaches and protecting marine life. Address: Ocean Beach, San Francisco, CA Date & Time: 2024-08-20 09:00:00 Cause: Environment Skills Required: Physical stamina, Environmental awareness Spots Available: 50 Age Range: All ages - Opportunity: Robotics Workshop for Kids Description: Guide children through basic robotics projects. Address: 123 University Lane, Tech City, CA Date & Time: 2024-11-15 14:00:00 Cause: Children and Youth Skills Required: Robotics knowledge, Teaching skills Spots Available: 15 Age Range: 18+",
+          "Organization: Future Tech University - Opportunity: STEM Fair Volunteer Description: Assist in organizing and running our annual STEM fair for high school students. Address: 1213 Mission St, San Francisco, CA 94110 Date & Time: 2024-10-05 17:00:00 Cause: Education & Literacy Skills Required: STEM knowledge, Event coordination Spots Available: 30 Age Range: 18+ - Opportunity: Robotics Workshop for Kids Description: Guide children through basic robotics projects. Address: 123 University Lane, Tech City, CA Date & Time: 2024-11-15 14:00:00 Cause: Children and Youth Skills Required: Robotics knowledge, Teaching skills Spots Available: 15 Age Range: 18+ - Opportunity: Code for Kids Workshop Description: Teach basic coding skills to underprivileged children. Address: 5678 California St, San Francisco, CA 94118 Date & Time: 2024-09-15 14:00:00 Cause: Children and Youth Skills Required: Programming, Teaching Spots Available: 10 Age Range: 18+",
       },
       {
         role: "system",
         content:
-          "Organization: Green Earth Foundation - Opportunity: Code for Kids Workshop Description: Teach basic coding skills to underprivileged children. Address: 456 Education Lane, Silicon Valley Date & Time: 2024-09-15 14:00:00 Cause: Children and Youth Skills Required: Programming, Teaching Spots Available: 10 Age Range: 18+ - Opportunity: Tree Planting Day Description: Help us plant trees in urban areas to increase green cover. Address: Golden Gate Park, San Francisco, CA Date & Time: 2024-10-10 08:00:00 Cause: Environment Skills Required: Physical fitness, Environmental knowledge Spots Available: 100 Age Range: 12+",
+          "Organization: Wellness Haven - Opportunity: Food Drive Volunteer Description: Help organize and distribute food at our community food drive. Address: 1234 Market St, San Francisco, CA 94103 Date & Time: 2024-08-20 20:00:00 Cause: Hunger Skills Required: Organizational skills Spots Available: 20 Age Range: 16+ - Opportunity: Nutrition Seminar Assistant Description: Help organize and run a nutrition seminar for community health. Address: 456 Wellness Blvd, Los Angeles, CA Date & Time: 2024-09-08 22:00:00 Cause: Health & Medicine Skills Required: Nutrition knowledge, Event planning Spots Available: 10 Age Range: 18+",
       },
       {
         role: "system",
         content:
-          "Organization: Tech Giants - Opportunity: Database Cleanup Description: Assist in organizing and cleaning up our organization's database. Address: 123 Main St, Silicon Valley Date & Time: 2024-08-12 09:00:00 Cause: Computers and Technology Skills Required: Data entry, Attention to detail Spots Available: 5 Age Range: 18+",
+          "Organization: Innovate Tech Labs - Opportunity: AI Ethics Workshop Description: Help facilitate discussions on AI ethics for tech professionals. Address: 1617 Lombard St, San Francisco, CA 94123 Date & Time: 2024-09-22 22:00:00 Cause: Computers and Technology Skills Required: AI knowledge, Public speaking Spots Available: 8 Age Range: 21+ - Opportunity: Hackathon Mentor Description: Mentor young developers during our annual 24-hour hackathon. Address: 321 Innovation St, San Jose, CA Date & Time: 2024-08-12 22:00:00 Cause: Computers and Technology Skills Required: Coding expertise, Mentoring Spots Available: 12 Age Range: 21+ - Opportunity: Community Yoga Session Description: Lead or assist in a free yoga session for community members. Address: 1415 Divisadero St, San Francisco, CA 94115 Date & Time: 2024-08-10 18:00:00 Cause: Health & Medicine Skills Required: Yoga experience, Teaching Spots Available: 5 Age Range: 18+",
       },
       {
         role: "system",
         content:
-          "Organization: City Arts Collective - Opportunity: Senior Tech Support Description: Provide one-on-one tech support for seniors in our community. Address: 123 Main Street, Downtown City, TX Date & Time: 2024-08-05 10:00:00 Cause: Seniors Skills Required: Tech savvy, Patience Spots Available: 15 Age Range: 16+ - Opportunity: Mural Painting Project Description: Help create a community mural in the city center. Address: 654 Arts Ave, City Center, NY Date & Time: 2024-09-01 09:00:00 Cause: Arts and Culture Skills Required: Artistic ability, Teamwork Spots Available: 25 Age Range: All ages - Opportunity: Open Mic Night Host Description: Help organize and host our monthly community open mic night. Address: 654 Arts Ave, City Center, NY Date & Time: 2024-08-25 19:00:00 Cause: Arts and Culture Skills Required: Event planning, Hosting Spots Available: 10 Age Range: 18+",
+          "Organization: Miami EcoAdventures - Opportunity: Pelican Harbor Coastal Cleanup Description: Volunteers will assist the Pelican Harbor Marina staff beautify this coastal park and keep our ocean ecosystem healthy. Address: 1275 NE 79 ST Causeway Miami, FL 33138 Date & Time: 2024-08-17 15:00:00 Cause: Environment Skills Required: Physical stamina, Environmental awareness Spots Available: 24 Age Range: 16+",
+      },
+      {
+        role: "system",
+        content:
+          "Organization: The Arc of San Francisco - Opportunity: Friends Like Me Drama/Theater Workshop Description: Designed to relieve the social isolation of adults with developmental disabilities, Friends Like Me offers afternoon and evening recreational activities and games that encourage friendship, conversation, and healthy socialization. Address: 1500 Howard St, San Francisco, CA 94103 Date & Time: 2024-08-13 22:00:00 Cause: Education and Literacy Skills Required: Communication skills Spots Available: 8 Age Range: 16+",
+      },
+      {
+        role: "system",
+        content:
+          "Organization: Community Living Campaign - Opportunity: Digital Passport: Scanning (In-Person) Description: Use a digital scanner to turn your cherished photos, letters, recipes, (even 3-dimensional objects!) into digital images. Then pair up with your computer coach to learn how to share your images with family and friends. Address: 1663 Mission Street, Suite 525 Date & Time: 2024-09-02 17:00:00 Cause: Senior Skills Required: Teaching skills Spots Available: 14 Age Range: 16+",
+      },
+      {
+        role: "system",
+        content:
+          "Organization: St. Anthony Foundation - Opportunity: Dining Room Meal Service Description: Our Dining Room needs volunteer support to prepare and serve delicious meals for our guests! Your help is essential to the success of our daily hot meal service. Volunteers will be assigned roles in food preparation, food packing, and ensuring our Dining Room guests are served with dignity. Address: 121 Golden Gate Avenue San Francisco, CA  94102 Date & Time: 2024-08-11 02:30:00 Cause: Hunger Skills Required: Organizational skills Spots Available: 12 Age Range: 18+",
+      },
+      {
+        role: "system",
+        content:
+          "Organization: America Needs You - Opportunity: Assist in Developing Personal Brand & Online Presence Description: Volunteers will provide valuable insight and expertise from their own personal and professional experiences. Orientation will be provided at the beginning of the day. Address: 82 Nassau St #60358 New York, New York 10038 Date & Time: 2024-09-22 19:00:00 Cause: Education and Literacy Skills Required: Mentoring, Teaching Spots Available: 9 Age Range: 21+",
       },
     ];
 

@@ -72,7 +72,7 @@ const Chatbot = () => {
         { text: interaction.prompt, from: "user" },
         { text: interaction.response, from: "bot" },
       ]);
-      setChatHistory(formattedHistory.reverse()); // Reverse to show oldest first
+      setChatHistory(formattedHistory);
     } catch (error) {
       console.error("Error fetching chat history:", error);
     }
@@ -123,9 +123,9 @@ const Chatbot = () => {
   };
 
   // Toggle collapse state
-  const handleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  // const handleCollapse = () => {
+  //   setIsCollapsed(!isCollapsed);
+  // };
 
   // Toggle quick replies visibility
   const toggleQuickReplies = () => {
@@ -155,9 +155,9 @@ const Chatbot = () => {
           <div className="chatbot-header">
             <img src={logo} alt="Website Logo" className="chatbot-logo" />
             <div className="button-group">
-              <button onClick={handleCollapse} className="collapse-button">
+              {/* <button onClick={handleCollapse} className="collapse-button">
                 {isCollapsed ? "▼" : "▲"}
-              </button>
+              </button> */}
               <button onClick={toggleChatbot} className="button close-button">
                 ×
               </button>

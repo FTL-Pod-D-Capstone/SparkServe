@@ -32,10 +32,10 @@ function Upload({ onUploaded }) {
             } else {
             // console.log('onUploaded is not a function');
             }
-            alert("File uploaded successfully.");
+            // alert("File uploaded successfully.");
         } catch (err) {
             console.error('Upload failed:', err);
-            alert("Error uploading file.");
+            // alert("Error uploading file.");
         }
     };
 
