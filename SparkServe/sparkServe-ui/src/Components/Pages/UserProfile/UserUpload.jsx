@@ -1,55 +1,70 @@
-// import AWS from 'aws-sdk';
 import { useState } from 'react';
-
 
 function Upload({ onUploaded }) {
     const [file, setFile] = useState(null);
+    const [error, setError] = useState('');
 
     const uploadFile = async () => {
+        if (!file) {
+            setError('Please select a file before uploading.');
+            return;
+        }
+
         const S3_BUCKET = "sparkserve";
         const REGION = "us-east-2";
 
-    window.AWS.config.update({
-        accessKeyId: import.meta.env.VITE_ACCESS_KEY,
-        secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
-        region: REGION,
-    });
+        window.AWS.config.update({
+            accessKeyId: import.meta.env.VITE_ACCESS_KEY,
+            secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
+            region: REGION,
+        });
 
-    const s3 = new window.AWS.S3();    
-    const params = {
-        Bucket: S3_BUCKET,
-        Key: file.name,
-        Body: file,
-    };
+        const s3 = new window.AWS.S3();    
+        const params = {
+            Bucket: S3_BUCKET,
+            Key: file.name,
+            Body: file,
+        };
 
-    try {
-        // console.log('Uploading to S3...');
-        const data = await s3.upload(params).promise();
-        // console.log('Upload successful, data:', data);
-        if (typeof onUploaded === 'function') {
-            // console.log('Calling onUploaded with:', data.Location);
-            onUploaded(data.Location);
-            } else {
-            // console.log('onUploaded is not a function');
+        try {
+            const data = await s3.upload(params).promise();
+            if (typeof onUploaded === 'function') {
+                onUploaded(data.Location);
             }
-            // alert("File uploaded successfully.");
+            setError('');
         } catch (err) {
             console.error('Upload failed:', err);
-            // alert("Error uploading file.");
+            setError('Error uploading file. Please try again.');
         }
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFile(file);
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        setError('');
     };
 
     return (
         <div className="file-upload">
-        <div className="file-input-container">
-            <input type="file" onChange={handleFileChange} className="file-input" />
-            <button onClick={uploadFile} className="upload-button">Upload Image</button>
-        </div>
+            <div className="file-input-container">
+                <input 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    className="file-input" 
+                    id="file-input"
+                />
+                <label htmlFor="file-input" className="file-input-label">
+                    {file ? file.name : 'Choose File'}
+                </label>
+                <button 
+                    onClick={uploadFile} 
+                    className="upload-button"
+                    disabled={!file}
+                >
+                    Upload Image
+                </button>
+            </div>
+            {error && <p className="error-message">{error}</p>}
         </div>
     );
 }
