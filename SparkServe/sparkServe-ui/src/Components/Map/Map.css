@@ -11,7 +11,7 @@
 
 .google-map {
   padding-top: 41px; /* Adjusted to lower the map */
-  width: 1890px;
+  width: 1800px;
   height: 810px;
   display: flex;
   flex-direction: column;
