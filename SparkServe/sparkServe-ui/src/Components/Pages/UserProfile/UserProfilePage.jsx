@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import Footer from '../../Footer/Footer';
 import UserNavBar from '../../UserNavBar/UserNavBar';
 import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert, Container } from '@mui/material';
@@ -10,6 +10,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from '@mui/system';
 import UserUpload from './UserUpload';
+import { CombinedAuthContext } from '../../CombinedAuthContext/CombinedAuthContext';
+
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -37,10 +39,9 @@ const StyledAvatar = styled(Avatar)({
 const UserProfilePage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const [user, setUser] = useState(null);
+    const { userAuth, setUserAuth } = useContext(CombinedAuthContext);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [profilePicture, setProfilePicture] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [editedUser, setEditedUser] = useState(null);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
@@ -63,9 +64,13 @@ const UserProfilePage = () => {
             setIsLoading(true);
             try {
                 const response = await axios.get(`${baseUrl}/users/${id}`);
-                setUser(response.data);
+                setUserAuth(prev => ({
+                    ...prev,
+                    user: response.data,
+                    loading: false,
+                    isAuthenticated: true
+                }));
                 setEditedUser(response.data);
-                setProfilePicture(response.data.profilePicture || '');
                 setIsLoading(false);
             } catch (err) {
                 console.error(`Error getting User:`, err);
@@ -75,7 +80,7 @@ const UserProfilePage = () => {
         };
 
         getUser();
-    }, [id]);
+    }, [id, setUserAuth]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -122,11 +127,11 @@ const UserProfilePage = () => {
 
     if (isLoading) return <Box display="flex" justifyContent="center" alignItems="center" height="100vh"><CircularProgress /></Box>;
     if (error) return <Box display="flex" justifyContent="center" alignItems="center" height="100vh"><Typography color="error">{error}</Typography></Box>;
-    if (!user) return <Box display="flex" justifyContent="center" alignItems="center" height="100vh"><Typography>No user data found</Typography></Box>;
+    if (!userAuth.user) return <Box display="flex" justifyContent="center" alignItems="center" height="100vh"><Typography>No user data found</Typography></Box>;
 
     return (
         <>
-            <UserNavBar profilePicture={profilePicture} />
+            <UserNavBar profilePicture={userAuth.user?.profilePicture} />
             <Box
                 sx={{
                     backgroundImage: 'linear-gradient(rgb(180, 200, 255), rgb(255, 255, 255))',
@@ -152,13 +157,13 @@ const UserProfilePage = () => {
                                 <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <ProfileImage>
                                         <StyledAvatar
-                                            alt={user.name || 'User'}
-                                            src={profilePicture || "/path-to-default-image.jpg"}
+                                            alt={userAuth.user.name || 'User'}
+                                            src={userAuth.user.profilePicture || "/path-to-default-image.jpg"}
                                         />
                                     </ProfileImage>
                                     <UserUpload onUploaded={handleFileUploaded} />
                                     <Typography variant="h5" component="div">
-                                        {user.username || 'Unknown User'}
+                                        {userAuth.user.username || 'Unknown User'}
                                     </Typography>
                                 </CardContent>
                             </StyledCard>
@@ -219,10 +224,10 @@ const UserProfilePage = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <Typography variant="body1">Bio: {user.bio || 'No bio available'}</Typography>
-                                            <Typography variant="body1">Email: {user.email || 'Not provided'}</Typography>
-                                            <Typography variant="body1">Phone: {user.phoneNumber || 'Not provided'}</Typography>
-                                            <Typography variant="body1">Address: {user.address || 'Not provided'}</Typography>
+                                            <Typography variant="body1">Bio: {userAuth.user.bio || 'No bio available'}</Typography>
+                                            <Typography variant="body1">Email: {userAuth.user.email || 'Not provided'}</Typography>
+                                            <Typography variant="body1">Phone: {userAuth.user.phoneNumber || 'Not provided'}</Typography>
+                                            <Typography variant="body1">Address: {userAuth.user.address || 'Not provided'}</Typography>
                                         </>
                                     )}
                                 </CardContent>
