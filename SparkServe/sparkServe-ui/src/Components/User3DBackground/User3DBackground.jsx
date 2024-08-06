@@ -1,10 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const User3DBackground = () => {
   const containerRef = useRef();
   const location = useLocation();
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
 
   useEffect(() => {
     if (location.pathname !== '/' && location.pathname !== '/org') {
@@ -21,13 +29,16 @@ const User3DBackground = () => {
       camera.position.z = 2;
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setClearColor(0x4685f6, 1); // Set the background color
+      renderer.setClearColor(0x4685f6, 1);
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); // Limit pixel ratio for better performance
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
       container.appendChild(renderer.domElement);
 
+      const segmentsX = isLaptop ? 16 : isTablet ? 12 : 8;
+      const segmentsY = isLaptop ? 16 : isTablet ? 12 : 8;
+
       ribbon = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1, 16, 16), // Reduced segments for better performance
+        new THREE.PlaneGeometry(1, 1, segmentsX, segmentsY),
         new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 1.0 },
@@ -107,15 +118,34 @@ const User3DBackground = () => {
         renderer.setSize(innerWidth, innerHeight);
         camera.aspect = innerWidth / innerHeight;
         camera.updateProjectionMatrix();
-        ribbon.scale.set(camera.aspect * 1.55, 0.75, 1);
+        
+        let scaleX = camera.aspect * 1.55;
+        let scaleY = 0.75;
+        
+        if (isTablet) {
+          scaleX *= 1.2;
+          scaleY *= 1.2;
+        } else if (isLaptop) {
+          scaleX *= 1.4;
+          scaleY *= 1.4;
+        } else if (isLaptopL) {
+          scaleX *= 1.6;
+          scaleY *= 1.6;
+        } else if (isDesktop) {
+          scaleX *= 2;
+          scaleY *= 2;
+        }
+        
+        ribbon.scale.set(scaleX, scaleY, 1);
       };
 
       window.addEventListener('resize', resize);
       resize();
 
       const animate = () => {
-        if (frame % 2 === 0) { // Render every 2nd frame for better performance
-          ribbon.material.uniforms.time.value += 0.01;
+        const frameSkip = isLaptop ? 1 : isTablet ? 2 : 3;
+        if (frame % frameSkip === 0) {
+          ribbon.material.uniforms.time.value += isLaptop ? 0.01 : 0.008;
           renderer.render(scene, camera);
         }
         frame++;
@@ -135,7 +165,7 @@ const User3DBackground = () => {
     };
 
     init();
-  }, [location.pathname]);
+  }, [location.pathname, isMobileS, isMobileM, isMobileL, isTablet, isLaptop, isLaptopL, isDesktop]);
 
   if (location.pathname !== '/' && location.pathname !== '/org') {
     return null;
@@ -155,5 +185,3 @@ const containerStyle = {
 };
 
 export default User3DBackground;
-
-

@@ -92,7 +92,7 @@ function UserAccountPopover({ profileType, profilePicture }) {
           <Avatar
             src={profilePicture}
             alt="User Avatar"
-            sx={{ width: 30, height: 30 }}
+            sx={{ width: 40, height: 40 }}
           />
         ) : (
           <AccountCircle sx={{ fontSize: 30 }} />

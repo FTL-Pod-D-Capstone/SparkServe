@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,10 +10,14 @@ import Drawer from "@mui/material/Drawer";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import logo2 from "../../assets/logo2.png";
 import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
 import { CombinedAuthContext } from '../CombinedAuthContext/CombinedAuthContext';
+import axios from "axios";
+
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const logoStyle = {
   width: "140px",
@@ -48,9 +52,42 @@ const navButtonStyle = {
 function UserNavBar() {
   const [open, setOpen] = React.useState(false);
   const [signInModalOpen, setSignInModalOpen] = React.useState(false);
-  const { userAuth } = useContext(CombinedAuthContext);
+  const { userAuth, setUserAuth } = useContext(CombinedAuthContext);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
+
+  useEffect(() => {
+    const checkUserAuth = async () => {
+      const authStatus = localStorage.getItem("isUserAuthenticated");
+      const userId = localStorage.getItem('userId');
+      
+      if (authStatus === "true" && userId) {
+        try {
+          const response = await axios.get(`${baseUrl}/users/${userId}`);
+          setUserAuth({
+            isAuthenticated: true,
+            user: response.data,
+            loading: false
+          });
+        } catch (err) {
+          console.error(`Error getting User:`, err);
+          setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+        }
+      } else {
+        setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+      }
+    };
+
+    checkUserAuth();
+  }, [setUserAuth]);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -125,55 +162,56 @@ function UserNavBar() {
           zIndex: 1100,
         }}
       >
-        <Container>
+        <Container maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}>
           <Toolbar
             variant="regular"
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              py: isTablet ? 1 : 0.5,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: isTablet ? 0 : 1 }}>
               <img
                 src={logo2}
-                style={logoStyle}
+                style={{...logoStyle, width: isTablet ? "140px" : "100px"}}
                 alt="Logo"
                 onClick={() => navigate("/")}
               />
             </Box>
-            <Button
-              color="primary"
-              variant="text"
-              size="large"
-              component={Link}
-              to="/"
-              sx={responsiveNavButtonStyle}
-            >
-              Home
-            </Button>
-            <Button
-              color="primary"
-              variant="text"
-              size="large"
-              component={Link}
-              to="/UserLandingPage"
-              sx={responsiveNavButtonStyle}
-            >
-              Opportunities
-            </Button>
-            <Box
-              sx={{
-                display: { xs: "none", md: "flex" },
-                gap: 2,
-                alignItems: "center",
-              }}
-            >
+            <Box sx={{ 
+              display: { xs: "none", md: "flex" }, 
+              flexGrow: 1, 
+              justifyContent: "center",
+              gap: isLaptop ? 4 : 2
+            }}>
+              <Button
+                color="primary"
+                variant="text"
+                size={isLaptop ? "large" : "medium"}
+                component={Link}
+                to="/"
+                sx={responsiveNavButtonStyle}
+              >
+                Home
+              </Button>
+              <Button
+                color="primary"
+                variant="text"
+                size={isLaptop ? "large" : "medium"}
+                component={Link}
+                to="/UserLandingPage"
+                sx={responsiveNavButtonStyle}
+              >
+                Opportunities
+              </Button>
               {userAuth.isAuthenticated && (
                 <Button
                   color="primary"
                   variant="text"
-                  size="large"
+                  size={isLaptop ? "large" : "medium"}
                   component={Link}
                   to="/Map"
                   sx={responsiveNavButtonStyle}

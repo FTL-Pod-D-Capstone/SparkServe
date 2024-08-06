@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Box, IconButton, Typography } from '@mui/material';
+import { Container, Box, IconButton, Typography, useMediaQuery } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -38,8 +38,23 @@ const profileData = [
 ];
 
 const ProfileCards = () => {
+  const isMobileS = useMediaQuery('(min-width:320px)');
+  const isMobileM = useMediaQuery('(min-width:375px)');
+  const isMobileL = useMediaQuery('(min-width:425px)');
+  const isTablet = useMediaQuery('(min-width:768px)');
+  const isLaptop = useMediaQuery('(min-width:1024px)');
+  const isLaptopL = useMediaQuery('(min-width:1440px)');
+  const isDesktop = useMediaQuery('(min-width:2560px)');
+
   return (
-    <Container sx={{ mt: 4, mb: 8 }}>
+    <Container 
+      sx={{ 
+        mt: { xs: 2, sm: 3, md: 4 }, 
+        mb: { xs: 4, sm: 6, md: 8 },
+        px: { xs: 2, sm: 3, md: 4 }
+      }}
+      maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -47,25 +62,25 @@ const ProfileCards = () => {
       >
         <Card
           sx={{
-            p: 4,
+            p: { xs: 2, sm: 3, md: 4 },
             backgroundColor: 'white',
             borderRadius: 2,
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-            mt: 4,
+            mt: { xs: 2, sm: 3, md: 4 },
             overflow: 'hidden',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: { xs: 2, sm: 3, md: 4 } }}>
             <Typography
               component="h2"
-              variant="h4"
+              variant={isTablet ? "h4" : "h5"}
               color="text.primary"
               sx={{ textAlign: 'center', mr: 2, fontWeight: 'bold' }}
             >
               Meet the&nbsp;
               <Typography
                 component="span"
-                variant="h4"
+                variant={isTablet ? "h4" : "h5"}
                 sx={{ color: 'primary.main', fontWeight: 'bold' }}
               >
                 creators
@@ -76,10 +91,15 @@ const ProfileCards = () => {
               trigger="hover"
               stroke="light"
               colors="primary:#121331,secondary:#f9c9c0,tertiary:#4bb3fd,quaternary:#c67d53,quinary:#ebe6ef"
-              style={{ width: '50px', height: '50px' }}
+              style={{ width: isTablet ? '50px' : '40px', height: isTablet ? '50px' : '40px' }}
             ></lord-icon>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 4 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            flexWrap: 'wrap', 
+            gap: { xs: 2, sm: 3, md: 4 } 
+          }}>
             {profileData.map((profile, index) => (
               <motion.div
                 key={index}
@@ -88,7 +108,7 @@ const ProfileCards = () => {
               >
                 <Card 
                   sx={{
-                    width: 300,
+                    width: { xs: 250, sm: 280, md: 300 },
                     backgroundColor: 'white',
                     borderRadius: 2,
                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.1)',
@@ -102,7 +122,7 @@ const ProfileCards = () => {
                   <CardActionArea>
                     <CardMedia
                       component="img"
-                      height="250"
+                      height={isTablet ? "250" : "200"}
                       image={profile.image}
                       alt={profile.name}
                       sx={{ 
@@ -110,8 +130,8 @@ const ProfileCards = () => {
                         objectPosition: profile.objectPosition || 'center'
                       }}
                     />
-                    <CardContent sx={{ textAlign: 'center', py: 3 }}>
-                      <Typography gutterBottom variant="h5" component="div" fontWeight="bold">
+                    <CardContent sx={{ textAlign: 'center', py: { xs: 2, sm: 2.5, md: 3 } }}>
+                      <Typography gutterBottom variant={isTablet ? "h5" : "h6"} component="div" fontWeight="bold">
                         {profile.name}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -130,7 +150,7 @@ const ProfileCards = () => {
                             '&:hover': { transform: 'translateY(-3px)' }
                           }}
                         >
-                          <LinkedInIcon fontSize="large" />
+                          <LinkedInIcon fontSize={isTablet ? "large" : "medium"} />
                         </IconButton>
                         <IconButton
                           href={profile.github}
@@ -144,7 +164,7 @@ const ProfileCards = () => {
                             '&:hover': { transform: 'translateY(-3px)' }
                           }}
                         >
-                          <GitHubIcon fontSize="large" />
+                          <GitHubIcon fontSize={isTablet ? "large" : "medium"} />
                         </IconButton>
                       </Box>
                     </CardContent>
