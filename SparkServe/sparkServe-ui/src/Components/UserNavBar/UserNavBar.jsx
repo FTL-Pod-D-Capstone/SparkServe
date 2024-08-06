@@ -36,15 +36,16 @@ const UserNavBar = () => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
 
   const logoStyle = {
-    width: isMobile ? "80px" : isTablet ? "100px" : "120px",
+    width: isMobile ? "100px" : isTablet ? "120px" : "140px",
     height: "auto",
     cursor: "pointer",
   };
 
   const navButtonStyle = {
-    color: '#4856f6',
-    fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
+    color: '#4685F6', // Changed to #4685F6
+    fontSize: isMobile ? '0.9rem' : isTablet ? '1rem' : '1.1rem',
     fontWeight: 'bold',
+    padding: '6px 12px',
     '&::after': {
       content: '""',
       position: 'absolute',
@@ -52,7 +53,7 @@ const UserNavBar = () => {
       left: 0,
       width: '100%',
       height: '2px',
-      backgroundColor: '#4856f6',
+      backgroundColor: '#4685F6', // Changed to #4685F6
       transform: 'scaleX(0)',
       transformOrigin: 'bottom right',
       transition: 'transform 0.3s ease-out',
@@ -62,9 +63,11 @@ const UserNavBar = () => {
       transformOrigin: 'bottom left',
     },
     '&:hover': {
-      backgroundColor: 'rgba(72, 86, 246, 0.04)',
+      backgroundColor: 'rgba(70, 133, 246, 0.04)', // Changed to match #4685F6 with low opacity
     },
   };
+
+
 
   useEffect(() => {
     const checkUserAuth = async () => {
@@ -302,13 +305,13 @@ const UserNavBar = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: 'space-between',
-              py: isMobile ? 1 : 2,
+              py: isMobile ? 1.5 : 2,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1  }}>
               <img src={logo2} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1, justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 2 }}>
               {!isMobile && (
                 navItems.map((item) => (
                   <Button 
@@ -322,7 +325,7 @@ const UserNavBar = () => {
                 ))
               )}
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'flex-end', marginRight: 8 }}>
               {renderButtons()}
               {isMobile && (
                 <IconButton

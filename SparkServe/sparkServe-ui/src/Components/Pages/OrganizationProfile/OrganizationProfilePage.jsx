@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Footer from '../../Footer/Footer';
 import OrganizationNavBar from '../../OrganizationNavBar/OrganizationNavBar';
-import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert } from '@mui/material';
+import { Typography, Grid, Card, CardContent, Avatar, Box, CircularProgress, Button, TextField, Snackbar, Alert, Container } from '@mui/material';
 import { IconButton } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+// import { ArrowBack } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,14 +13,20 @@ import OrganizationUpload from './OrganizationUpload';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  transition: 'box-shadow 0.3s',
+  transition: 'box-shadow 0.3s, transform 0.3s',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  borderRadius: '16px',
+  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+  backdropFilter: 'blur(5px)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+
   '&:hover': {
-    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+    transform: 'translateY(-5px)',
   },
 }));
 
@@ -35,7 +41,18 @@ const ProfileImage = styled('div')({
 const StyledAvatar = styled(Avatar)({
   width: '100%',
   height: '100%',
+  backgroundColor: '#8B5CF6',
+  border: '4px solid white',
+  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
 });
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: '#8B5CF6',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: '#7C3AED',
+  },
+}));
 
 const OrganizationProfilePage = () => {
     const navigate = useNavigate();
@@ -137,135 +154,149 @@ const OrganizationProfilePage = () => {
     return (
         <>
             <OrganizationNavBar />
-            <Box sx={{ flexGrow: 1, padding: 3, mt: 8 }}>
-                <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
-                    <ArrowBack />
-                </IconButton>
+            <Box sx={{
+                flexGrow: 1,
+                padding: 3,
+                mt: 8,
+                background: 'linear-gradient(135deg, #ffc8dd 0%, #bde0fe 100%)',
+                minHeight: '100vh',
+            }}>
+                <Container maxWidth="lg">
+                    <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2, color: '#4B5563' }}>
+                    </IconButton>
 
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={4}>
-                        <StyledCard>
-                            <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <ProfileImage>
-                                    <StyledAvatar
-                                        alt={organization.name || 'Organization'}
-                                        src={pictureUrl || "/path-to-default-image.jpg"}
-                                    />
-                                </ProfileImage>
-                                <OrganizationUpload onUploaded={handleFileUploaded} />
-                                <Typography variant="h5" component="div">
-                                    {organization.name || 'Unknown Organization'}
-                                </Typography>
-                            </CardContent>
-                        </StyledCard>
-                    </Grid>
-
-                    <Grid item xs={12} md={8}>
-                        <StyledCard>
-                            <CardContent sx={{ flexGrow: 1 }}>
-                                <Box display="flex" justifyContent="space-between" alignItems="center">
-                                    <Typography variant="h6" gutterBottom>
-                                        Organization Information
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} md={4}>
+                            <StyledCard>
+                                <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4 }}>
+                                    <ProfileImage>
+                                        <StyledAvatar
+                                            alt={organization.name || 'Organization'}
+                                            src={pictureUrl || "/path-to-default-image.jpg"}
+                                        />
+                                    </ProfileImage>
+                                    <OrganizationUpload onUploaded={handleFileUploaded} />
+                                    <Typography variant="h5" component="div" sx={{ mt: 2, fontWeight: 'bold', color: '#4B5563' }}>
+                                        {organization.name || 'Unknown Organization'}
                                     </Typography>
-                                    <Button 
-                                        startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
-                                        onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                                    >
-                                        {isEditing ? 'Save' : 'Edit'}
-                                    </Button>
-                                </Box>
-                                {isEditing ? (
-                                    <>
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="name"
-                                            label="Organization Name"
-                                            value={editedOrganization.name || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="description"
-                                            label="Description"
-                                            value={editedOrganization.description || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="email"
-                                            label="Email"
-                                            value={editedOrganization.email || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="phoneNumber"
-                                            label="Phone Number"
-                                            value={editedOrganization.phoneNumber || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="address"
-                                            label="Address"
-                                            value={editedOrganization.address || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="website"
-                                            label="Website"
-                                            value={editedOrganization.website || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="contactEmail"
-                                            label="Contact Email"
-                                            value={editedOrganization.contactEmail || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="primaryCause"
-                                            label="Primary Cause"
-                                            value={editedOrganization.primaryCause || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            margin="normal"
-                                            name="orgUrl"
-                                            label="Organization URL"
-                                            value={editedOrganization.orgUrl || ''}
-                                            onChange={handleInputChange}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <Typography variant="body1">Name: {organization.name}</Typography>
-                                        <Typography variant="body1">Description: {organization.description || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Email: {organization.email}</Typography>
-                                        <Typography variant="body1">Phone: {organization.phoneNumber}</Typography>
-                                        <Typography variant="body1">Address: {organization.address || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Website: {organization.website || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Contact Email: {organization.contactEmail || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Primary Cause: {organization.primaryCause || 'Not provided'}</Typography>
-                                        <Typography variant="body1">Organization URL: {organization.orgUrl || 'Not provided'}</Typography>
-                                    </>
-                                )}
-                            </CardContent>
-                        </StyledCard>
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
+
+                        <Grid item xs={12} md={8}>
+                            <StyledCard>
+                                <CardContent sx={{ flexGrow: 1, p: 4 }}>
+                                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#4B5563' }}>
+                                            Organization Information
+                                        </Typography>
+                                        <StyledButton 
+                                            startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
+                                            onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+                                        >
+                                            {isEditing ? 'Save' : 'Edit'}
+                                        </StyledButton>
+                                    </Box>
+                                    {isEditing ? (
+                                        <>
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="name"
+                                                label="Organization Name"
+                                                value={editedOrganization.name || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="description"
+                                                label="Description"
+                                                value={editedOrganization.description || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="email"
+                                                label="Email"
+                                                value={editedOrganization.email || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="phoneNumber"
+                                                label="Phone Number"
+                                                value={editedOrganization.phoneNumber || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="address"
+                                                label="Address"
+                                                value={editedOrganization.address || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="website"
+                                                label="Website"
+                                                value={editedOrganization.website || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="contactEmail"
+                                                label="Contact Email"
+                                                value={editedOrganization.contactEmail || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="primaryCause"
+                                                label="Primary Cause"
+                                                value={editedOrganization.primaryCause || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                margin="normal"
+                                                name="orgUrl"
+                                                label="Organization URL"
+                                                value={editedOrganization.orgUrl || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                        </>
+                                    ) : (
+                                        <Grid container spacing={2}>
+                                            {Object.entries({
+                                                Name: organization.name,
+                                                Description: organization.description,
+                                                Email: organization.email,
+                                                Phone: organization.phoneNumber,
+                                                Address: organization.address,
+                                                Website: organization.website,
+                                                'Contact Email': organization.contactEmail,
+                                                'Primary Cause': organization.primaryCause,
+                                                'Organization URL': organization.orgUrl
+                                            }).map(([key, value]) => (
+                                                <Grid item xs={12} sm={6} key={key}>
+                                                    <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#4B5563' }}>{key}:</Typography>
+                                                    <Typography variant="body2" sx={{ color: '#6B7280' }}>{value || 'Not provided'}</Typography>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    )}
+                                </CardContent>
+                            </StyledCard>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </Container>
             </Box>
             <Footer/>
             <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>

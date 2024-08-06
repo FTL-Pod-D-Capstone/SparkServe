@@ -53,9 +53,9 @@ function Upload({ onUploaded }) {
                     className="file-input" 
                     id="file-input"
                 />
-                <label htmlFor="file-input" className="file-input-label">
+                {/* <label htmlFor="file-input" className="file-input-label">
                     {file ? file.name : 'Choose File'}
-                </label>
+                </label> */}
                 <button 
                     onClick={uploadFile} 
                     className="upload-button"

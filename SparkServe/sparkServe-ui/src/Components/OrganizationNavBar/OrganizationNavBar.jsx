@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -17,6 +17,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTheme, useMediaQuery, Avatar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Menu, MenuItem } from '@mui/material';
 import { CombinedAuthContext } from '../CombinedAuthContext/CombinedAuthContext';
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -68,10 +69,37 @@ const OrganizationNavBar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const { orgAuth } = useContext(CombinedAuthContext);
+  const { orgAuth, setOrgAuth } = useContext(CombinedAuthContext);
+
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    const checkOrgAuth = async () => {
+      const authStatus = localStorage.getItem("isOrgAuthenticated");
+      const organizationId = localStorage.getItem('organizationId');
+      
+      if (authStatus === "true" && organizationId) {
+        try {
+          const response = await axios.get(`${baseUrl}/orgs/${organizationId}`);
+          setOrgAuth({
+            isAuthenticated: true,
+            org: response.data,
+            loading: false
+          });
+        } catch (err) {
+          console.error(`Error getting Organization:`, err);
+          setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+        }
+      } else {
+        setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+      }
+    };
+
+    checkOrgAuth();
+  }, [setOrgAuth, baseUrl]);
 
   const logoStyle = {
-    width: isMobile ? '80px' : isTablet ? '100px' : '120px',
+    width: isMobile ? "100px" : isTablet ? "120px" : "140px",
     height: 'auto',
     cursor: 'pointer',
   };
@@ -105,7 +133,11 @@ const OrganizationNavBar = () => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-    setDrawerOpen(open);
+    if (!orgAuth.isAuthenticated && open) {
+      navigate('/OrganizationSignUpPage');
+    } else {
+      setDrawerOpen(open);
+    }
   };
 
   const handleSignInClick = () => {
@@ -141,10 +173,12 @@ const OrganizationNavBar = () => {
     setAnchorEl(null);
   };
 
-  const navItems = [
-    { text: 'Schedule', path: '/OrganizationLandingPage' },
-    { text: 'Calendar', path: '/Calendar' }
-  ];
+  const navItems = orgAuth.isAuthenticated
+    ? [
+        { text: 'Schedule', path: '/OrganizationLandingPage' },
+        { text: 'Calendar', path: '/Calendar' }
+      ]
+    : [];
 
   const list = () => (
     <Box
