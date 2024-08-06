@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,11 +14,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import * as jwt_decode from 'jwt-decode';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
-// const baseUrl ="http://localhost:3000";
-const baseUrl =import.meta.env.VITE_BACKEND_URL;
+import { CombinedAuthContext } from '../CombinedAuthContext/CombinedAuthContext';
+
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -34,14 +36,15 @@ function Copyright(props) {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#4856f6', // This matches the color used for the Avatar
+      main: '#4856f6',
     },
   },
 });
 
 const UserSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = React.useState(null);
+  const [loginStatus, setLoginStatus] = useState(null);
+  const { setUserAuth, checkUserAuth } = useContext(CombinedAuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,15 +56,25 @@ const UserSignIn = ({ open, handleClose }) => {
 
     try {
       const response = await axios.post(`${baseUrl}/users/login`, credentials);
-      localStorage.setItem('userId', response.data.userId)
-      localStorage.setItem('isUserAuthenticated', 'true');
-      navigate('/UserLandingPage');
-      window.location.reload(); // Force a reload to update the nav bar
+      if (response.data && response.data.userId) {
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('isUserAuthenticated', 'true');
+        
+        await checkUserAuth();
+        
+        setLoginStatus('success');
+        setTimeout(() => {
+          handleClose();
+          navigate('/UserLandingPage');
+        }, 2000);
+      } else {
+        throw new Error('Login successful but user data is missing');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       setLoginStatus('error');
     }
-  };   //jwt decode token to get user id and get user profile page using aws s3 bucket for profile picutre 
+  };
 
   const handleSignUpRedirect = () => {
     handleClose();
@@ -76,7 +89,7 @@ const UserSignIn = ({ open, handleClose }) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 500, // Adjusted width for wider modal
+          width: 500,
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,

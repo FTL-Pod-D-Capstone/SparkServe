@@ -29,7 +29,7 @@ const PageRoutes = () => {
       <Route path="OrganizationSignInPage" element={<OrganizationSignInPage/>} />
       <Route path="/Calendar" element={<Calendar />} />
       <Route path="/Map" element={<MapPage />} />
-      <Route path="/ChatBot" element={<Chatbot />} /> {/* Add this line for ChatBot route */}
+      <Route path="/ChatBot" element={<Chatbot />} />
       <Route path="/UserProfile/:id" element={<UserProfilePage />} />
       <Route path="/bookmarks" element={<BookmarksPage />} />      
       <Route path="/OrganizationProfile/:id" element={<OrganizationProfilePage />} />
