@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import { CombinedAuthContext } from '../CombinedAuthContext/CombinedAuthContext';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -34,14 +36,15 @@ function Copyright(props) {
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#ff66c4',
+      main: '#8B5CF6',
     },
   },
 });
 
 const OrganizationSignIn = ({ open, handleClose }) => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = React.useState(null);
+  const [loginStatus, setLoginStatus] = useState(null);
+  const { setOrgAuth } = useContext(CombinedAuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,44 +55,29 @@ const OrganizationSignIn = ({ open, handleClose }) => {
     };
   
     try {
-      // console.log('Sending login request with credentials:', credentials);
       const response = await axios.post(`${baseUrl}/orgs/login`, credentials);
-      // console.log('Full login response:', response);
       
       if (response.status === 200 && response.data.token) {
-        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('isOrgAuthenticated', 'true');
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('organizationId', response.data.organizationId)
+        localStorage.setItem('organizationId', response.data.organizationId.toString());
         
-        if (response.data.organizationId) {
-          localStorage.setItem('organizationId', response.data.organizationId.toString());
-          // console.log('Stored organizationId:', response.data.organizationId.toString());
-        } else {
-          console.warn('No organizationId in response, attempting to extract from token');
-          const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
-          if (decodedToken.id) {
-            localStorage.setItem('organizationId', decodedToken.id.toString());
-            console.log('Extracted and stored organizationId from token:', decodedToken.id);
-          } else {
-            console.error('Unable to extract organizationId from token');
-          }
-        }
+        setOrgAuth({
+          isAuthenticated: true,
+          org: response.data.org,
+          loading: false
+        });
         
         setLoginStatus('success');
         setTimeout(() => {
+          handleClose();
           navigate('/OrganizationLandingPage');
-          window.location.reload();
         }, 2000);
       } else {
-        console.error('Unexpected response:', response);
-        setLoginStatus('error');
+        throw new Error('Login successful but unexpected response format');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        console.error('Error status:', error.response.status);
-      }
       setLoginStatus('error');
     }
   };
@@ -135,7 +123,7 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                   Incorrect email or password. Please try again.
                 </Alert>
               )}
-              <Avatar sx={{ m: 1, bgcolor: '#ff66c4' }}>
+              <Avatar sx={{ m: 1, bgcolor: '#8B5CF6' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
@@ -166,13 +154,13 @@ const OrganizationSignIn = ({ open, handleClose }) => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2, bgcolor: '#ff66c4', '&:hover': { bgcolor: '#ff33ab' } }}
+                  sx={{ mt: 3, mb: 2 }}
                 >
                   Log In
                 </Button>
                 <Grid container>
                   <Grid item>
-                    <Link onClick={handleSignUpRedirect} variant="body2" style={{ cursor: 'pointer', color: '#ff66c4' }}>
+                    <Link onClick={handleSignUpRedirect} variant="body2" style={{ cursor: 'pointer', color: '#8B5CF6' }}>
                       {"Don't have an Organization account? Sign Up"}
                     </Link>
                   </Grid>
@@ -188,4 +176,3 @@ const OrganizationSignIn = ({ open, handleClose }) => {
 };
 
 export default OrganizationSignIn;
-

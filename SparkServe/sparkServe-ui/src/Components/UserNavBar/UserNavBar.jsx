@@ -1,16 +1,19 @@
-import React, { useContext, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
-import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme, useMediaQuery, Avatar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import logo2 from "../../assets/logo2.png";
 import UserAccountPopover from "../UserAccountPopover/UserAccountPopover";
 import UserSignIn from "../UserSignIn/UserSignIn";
@@ -19,50 +22,49 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-const logoStyle = {
-  width: "140px",
-  height: "auto",
-  cursor: "pointer",
-};
-
-const navButtonStyle = {
-  position: "relative",
-  overflow: "hidden",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    height: "2px",
-    backgroundColor: "primary.main",
-    transform: "scaleX(0)",
-    transformOrigin: "bottom right",
-    transition: "transform 0.3s ease-out",
-  },
-  "&:hover::after": {
-    transform: "scaleX(1)",
-    transformOrigin: "bottom left",
-  },
-  "&:hover": {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-  },
-};
-
-function UserNavBar() {
-  const [open, setOpen] = React.useState(false);
-  const [signInModalOpen, setSignInModalOpen] = React.useState(false);
+const UserNavBar = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [signInModalOpen, setSignInModalOpen] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { userAuth, setUserAuth } = useContext(CombinedAuthContext);
-  const location = useLocation();
   const navigate = useNavigate();
+  const theme = useTheme();
 
-  const isMobileS = useMediaQuery('(min-width:320px)');
-  const isMobileM = useMediaQuery('(min-width:375px)');
-  const isMobileL = useMediaQuery('(min-width:425px)');
-  const isTablet = useMediaQuery('(min-width:768px)');
-  const isLaptop = useMediaQuery('(min-width:1024px)');
-  const isLaptopL = useMediaQuery('(min-width:1440px)');
-  const isDesktop = useMediaQuery('(min-width:2560px)');
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isLaptop = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+
+  const logoStyle = {
+    width: isMobile ? "80px" : isTablet ? "100px" : "120px",
+    height: "auto",
+    cursor: "pointer",
+  };
+
+  const navButtonStyle = {
+    color: '#4856f6',
+    fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
+    fontWeight: 'bold',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      height: '2px',
+      backgroundColor: '#4856f6',
+      transform: 'scaleX(0)',
+      transformOrigin: 'bottom right',
+      transition: 'transform 0.3s ease-out',
+    },
+    '&:hover::after': {
+      transform: 'scaleX(1)',
+      transformOrigin: 'bottom left',
+    },
+    '&:hover': {
+      backgroundColor: 'rgba(72, 86, 246, 0.04)',
+    },
+  };
 
   useEffect(() => {
     const checkUserAuth = async () => {
@@ -89,8 +91,11 @@ function UserNavBar() {
     checkUserAuth();
   }, [setUserAuth]);
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
   };
 
   const handleSignInClick = () => {
@@ -101,11 +106,141 @@ function UserNavBar() {
     setSignInModalOpen(false);
   };
 
+  const handleLogoutClick = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    localStorage.removeItem('isUserAuthenticated');
+    localStorage.removeItem('userId');
+    setLogoutDialogOpen(false);
+    navigate('/');
+    window.location.reload();
+  };
+
+  const handleLogoutCancel = () => {
+    setLogoutDialogOpen(false);
+  };
+
+  const navItems = [
+    { text: 'Opportunities', path: '/UserLandingPage' },
+    ...(userAuth.isAuthenticated ? [{ text: 'Map', path: '/Map' }] : [])
+  ];
+
+  const list = () => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      {userAuth.isAuthenticated && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <Avatar
+            src={userAuth.user?.profilePicture}
+            alt="User Avatar"
+            sx={{
+              width: isMobile ? 40 : isTablet ? 45 : 50,
+              height: isMobile ? 40 : isTablet ? 45 : 50,
+              border: '2px solid #4856f6',
+            }}
+          />
+        </Box>
+      )}
+      <List>
+        {navItems.map((item) => (
+          <ListItem
+            button
+            key={item.text}
+            onClick={() => navigate(item.path)}
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(72, 86, 246, 0.04)',
+              },
+            }}
+          >
+            <ListItemText
+              primary={item.text}
+              sx={{
+                color: '#4856f6',
+                '& .MuiTypography-root': {
+                  fontWeight: 'bold',
+                },
+              }}
+            />
+          </ListItem>
+        ))}
+        {userAuth.isAuthenticated && (
+          <>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => navigate(`/UserProfile/${userAuth.user?.userId}`)}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(72, 86, 246, 0.04)',
+                },
+              }}
+            >
+              <ListItemText
+                primary="User Profile"
+                sx={{
+                  color: '#4856f6',
+                  '& .MuiTypography-root': {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => navigate('/bookmarks')}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(72, 86, 246, 0.04)',
+                },
+              }}
+            >
+              <ListItemText
+                primary="Favorites"
+                sx={{
+                  color: '#4856f6',
+                  '& .MuiTypography-root': {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleLogoutClick}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(72, 86, 246, 0.04)',
+                },
+              }}
+            >
+              <ListItemText
+                primary="Logout"
+                sx={{
+                  color: '#4856f6',
+                  '& .MuiTypography-root': {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
+
   const renderButtons = () => {
     if (userAuth.loading) {
       return <CircularProgress size={24} />;
     }
-  
+
     if (!userAuth.isAuthenticated) {
       return (
         <>
@@ -114,6 +249,7 @@ function UserNavBar() {
             variant="text"
             size="small"
             onClick={handleSignInClick}
+            sx={{ color: '#4856f6' }}
           >
             Sign in
           </Button>
@@ -123,24 +259,21 @@ function UserNavBar() {
             size="small"
             component={Link}
             to="/UserSignUpPage"
+            sx={{ backgroundColor: '#4856f6', '&:hover': { backgroundColor: '#3A45C4' } }}
           >
             Sign up
           </Button>
         </>
       );
-    } else {
+    } else if (!isMobile) {
       return (
         <UserAccountPopover 
           profileType="User Profile" 
-          profilePicture={userAuth.user.profilePicture} 
+          profilePicture={userAuth.user?.profilePicture} 
         />
       );
     }
-  };
-
-  const responsiveNavButtonStyle = {
-    ...navButtonStyle,
-    display: { xs: "none", md: "inline-flex" },
+    return null;
   };
 
   if (userAuth.loading) {
@@ -162,161 +295,83 @@ function UserNavBar() {
           zIndex: 1100,
         }}
       >
-        <Container maxWidth={isDesktop ? "xl" : isLaptopL ? "lg" : "md"}>
+        <Container maxWidth={isDesktop ? "lg" : isLaptop ? "md" : "sm"}>
           <Toolbar
             variant="regular"
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              py: isTablet ? 1 : 0.5,
+              justifyContent: 'space-between',
+              py: isMobile ? 1 : 2,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", flexGrow: isTablet ? 0 : 1 }}>
-              <img
-                src={logo2}
-                style={{...logoStyle, width: isTablet ? "140px" : "100px"}}
-                alt="Logo"
-                onClick={() => navigate("/")}
-              />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img src={logo2} style={logoStyle} alt="Logo" onClick={() => navigate('/')} />
             </Box>
-            <Box sx={{ 
-              display: { xs: "none", md: "flex" }, 
-              flexGrow: 1, 
-              justifyContent: "center",
-              gap: isLaptop ? 4 : 2
-            }}>
-              <Button
-                color="primary"
-                variant="text"
-                size={isLaptop ? "large" : "medium"}
-                component={Link}
-                to="/"
-                sx={responsiveNavButtonStyle}
-              >
-                Home
-              </Button>
-              <Button
-                color="primary"
-                variant="text"
-                size={isLaptop ? "large" : "medium"}
-                component={Link}
-                to="/UserLandingPage"
-                sx={responsiveNavButtonStyle}
-              >
-                Opportunities
-              </Button>
-              {userAuth.isAuthenticated && (
-                <Button
-                  color="primary"
-                  variant="text"
-                  size={isLaptop ? "large" : "medium"}
-                  component={Link}
-                  to="/Map"
-                  sx={responsiveNavButtonStyle}
-                >
-                  Map
-                </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1, justifyContent: 'center' }}>
+              {!isMobile && (
+                navItems.map((item) => (
+                  <Button 
+                    key={item.text}
+                    size="large" 
+                    sx={navButtonStyle} 
+                    onClick={() => navigate(item.path)}
+                  >
+                    {item.text}
+                  </Button>
+                ))
               )}
             </Box>
-            <Box
-              sx={{
-                display: { xs: "none", md: "flex" },
-                gap: 1,
-                alignItems: "center",
-              }}
-            >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               {renderButtons()}
-            </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton color="primary" onClick={toggleDrawer(true)}>
-                <MenuIcon />
-              </IconButton>
-              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-                <Box sx={{ width: 250, p: 2 }}>
-                  {location.pathname === "/" ||
-                  location.pathname === "/signup" ? (
-                    <>
-                      <MenuItem>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          component={Link}
-                          to="/UserSignUpPage"
-                          sx={{ width: "100%" }}
-                        >
-                          Sign up
-                        </Button>
-                      </MenuItem>
-                      <MenuItem>
-                        <Button
-                          color="primary"
-                          variant="outlined"
-                          onClick={handleSignInClick}
-                          sx={{ width: "100%" }}
-                        >
-                          Sign in
-                        </Button>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <MenuItem>
-                        <Button
-                          color="primary"
-                          variant="text"
-                          size="small"
-                          component={Link}
-                          to="/"
-                          sx={{ width: "100%", ...navButtonStyle }}
-                        >
-                          Home
-                        </Button>
-                      </MenuItem>
-                      <MenuItem>
-                        <Button
-                          color="primary"
-                          variant="text"
-                          size="small"
-                          component={Link}
-                          to="/UserLandingPage"
-                          sx={{ width: "100%", ...navButtonStyle }}
-                        >
-                          Opportunities
-                        </Button>
-                      </MenuItem>
-                      {userAuth.isAuthenticated && (
-                        <MenuItem>
-                          <Button
-                            color="primary"
-                            variant="text"
-                            size="small"
-                            component={Link}
-                            to="/Map"
-                            sx={{ width: "100%", ...navButtonStyle }}
-                          >
-                            Map
-                          </Button>
-                        </MenuItem>
-                      )}
-                      {userAuth.isAuthenticated && (
-                        <MenuItem>
-                          <UserAccountPopover 
-                            profileType="User Profile" 
-                            profilePicture={userAuth.user?.profilePicture} 
-                          />
-                        </MenuItem>
-                      )}
-                    </>
-                  )}
-                </Box>
-              </Drawer>
+              {isMobile && (
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="menu"
+                  onClick={toggleDrawer(true)}
+                  sx={{ 
+                    color: '#4856f6',
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: 'rgba(72, 86, 246, 0.04)',
+                    },
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+      >
+        {list()}
+      </Drawer>
       <UserSignIn open={signInModalOpen} handleClose={handleSignInClose} />
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={handleLogoutCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutCancel} sx={{ color: '#4856f6' }}>Cancel</Button>
+          <Button onClick={handleLogoutConfirm} autoFocus sx={{ color: '#4856f6' }}>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

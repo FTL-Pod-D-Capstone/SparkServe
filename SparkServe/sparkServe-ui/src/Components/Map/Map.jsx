@@ -157,7 +157,7 @@ const ReactGoogleMapComponent = () => {
 
         const newMarkers = await Promise.all(addresses.map(async (address) => {
           if (!address.address) {
-            console.error('Skipping empty address:', address);
+            //console.error('Skipping empty address:', address);
             return null;
           }
 

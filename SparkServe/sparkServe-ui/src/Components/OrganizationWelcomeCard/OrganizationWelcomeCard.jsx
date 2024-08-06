@@ -38,6 +38,7 @@ const OrganizationWelcomeCard = () => {
     textAlign: 'center',
     backgroundColor: 'white',
     borderRadius: '20px',
+    position: 'relative', // Added for positioning the back button
   };
 
   const buttonStyle = {
@@ -71,15 +72,11 @@ const OrganizationWelcomeCard = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 'calc(100vh - 400px)',
-        paddingTop: isMobile ? '5px' : '10px',
+        minHeight: '100vh',
+        paddingTop: isMobile ? '10px' : '20px',
+        paddingBottom: isMobile ? '10px' : '20px',
       }}
     >
-      <Box sx={{ alignSelf: 'flex-start', marginBottom: isMobile ? 1 : 2 }}>
-        <IconButton color="primary" onClick={handleBackClick}>
-          <ArrowBackIosIcon />
-        </IconButton>
-      </Box>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -87,9 +84,8 @@ const OrganizationWelcomeCard = () => {
       >
         <Card
           sx={{
-            maxHeight: isMobile ? 800 : 1000,
-            maxWidth: isMobile ? 300 : isTablet ? 500 : 700,
-            height: '100%',
+            maxHeight: isMobile ? 'auto' : isTablet ? 800 : 1000,
+            maxWidth: isMobile ? '90%' : isTablet ? '80%' : 700,
             width: '100%',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
             zIndex: 99,
@@ -97,6 +93,22 @@ const OrganizationWelcomeCard = () => {
             ...cardStyle,
           }}
         >
+          <IconButton
+            color="primary"
+            onClick={handleBackClick}
+            sx={{
+              position: 'absolute',
+              top: isMobile ? '8px' : '16px',
+              left: isMobile ? '8px' : '16px',
+              backgroundColor: 'rgba(0, 0, 255, 0.1)',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+              },
+              padding: isMobile ? '4px' : '8px',
+            }}
+          >
+            <ArrowBackIosIcon sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem', color: '#1976d2' }} />
+          </IconButton>
           <CardContent>
             <motion.img 
               src={logo} 
@@ -106,7 +118,7 @@ const OrganizationWelcomeCard = () => {
               transition={{ type: 'spring', stiffness: 300 }}
             />
             <Typography
-              variant={isMobile ? "h6" : "h5"}
+              variant={isMobile ? "h6" : isTablet ? "h5" : "h4"}
               component="div"
               gutterBottom
               sx={{
@@ -116,7 +128,9 @@ const OrganizationWelcomeCard = () => {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
                 fontWeight: 'bold',
-                fontSize: isMobile ? '1.1rem' : isTablet ? '1.3rem' : '1.5rem',
+                fontSize: isMobile ? '1rem' : isTablet ? '1.2rem' : '1.5rem',
+                lineHeight: 1.4,
+                marginBottom: isMobile ? '10px' : '20px',
               }}
             >
               Welcome
@@ -156,8 +170,9 @@ const OrganizationWelcomeCard = () => {
               display: 'flex', 
               justifyContent: 'center',
               flexDirection: isMobile ? 'column' : 'row',
+              width: '100%',
             }}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ width: isMobile ? '100%' : 'auto' }}>
                 <Button
                   variant="contained"
                   sx={{ 
@@ -165,13 +180,14 @@ const OrganizationWelcomeCard = () => {
                     backgroundColor: '#8c52ff', 
                     '&:hover': { backgroundColor: '#7a46e0' },
                     width: isMobile ? '100%' : 'auto',
+                    marginBottom: isMobile ? '10px' : '0',
                   }}
                   onClick={handleExploreClick}
                 >
                   Introduce me
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ width: isMobile ? '100%' : 'auto' }}>
                 <Button
                   variant="contained"
                   sx={{ 

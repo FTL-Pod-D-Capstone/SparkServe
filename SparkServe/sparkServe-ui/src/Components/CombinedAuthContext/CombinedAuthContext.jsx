@@ -1,76 +1,3 @@
-// import React, { createContext, useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// const baseUrl = import.meta.env.VITE_BACKEND_URL;
-
-// export const CombinedAuthContext = createContext();
-
-// export const CombinedAuthProvider = ({ children }) => {
-//   const [userAuth, setUserAuth] = useState({
-//     isAuthenticated: false,
-//     user: null,
-//     loading: true
-//   });
-
-//   const [orgAuth, setOrgAuth] = useState({
-//     isAuthenticated: false,
-//     org: null,
-//     loading: true
-//   });
-
-//   useEffect(() => {
-//     const checkUserAuth = async () => {
-//       const authStatus = localStorage.getItem("isUserAuthenticated");
-//       const userId = localStorage.getItem('userId');
-      
-//       if (authStatus === "true" && userId) {
-//         try {
-//           const response = await axios.get(`${baseUrl}/users/${userId}`);
-//           setUserAuth({
-//             isAuthenticated: true,
-//             user: response.data,
-//             loading: false
-//           });
-//         } catch (err) {
-//           console.error(`Error getting User:`, err);
-//           setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
-//         }
-//       } else {
-//         setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
-//       }
-//     };
-
-//     const checkOrgAuth = async () => {
-//       const authStatus = localStorage.getItem("isOrgAuthenticated");
-//       const orgId = localStorage.getItem('orgId');
-      
-//       if (authStatus === "true" && orgId) {
-//         try {
-//           const response = await axios.get(`${baseUrl}/orgs/${orgId}`);
-//           setOrgAuth({
-//             isAuthenticated: true,
-//             org: response.data,
-//             loading: false
-//           });
-//         } catch (err) {
-//           console.error(`Error getting Organization:`, err);
-//           setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
-//         }
-//       } else {
-//         setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
-//       }
-//     };
-
-//     checkUserAuth();
-//     checkOrgAuth();
-//   }, []);
-
-//   return (
-//     <CombinedAuthContext.Provider value={{ userAuth, setUserAuth, orgAuth, setOrgAuth }}>
-//       {children}
-//     </CombinedAuthContext.Provider>
-//   );
-// };
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -80,13 +7,13 @@ export const CombinedAuthContext = createContext();
 
 export const CombinedAuthProvider = ({ children }) => {
   const [userAuth, setUserAuth] = useState({
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem("isUserAuthenticated") === "true",
     user: null,
     loading: true
   });
 
   const [orgAuth, setOrgAuth] = useState({
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem("isOrgAuthenticated") === "true",
     org: null,
     loading: true
   });
@@ -97,10 +24,9 @@ export const CombinedAuthProvider = ({ children }) => {
   }, []);
 
   const checkUserAuth = async () => {
-    const authStatus = localStorage.getItem("isUserAuthenticated");
     const userId = localStorage.getItem('userId');
     
-    if (authStatus === "true" && userId) {
+    if (userAuth.isAuthenticated && userId) {
       try {
         const response = await axios.get(`${baseUrl}/users/${userId}`);
         setUserAuth({
@@ -110,20 +36,19 @@ export const CombinedAuthProvider = ({ children }) => {
         });
       } catch (err) {
         console.error(`Error getting User:`, err);
-        setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+        setUserAuth({ isAuthenticated: false, user: null, loading: false });
       }
     } else {
-      setUserAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+      setUserAuth(prev => ({ ...prev, loading: false }));
     }
   };
 
   const checkOrgAuth = async () => {
-    const authStatus = localStorage.getItem("isOrgAuthenticated");
-    const orgId = localStorage.getItem('orgId');
+    const organizationId = localStorage.getItem('organizationId');
     
-    if (authStatus === "true" && orgId) {
+    if (orgAuth.isAuthenticated && organizationId) {
       try {
-        const response = await axios.get(`${baseUrl}/orgs/${orgId}`);
+        const response = await axios.get(`${baseUrl}/orgs/${organizationId}`);
         setOrgAuth({
           isAuthenticated: true,
           org: response.data,
@@ -131,10 +56,10 @@ export const CombinedAuthProvider = ({ children }) => {
         });
       } catch (err) {
         console.error(`Error getting Organization:`, err);
-        setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+        setOrgAuth({ isAuthenticated: false, org: null, loading: false });
       }
     } else {
-      setOrgAuth(prev => ({ ...prev, loading: false, isAuthenticated: false }));
+      setOrgAuth(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -145,6 +70,13 @@ export const CombinedAuthProvider = ({ children }) => {
     }));
   };
 
+  const updateOrgProfilePicture = (pictureUrl) => {
+    setOrgAuth(prev => ({
+      ...prev,
+      org: { ...prev.org, pictureUrl }
+    }));
+  };
+
   return (
     <CombinedAuthContext.Provider value={{ 
       userAuth, 
@@ -152,7 +84,9 @@ export const CombinedAuthProvider = ({ children }) => {
       orgAuth, 
       setOrgAuth, 
       checkUserAuth,
-      updateUserProfilePicture 
+      checkOrgAuth,
+      updateUserProfilePicture,
+      updateOrgProfilePicture
     }}>
       {children}
     </CombinedAuthContext.Provider>
