@@ -268,14 +268,14 @@ const CalendarApp = () => {
       <OrganizationNavBar />
       <div className="calendar-app">
         <div className="header">
-          <h1 className="heading">
+          <h1 className="heading" style={{ marginTop:'60px' }}>
             Calendar
             <lord-icon
               src="https://cdn.lordicon.com/lzgqzxrq.json"
               trigger="loop"
               state="loop-oscillate"
               colors="primary:#3a3347,secondary:#ebe6ef,tertiary:#ee66aa,quaternary:#a866ee"
-              style={{ width: '70px', height: '70px', marginLeft: '10px', verticalAlign: 'middle' }}
+              style={{ width: '70px', height: '70px', marginLeft: '10px', verticalAlign: 'middle', }}
             ></lord-icon>
           </h1>
         </div>
@@ -283,33 +283,32 @@ const CalendarApp = () => {
           <div className="calendar">
             <div className="navigate-date">
               <button onClick={prevMonth} className="button">
-                <ChevronLeftIcon style={{ color: '#ff66c4' }} />
+                <ChevronLeftIcon style={{ color: '#ff66c4', fontSize: '1.2rem' }} />
               </button>
-              <h2 className="month">{monthsOfYear[currentMonth]},</h2>
-              <h2 className="year">{currentYear}</h2>
+              <h2>{`${monthsOfYear[currentMonth].slice(0, 3)} ${currentYear}`}</h2>
               <button onClick={nextMonth} className="button">
-                <ChevronRightIcon style={{ color: '#ff66c4' }} />
+                <ChevronRightIcon style={{ color: '#ff66c4', fontSize: '1.2rem' }} />
               </button>
             </div>
             <div className="weekdays">
               {daysOfWeek.map((day) => (
-                <span key={day}>{day}</span>
+                <span key={day}>{day.slice(0, 1)}</span>
               ))}
             </div>
             <div className="days">
               {[...Array(firstDayOfMonth).keys()].map((_, index) => (
-                <span key={`empty-${index}`} />
+                <span key={`empty-${index}`} className='day-cell empty'/>
               ))}
               {[...Array(daysInMonth).keys()].map((day) => (
                 <span
                   key={day + 1}
-                  className={
+                  className={`day-cell ${
                     day + 1 === currentDate.getDate() &&
                     currentMonth === currentDate.getMonth() &&
                     currentYear === currentDate.getFullYear()
                       ? 'current-day'
                       : ''
-                  }
+                  }`}
                   onClick={() => handleDayClick(day + 1)}
                 >
                   {day + 1}
@@ -329,106 +328,88 @@ const CalendarApp = () => {
             <h2>Scheduled Opportunities</h2>
             {loading ? (
               <div className="loading-container">
-                <CircularProgress sx={{ color: '#ff66c4' }} />
+                <CircularProgress sx={{ color: '#ff66c4', size: 30 }} />
               </div>
             ) : (
               <div className="upcoming-events-scroll">
-                {opportunities.filter(opp => opp.organizationId === parseInt(localStorage.getItem('organizationId'))).map((opportunity) => (
-                  <div className="upcoming-event" key={opportunity.opportunityId}>
-                    <button className="delete-event" onClick={() => handleDeleteEvent(opportunity.opportunityId)}>
-                      <CloseSharpIcon />
-                    </button>
-                    <div className="event-date-wrapper">
-                      <div className="upcoming-event-date">{`${monthsOfYear[new Date(opportunity.dateTime).getMonth()]} ${new Date(opportunity.dateTime).getDate()}, ${new Date(opportunity.dateTime).getFullYear()}`}</div>
-                      <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                {opportunities
+                  .filter(opp => opp.organizationId === parseInt(localStorage.getItem('organizationId')))
+                  .map((opportunity) => (
+                    <div className="upcoming-event" key={opportunity.opportunityId}>
+                      <div className="event-date-wrapper">
+                        <div className="upcoming-event-date">{new Date(opportunity.dateTime).toLocaleDateString([], {month: 'short', day: 'numeric'})}</div>
+                        <div className="upcoming-event-time">{new Date(opportunity.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                      </div>
+                      <div className="upcoming-event-name">{opportunity.title}</div>
+                      <div className="event-actions">
+                        <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
+                        <button onClick={() => handleDeleteEvent(opportunity.opportunityId)}>Delete</button>
+                      </div>
                     </div>
-                    <div className="upcoming-event-name">{opportunity.title}</div>
-                    <button onClick={() => handleEditEvent(opportunity)}>Edit</button>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
         </div>
-        <div className="overlay"></div>
         {showEventPopup && (
-  <div className="event-popup">
-    <>
-      <div className="selected-date">
-        {`Selected Date: ${selectedDate.getDate()} ${monthsOfYear[selectedDate.getMonth()]}, ${selectedDate.getFullYear()}`}
-      </div>
-      <div className="time-input">
-        <div className="event-popup-time">Time</div>
-        <div className="time-inputs-container">
-          <input
-            type="number"
-            name="hours"
-            min={0}
-            max={23}
-            className="hours"
-            value={eventTime.hours}
-            onChange={handleTimeChange}
-          />
-          <span>:</span>
-          <input
-            type="number"
-            name="minutes"
-            min={0}
-            max={59}
-            className="minutes"
-            value={eventTime.minutes}
-            onChange={handleTimeChange}
-          />
-        </div>
-      </div>
-      <input
-        type="text"
-        placeholder="Enter Event Name"
-        value={eventName}
-        onChange={(e) => setEventName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Enter Event Location"
-        value={eventLocation}
-        onChange={(e) => setEventLocation(e.target.value)}
-      />
-      <select
-        value={eventRelatedCause}
-        onChange={(e) => setEventRelatedCause(e.target.value)}
-      >
-        <option value="">Select Related Cause</option>
-        {causes.map((cause) => (
-          <option key={cause} value={cause}>
-            {cause}
-          </option>
-        ))}
-      </select>
-      <input
-        type="number"
-        placeholder="Enter Spots Available"
-        value={spotsAvailable}
-        onChange={(e) => setSpotsAvailable(parseInt(e.target.value))}
-      />
-      <textarea
-        placeholder="Enter Event Description (Maximum 60 Characters)"
-        value={eventText}
-        onChange={(e) => {
-          if (e.target.value.length <= 60) {
-            setEventText(e.target.value);
-          }
-        }}
-      ></textarea>
-      <input type="file" onChange={handleImageChange} />
-      <button className="event-popup-btn" onClick={handleEventSubmit}>
-        {editingEvent ? 'Update Opportunity' : 'Add Opportunity'}
-      </button>
-      <button className="close-event-popup" onClick={closeEventPopup}>
-        <CloseSharpIcon />
-      </button>
-    </>
-  </div>
-)}
+          <div className="event-popup">
+            <h2>{editingEvent ? 'Edit Opportunity' : 'Add Opportunity'}</h2>
+            <input
+              type="date"
+              value={selectedDate.toISOString().split('T')[0]}
+              onChange={(e) => setSelectedDate(new Date(e.target.value))}
+            />
+            <input
+              type="time"
+              value={`${eventTime.hours}:${eventTime.minutes}`}
+              onChange={(e) => {
+                const [hours, minutes] = e.target.value.split(':');
+                setEventTime({ hours, minutes });
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Event Name"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Location"
+              value={eventLocation}
+              onChange={(e) => setEventLocation(e.target.value)}
+            />
+            <select
+              value={eventRelatedCause}
+              onChange={(e) => setEventRelatedCause(e.target.value)}
+            >
+              <option value="">Select Related Cause</option>
+              {causes.map((cause) => (
+                <option key={cause} value={cause}>{cause}</option>
+              ))}
+            </select>
+            <input
+              type="number"
+              placeholder="Spots Available"
+              value={spotsAvailable}
+              onChange={(e) => setSpotsAvailable(parseInt(e.target.value))}
+            />
+            <textarea
+              placeholder="Description (Max 60 chars)"
+              value={eventText}
+              onChange={(e) => {
+                if (e.target.value.length <= 60) setEventText(e.target.value);
+              }}
+            />
+            <input type="file" onChange={handleImageChange} />
+            <button className="event-popup-btn" onClick={handleEventSubmit}>
+              {editingEvent ? 'Update' : 'Add'} Opportunity
+            </button>
+            <button className="close-event-popup" onClick={closeEventPopup}>
+              <CloseSharpIcon />
+            </button>
+          </div>
+        )}
         {showConfirmModal && (
           <div className="confirm-modal">
             <div className="confirm-message">Are you sure you want to delete this opportunity?</div>
