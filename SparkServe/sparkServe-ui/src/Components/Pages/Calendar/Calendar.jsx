@@ -283,11 +283,11 @@ const CalendarApp = () => {
           <div className="calendar">
             <div className="navigate-date">
               <button onClick={prevMonth} className="button">
-                <ChevronLeftIcon style={{ color: '#ff66c4', fontSize: '1.2rem' }} />
+                <ChevronLeftIcon style={{ color: '#ff66c4', fontSize: '2rem' }} />
               </button>
               <h2>{`${monthsOfYear[currentMonth].slice(0, 3)} ${currentYear}`}</h2>
               <button onClick={nextMonth} className="button">
-                <ChevronRightIcon style={{ color: '#ff66c4', fontSize: '1.2rem' }} />
+                <ChevronRightIcon style={{ color: '#ff66c4', fontSize: '2rem' }} />
               </button>
             </div>
             <div className="weekdays">
@@ -351,6 +351,7 @@ const CalendarApp = () => {
             )}
           </div>
         </div>
+        <div className="overlay" style={{ display: showEventPopup ? 'block' : 'none' }}></div>
         {showEventPopup && (
           <div className="event-popup">
             <h2>{editingEvent ? 'Edit Opportunity' : 'Add Opportunity'}</h2>

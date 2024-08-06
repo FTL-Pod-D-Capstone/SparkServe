@@ -82,7 +82,7 @@
 .navigate-date button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: #ff66c4;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -423,6 +423,17 @@
 .close-event-popup:hover {
   background-color: rgba(255, 102, 196, 0.2);
   transform: rotate(90deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
 }
 
 .confirm-modal {
