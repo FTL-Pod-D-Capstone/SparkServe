@@ -1,6 +1,6 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Menu, MenuItem, IconButton, Typography, Avatar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from "@mui/material";
+import { Menu, MenuItem, IconButton, Typography, Avatar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, useTheme, useMediaQuery } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { styled } from '@mui/material/styles';
 
@@ -42,12 +42,15 @@ const StyledMenu = styled((props) => (
 }));
 
 function UserAccountPopover({ profileType, profilePicture }) {
-  const [userId, setUserId] = React.useState("");
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem("userId")) {
       setUserId(localStorage.getItem("userId"));
     }
@@ -78,6 +81,14 @@ function UserAccountPopover({ profileType, profilePicture }) {
     setLogoutDialogOpen(false);
   };
 
+  const getSize = () => {
+    if (isMobile) return 40;
+    if (isTablet) return 45;
+    return 50;
+  };
+
+  const size = getSize();
+
   return (
     <div>
       <IconButton
@@ -86,16 +97,16 @@ function UserAccountPopover({ profileType, profilePicture }) {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenuOpen}
-        sx={{ color: "#4856f6" }}
+        sx={{ color: "#4856f6", padding: 0 }}
       >
         {profilePicture ? (
           <Avatar
             src={profilePicture}
             alt="User Avatar"
-            sx={{ width: 40, height: 40 }}
+            sx={{ width: size, height: size, border: '2px solid #4856f6' }}
           />
         ) : (
-          <AccountCircle sx={{ fontSize: 30 }} />
+          <AccountCircle sx={{ fontSize: size + 10 }} />
         )}
       </IconButton>
       <StyledMenu
