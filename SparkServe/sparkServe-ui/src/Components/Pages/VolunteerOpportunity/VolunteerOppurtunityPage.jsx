@@ -7,6 +7,7 @@ import { IconButton } from '@mui/material';
 import { ArrowBack, Bookmark, BookmarkBorder } from '@mui/icons-material';
 import axios from 'axios';
 import UserSignIn from '../../UserSignIn/UserSignIn'; 
+import defaultImage from '../../../assets/image-placeholder-300x200.png';
 
 const VolunOppPage = () => {
     const { opportunityId } = useParams();
@@ -87,8 +88,8 @@ const VolunOppPage = () => {
             setShowLoginModal(true);
         } else if (opportunity.opportunityUrl) {
             window.open(opportunity.opportunityUrl, '_blank', 'noopener,noreferrer');
-        }else{
-            navigate('/Error')
+        } else {
+            navigate('/Error');
         }
     };
 
@@ -129,29 +130,29 @@ const VolunOppPage = () => {
                 ) : (
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={8}>
-    <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
-        <ArrowBack />
-    </IconButton>
-    <Typography variant="h4" gutterBottom>{opportunity.title}</Typography>
-    {opportunity.dateTime && (
-      <Typography variant="h6" gutterBottom>
-        {new Date(opportunity.dateTime).toLocaleString([], {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })}
-      </Typography>
-    )}
-    <CardMedia
-        component="img"
-        height="300"
-        image={opportunity.pictureUrl || 'default-image-url'}
-        alt={opportunity.title}
-        sx={{ mb: 2, borderRadius: '8px' }}
-    />
-                        
+                            <IconButton onClick={handleGoBack} aria-label="go back" sx={{ mb: 2 }}>
+                                <ArrowBack />
+                            </IconButton>
+                            <Typography variant="h4" gutterBottom>{opportunity.title}</Typography>
+                            {opportunity.dateTime && (
+                              <Typography variant="h6" gutterBottom>
+                                {new Date(opportunity.dateTime).toLocaleString([], {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </Typography>
+                            )}
+                            <CardMedia
+                                component="img"
+                                height="300"
+                                image={opportunity.pictureUrl || defaultImage}
+                                alt={opportunity.title}
+                                sx={{ mb: 2, borderRadius: '8px' }}
+                            />
+                            
                             <Typography variant="body1" sx={{ mt: 2 }}>
                                 Spots Available: {opportunity.spotsAvailable} | Related Cause: {opportunity.relatedCause}
                             </Typography>
@@ -171,34 +172,34 @@ const VolunOppPage = () => {
                                 </IconButton>
                             )}
                         </Grid>
-                            <Grid item xs={12} md={4} sx={{ alignSelf: 'flex-start' }}>
-                                <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1, mt: { xs: 8, md: 19 } }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                        <Avatar
-                                            src={organization?.pictureUrl}
-                                            alt={organization?.name}
-                                            sx={{ width: 60, height: 60, mr: 2 }}
-                                        />
-                                        <Typography variant="h6">{organization?.name}</Typography>
-                                    </Box>
-                                    <Divider sx={{ my: 2 }} />
-                                    <Typography variant="body2" sx={{ mb: 2 }}>
-                                        {organization?.description || "No description available."}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        Contact: {organization?.contactEmail}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        Website: <a href={organization?.website} target="_blank" rel="noopener noreferrer">{organization?.website}</a>
-                                    </Typography>
+                        <Grid item xs={12} md={4} sx={{ alignSelf: 'flex-start' }}>
+                            <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: '8px', boxShadow: 1, mt: { xs: 8, md: 19 } }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                    <Avatar
+                                        src={organization?.pictureUrl || defaultImage}
+                                        alt={organization?.name}
+                                        sx={{ width: 60, height: 60, mr: 2 }}
+                                    />
+                                    <Typography variant="h6">{organization?.name}</Typography>
                                 </Box>
-                            </Grid>
+                                <Divider sx={{ my: 2 }} />
+                                <Typography variant="body2" sx={{ mb: 2 }}>
+                                    {organization?.description || "No description available."}
+                                </Typography>
+                                <Typography variant="body2">
+                                    Contact: {organization?.contactEmail}
+                                </Typography>
+                                <Typography variant="body2">
+                                    Website: <a href={organization?.website} target="_blank" rel="noopener noreferrer">{organization?.website}</a>
+                                </Typography>
+                            </Box>
                         </Grid>
-                    )}
-                </Container>
-            </Box>
-            <Footer />
-            <UserSignIn open={showLoginModal} handleClose={handleCloseLoginModal} />
+                    </Grid>
+                )}
+            </Container>
+        </Box>
+        <Footer />
+        <UserSignIn open={showLoginModal} handleClose={handleCloseLoginModal} />
         </>
     );
 }

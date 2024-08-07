@@ -29,6 +29,7 @@ import { Link } from "react-router-dom";
 import LinearGradientLoading from "./LinearGradientLoading";
 import "./CustomStyles.css";
 
+import defaultImage from '../../assets/image-placeholder-300x200.png';
 
 const VolOppContainer = () => {
   const [opportunities, setOpportunities] = useState([]);
@@ -200,7 +201,7 @@ const VolOppContainer = () => {
     >
       <Box
         sx={{
-          backgroundImage: `url(${opportunity.pictureUrl || "https://via.placeholder.com/300x200"})`,
+          backgroundImage: `url(${opportunity.pictureUrl || defaultImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "200px",
