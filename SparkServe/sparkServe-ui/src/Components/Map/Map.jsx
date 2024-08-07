@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, useLoadScript, Marker, Autocomplete, InfoWindow } from '@react-google-maps/api';
+import { MarkerClusterer } from "@react-google-maps/api";
 import axios from 'axios';
 import { Button, Paper, Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 import { styled, keyframes } from '@mui/system';
@@ -85,7 +86,7 @@ const mapStyles = [
   {
     featureType: "landscape",
     elementType: "geometry",
-    stylers: [{ color: "#e8f0f7" }]
+    stylers: [{ color: "#e8f0e8" }] // Slightly greener landscape
   },
   {
     featureType: "road",
@@ -128,7 +129,12 @@ const mapStyles = [
   {
     featureType: "poi.park",
     elementType: "geometry.fill",
-    stylers: [{ color: "#b8e0c1" }]
+    stylers: [{ color: "#a8d0a1" }] // Greener parks
+  },
+  {
+    featureType: "landscape.natural",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#c8e6c1" }] // Greener natural landscapes
   }
 ];
 
@@ -157,7 +163,6 @@ const ReactGoogleMapComponent = () => {
 
         const newMarkers = await Promise.all(addresses.map(async (address) => {
           if (!address.address) {
-            //console.error('Skipping empty address:', address);
             return null;
           }
 
@@ -241,6 +246,68 @@ const ReactGoogleMapComponent = () => {
     }
   };
 
+  const renderMarkerCluster = (clusterer) => {
+    return (
+      <MarkerClusterer
+        averageCenter
+        enableRetinaIcons
+        gridSize={60}
+        zoomOnClick
+        minimumClusterSize={2}
+        styles={[
+          {
+            textColor: 'white',
+            height: 53,
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png",
+            width: 53
+          },
+          {
+            textColor: 'white',
+            height: 56,
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m2.png",
+            width: 56
+          },
+          {
+            textColor: 'white',
+            height: 66,
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m3.png",
+            width: 66
+          },
+          {
+            textColor: 'white',
+            height: 78,
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m4.png",
+            width: 78
+          },
+          {
+            textColor: 'white',
+            height: 90,
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m5.png",
+            width: 90
+          }
+        ]}
+      >
+        {(clusterer) =>
+          markers.map((marker, index) => (
+            <Marker
+              key={index}
+              position={{ lat: marker.lat, lng: marker.lng }}
+              onClick={() => handleMarkerClick(marker)}
+              clusterer={clusterer}
+              icon={{
+                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                scaledSize: new window.google.maps.Size(
+                  isMobile ? 30 : isTablet ? 35 : 40,
+                  isMobile ? 30 : isTablet ? 35 : 40
+                ),
+              }}
+            />
+          ))
+        }
+      </MarkerClusterer>
+    );
+  };
+
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
 
@@ -268,20 +335,7 @@ const ReactGoogleMapComponent = () => {
           mapTypeControl: true,
         }}
       >
-        {markers.map((marker, index) => (
-          <Marker
-            key={index}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker)}
-            icon={{
-              url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-              scaledSize: new window.google.maps.Size(
-                isMobile ? 30 : isTablet ? 35 : 40,
-                isMobile ? 30 : isTablet ? 35 : 40
-              ),
-            }}
-          />
-        ))}
+        {renderMarkerCluster()}
 
         {selectedMarker && (
           <InfoWindow
