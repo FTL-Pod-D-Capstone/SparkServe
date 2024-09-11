@@ -34,6 +34,8 @@ SparkServe is a web application designed to connect volunteers with meaningful o
 
 Deployment Website: **https://sparkserve-test-ui.onrender.com/**
 
+Website Video: <div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/d4786d9a455b4dee9b507d65e17a96d7?sid=39609f86-36df-4336-8624-4b306dc0635e" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
 ### Open-source libraries used:
 - [React](https://reactjs.org/) - A JavaScript library for building user interfaces
 - [Material-UI](https://mui.com/) - React components for faster and easier web development
